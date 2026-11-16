@@ -1,7 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { ArrowRight, MessageCircle, RotateCcw, Play } from 'lucide-react';
-import { ScrollReveal } from './react-bits/ScrollReveal';
-import { ScrollExpand } from './react-bits/ScrollExpand';
+import React, { useRef, useState, useEffect } from 'react';
+import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 
 interface HeroProps {
   onExplore: () => void;
@@ -10,126 +8,120 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoEnded, setIsVideoEnded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [hasPlayed, setHasPlayed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('celebration_box_intro_played') === 'true';
+    } catch {
+      return false;
+    }
+  });
 
-  const handleReplay = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play();
-      setIsVideoEnded(false);
-      setIsPlaying(true);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!hasPlayed && videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay may be restricted without user interaction; fallback gracefully
+      });
+    }
+  }, [hasPlayed]);
+
+  const handleVideoEnded = () => {
+    setHasPlayed(true);
+    try {
+      localStorage.setItem('celebration_box_intro_played', 'true');
+    } catch {
+      // ignore
     }
   };
 
-  const handleVideoEnded = () => {
-    setIsVideoEnded(true);
-    setIsPlaying(false);
-  };
-
   return (
-    <section id="home" className="relative pt-8 pb-14 md:pt-16 md:pb-20 overflow-hidden scroll-mt-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          {/* Left Column: Brand Headline & CTAs */}
-          <div className="lg:col-span-7 text-center lg:text-left space-y-6">
-            <ScrollReveal yOffset={16} duration={0.5}>
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-brand-ink tracking-tight leading-[1.12]">
-                Make Every Celebration{' '}
-                <span className="text-brand-pink underline decoration-brand-marigold decoration-wavy decoration-3">
-                  Special.
-                </span>
-              </h1>
-            </ScrollReveal>
+    <section
+      id="home"
+      className="relative pt-10 pb-16 md:pt-16 md:pb-24 overflow-hidden scroll-mt-28 text-center"
+    >
+      {/* Subtle background ambient dot pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.25]"
+        style={{
+          backgroundImage: 'radial-gradient(#2B2B3A 0.75px, transparent 0.75px)',
+          backgroundSize: '24px 24px',
+        }}
+        aria-hidden="true"
+      />
 
-            <ScrollReveal yOffset={20} duration={0.6} delay={0.1}>
-              <p className="text-base sm:text-lg text-brand-ink-light max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-                Beautiful DIY birthday decorations, thoughtfully curated and packed into one celebration box.
-              </p>
-            </ScrollReveal>
-
-            <ScrollReveal yOffset={20} duration={0.6} delay={0.2}>
-              {/* Action Buttons */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
-                <button
-                  onClick={onExplore}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
-                >
-                  <span>Explore Celebration Boxes</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={() => onOpenOrder('signature-celebration-box')}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/15 shadow-sm active:scale-98 transition-all cursor-pointer"
-                >
-                  <MessageCircle className="w-4 h-4 text-brand-teal" />
-                  <span>Order on WhatsApp</span>
-                </button>
-              </div>
-
-              {/* Supporting Microcopy */}
-              <div className="pt-4">
-                <p className="text-xs sm:text-sm font-medium text-brand-ink-muted">
-                  Curated DIY Kits • Easy to Set Up • Made for Your Moments
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
-
-          {/* Right Column: 10-Second Brand Animation Video in Modern Media Frame */}
-          <div className="lg:col-span-5">
-            <ScrollExpand minScale={0.97} maxScale={1.02}>
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-brand-ink/5 border border-brand-ink/10 shadow-card aspect-[16/10] sm:aspect-[4/3] group">
-                {/* Video Element */}
-                <video
-                  ref={videoRef}
-                  src="/videos/celebration-box-intro.mp4"
-                  poster="/brand/logo.webp"
-                  autoPlay
-                  muted
-                  playsInline
-                  onEnded={handleVideoEnded}
-                  onPlay={() => setIsPlaying(true)}
-                  className="w-full h-full object-cover"
-                  aria-label="Celebration Box Brand Introduction Video"
-                />
-
-                {/* Video Overlay Control: Subtle Replay Button */}
-                <div className="absolute bottom-3 right-3 flex items-center gap-2 z-10">
-                  {isVideoEnded ? (
-                    <button
-                      onClick={handleReplay}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-ink/80 hover:bg-brand-ink text-white text-xs font-semibold backdrop-blur-xs shadow-sm transition-all cursor-pointer"
-                      aria-label="Replay brand intro animation"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5 text-brand-marigold" />
-                      <span>Replay Animation</span>
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleReplay}
-                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/50 hover:bg-black/70 text-white text-[11px] backdrop-blur-xs transition-opacity cursor-pointer"
-                      aria-label="Replay intro"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      <span>Replay</span>
-                    </button>
-                  )}
-                </div>
-
-                {/* Subtle Brand Badge Overlay in corner */}
-                <div className="absolute top-3 left-3 pointer-events-none">
-                  <span className="bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-md text-[10px] font-bold text-brand-ink border border-brand-ink/10 shadow-xs">
-                    Celebration Box • Brand Intro
-                  </span>
-                </div>
-              </div>
-            </ScrollExpand>
-          </div>
-
+      {/* Main Centered Container (max-w ~ 1100px) */}
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+        
+        {/* ELEMENT 1: TOP BRAND BADGE */}
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-pink-50 border border-brand-pink-200 text-brand-pink-700 text-xs font-bold tracking-wider uppercase mb-5 sm:mb-6 shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-brand-pink fill-brand-pink/20" />
+          <span>✦ CURATED DIY CELEBRATION KITS</span>
         </div>
+
+        {/* ELEMENT 2: CELEBRATION BOX ANIMATED LOGO / STATIC LOGO */}
+        <div className="h-16 sm:h-20 md:h-24 w-full max-w-md sm:max-w-lg mx-auto flex items-center justify-center mb-6 sm:mb-7">
+          {!hasPlayed ? (
+            <video
+              ref={videoRef}
+              src="/videos/celebration-box-intro.mp4"
+              poster="/brand/logo.webp"
+              autoPlay
+              muted
+              playsInline
+              onLoadedData={() => setIsVideoLoaded(true)}
+              onEnded={handleVideoEnded}
+              className={`h-full w-auto max-w-full object-contain mix-blend-multiply transition-opacity duration-500 ${
+                isVideoLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              aria-label="Celebration Box Animated Logo"
+            />
+          ) : (
+            <img
+              src="/brand/logo.webp"
+              alt="Celebration Box Logo"
+              className="h-full w-auto max-w-full object-contain mx-auto animate-fadeIn"
+            />
+          )}
+        </div>
+
+        {/* ELEMENT 3: MAIN HEADLINE */}
+        <h1 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-brand-ink tracking-tight leading-[1.14] mb-4 sm:mb-5 max-w-3xl mx-auto">
+          Make Every Celebration{' '}
+          <span className="text-brand-pink underline decoration-brand-marigold decoration-wavy decoration-3">
+            Special.
+          </span>
+        </h1>
+
+        {/* ELEMENT 4: SUPPORTING DESCRIPTION */}
+        <p className="text-sm sm:text-base md:text-lg text-brand-ink-light max-w-2xl mx-auto font-normal leading-relaxed mb-3">
+          Beautiful DIY birthday decorations, thoughtfully curated and packed into one celebration box.
+        </p>
+
+        {/* ELEMENT 5: BRAND SUPPORTING LINE */}
+        <p className="text-xs sm:text-sm font-medium text-brand-ink-muted mb-7 sm:mb-8">
+          DIY Celebration Kits • Easy to Set Up • Made for Your Moments
+        </p>
+
+        {/* ELEMENT 6: ACTION BUTTONS */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
+          <button
+            onClick={onExplore}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm sm:text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
+          >
+            <span>Explore Celebration Boxes</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={() => onOpenOrder('signature-celebration-box')}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-brand-ink bg-white hover:bg-brand-cream-100 border border-brand-ink/15 shadow-sm active:scale-98 transition-all cursor-pointer"
+          >
+            <MessageCircle className="w-4 h-4 text-brand-teal" />
+            <span>Order on WhatsApp</span>
+          </button>
+        </div>
+
       </div>
     </section>
   );
