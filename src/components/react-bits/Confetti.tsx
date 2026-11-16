@@ -6,6 +6,7 @@ import React, {
   CSSProperties,
   ReactNode,
 } from 'react';
+import confetti from 'canvas-confetti';
 
 export type ConfettiShape = 'rect' | 'square' | 'strip' | 'circle' | 'triangle';
 
@@ -52,28 +53,6 @@ export interface ConfettiProps {
   style?: CSSProperties;
 }
 
-interface Piece {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  shape: ConfettiShape;
-  color: string;
-  size: number;
-  aspect: number;
-  rotX: number;
-  rotY: number;
-  rotZ: number;
-  vRotX: number;
-  vRotY: number;
-  vRotZ: number;
-  wobble: number;
-  wobbleSpeed: number;
-  age: number;
-  maxLife: number;
-  settled: boolean;
-}
-
 export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
   (
     {
@@ -82,7 +61,7 @@ export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
       size = 14,
       sizeVariance = 0.4,
       aspect = 0.55,
-      density = 0, // Set to 0 to prevent cursor waterfall; bursts & cannons take spotlight!
+      density = 0, // 0 turns off pointer trail waterfall!
       spread = 1,
       inherit = 0.25,
       gravity = 1,
@@ -115,95 +94,77 @@ export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
     ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const piecesRef = useRef<Piece[]>([]);
-    const lastPosRef = useRef<{ x: number; y: number; time: number; vx: number; vy: number } | null>(null);
     const hasFiredIntroRef = useRef(false);
-    const lastPointerTimeRef = useRef(Date.now());
-    const autoplayAngleRef = useRef(0);
 
-    // Helpers
-    const rand = (min: number, max: number) => min + Math.random() * (max - min);
-    const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+    // Map React Bits shapes to confetti shapes
+    const mappedShapes: ('square' | 'circle')[] = shapes.some((s) => s === 'circle')
+      ? ['square', 'circle']
+      : ['square'];
 
-    const createPiece = (
-      x: number,
-      y: number,
-      vx: number,
-      vy: number,
-      targetShape?: ConfettiShape
-    ): Piece => {
-      const sVar = 1 + (Math.random() * 2 - 1) * sizeVariance;
-      const pieceSize = Math.max(4, size * sVar);
-      const chosenShape = targetShape || pick(shapes);
-
-      let pieceAspect = aspect;
-      if (chosenShape === 'square' || chosenShape === 'circle') pieceAspect = 1;
-      if (chosenShape === 'strip') pieceAspect = 0.25;
-
-      return {
-        x,
-        y,
-        vx,
-        vy,
-        shape: chosenShape,
-        color: pick(colors),
-        size: pieceSize,
-        aspect: pieceAspect,
-        rotX: Math.random() * Math.PI * 2,
-        rotY: Math.random() * Math.PI * 2,
-        rotZ: Math.random() * Math.PI * 2,
-        vRotX: (Math.random() - 0.5) * 8 * spin,
-        vRotY: (Math.random() - 0.5) * 8 * spin,
-        vRotZ: (Math.random() - 0.5) * 4 * spin,
-        wobble: Math.random() * Math.PI * 2,
-        wobbleSpeed: rand(3, 7) * flutter,
-        age: 0,
-        maxLife: life * rand(0.8, 1.2),
-        settled: false,
-      };
-    };
-
-    // Public API for ref
-    const fireBurst = (x?: number, y?: number, angleDeg: number = -90) => {
+    // Public API: Fire a burst from a specific coordinate
+    const fireBurst = (clientX?: number, clientY?: number, angleDeg: number = 90) => {
       if (disabled) return;
-      const canvas = canvasRef.current;
-      if (!canvas) return;
+      if (typeof window === 'undefined') return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      const rect = canvas.getBoundingClientRect();
-      const originX = x !== undefined ? x : rect.width / 2;
-      const originY = y !== undefined ? y : rect.height / 2;
+      const originX = clientX !== undefined ? clientX / window.innerWidth : 0.5;
+      const originY = clientY !== undefined ? clientY / window.innerHeight : 0.35;
 
-      const count = Math.min(burstCount, maxPieces - piecesRef.current.length);
-      const angleRad = (angleDeg * Math.PI) / 180;
-      const halfSpreadRad = ((burstSpread / 2) * Math.PI) / 180;
-
-      for (let i = 0; i < count; i++) {
-        const spreadOffset = (Math.random() - 0.5) * 2 * halfSpreadRad;
-        const speed = rand(14, 28) * burstPower;
-        const pAngle = angleRad + spreadOffset;
-
-        const vx = Math.cos(pAngle) * speed + rand(-2, 2);
-        const vy = Math.sin(pAngle) * speed + rand(-2, 2);
-
-        piecesRef.current.push(createPiece(originX, originY, vx, vy));
-      }
+      confetti({
+        particleCount: burstCount,
+        angle: angleDeg,
+        spread: burstSpread,
+        startVelocity: 38 * burstPower,
+        origin: { x: originX, y: originY },
+        colors,
+        shapes: mappedShapes,
+        scalar: (size / 14) * 1.2,
+        gravity: gravity * 0.85,
+        ticks: Math.floor(life * 50),
+        drift: wind * 0.5,
+        disableForReducedMotion: true,
+      });
     };
 
+    // Public API: Fire two celebratory corner cannons
     const fireCannons = () => {
       if (disabled) return;
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
+      if (typeof window === 'undefined') return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      // Left bottom cannon aimed inward & upward
-      fireBurst(rect.width * 0.1, rect.height * 0.9, -55);
-      // Right bottom cannon aimed inward & upward
-      fireBurst(rect.width * 0.9, rect.height * 0.9, -125);
+      // Left bottom cannon aimed inward & upward (60 degrees)
+      confetti({
+        particleCount: Math.floor(burstCount * 0.75),
+        angle: 60,
+        spread: burstSpread,
+        startVelocity: 45 * burstPower,
+        origin: { x: 0.1, y: 0.85 },
+        colors,
+        shapes: mappedShapes,
+        scalar: (size / 14) * 1.25,
+        gravity: gravity * 0.85,
+        ticks: Math.floor(life * 55),
+        disableForReducedMotion: true,
+      });
+
+      // Right bottom cannon aimed inward & upward (120 degrees)
+      confetti({
+        particleCount: Math.floor(burstCount * 0.75),
+        angle: 120,
+        spread: burstSpread,
+        startVelocity: 45 * burstPower,
+        origin: { x: 0.9, y: 0.85 },
+        colors,
+        shapes: mappedShapes,
+        scalar: (size / 14) * 1.25,
+        gravity: gravity * 0.85,
+        ticks: Math.floor(life * 55),
+        disableForReducedMotion: true,
+      });
     };
 
     const clearAll = () => {
-      piecesRef.current = [];
+      confetti.reset();
     };
 
     useImperativeHandle(ref, () => ({
@@ -212,278 +173,46 @@ export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
       clear: clearAll,
     }));
 
+    // Trigger intro cannons once on view
     useEffect(() => {
-      if (typeof window === 'undefined') return;
-      const shouldReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (shouldReduce) return;
-
-      const canvas = canvasRef.current;
+      if (!intro || disabled || hasFiredIntroRef.current) return;
       const container = containerRef.current;
-      if (!canvas || !container) return;
+      if (!container) return;
 
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      let animId: number;
-      let lastFrameTime = performance.now();
-
-      const resize = () => {
-        const rect = container.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        canvas.style.width = `${rect.width}px`;
-        canvas.style.height = `${rect.height}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      };
-
-      resize();
-      const ro = new ResizeObserver(resize);
-      ro.observe(container);
-
-      // Intersection Observer for intro cannons
-      if (intro && !hasFiredIntroRef.current) {
-        const io = new IntersectionObserver(
-          (entries) => {
-            if (entries[0].isIntersecting && !hasFiredIntroRef.current) {
-              hasFiredIntroRef.current = true;
-              setTimeout(() => {
-                fireCannons();
-              }, 400);
-            }
-          },
-          { threshold: 0.15 }
-        );
-        io.observe(container);
-      }
-
-      // Pointer event listeners
-      const handlePointerMove = (e: PointerEvent) => {
-        if (!interactive || disabled) return;
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const now = Date.now();
-        lastPointerTimeRef.current = now;
-
-        if (lastPosRef.current) {
-          const dt = Math.max(1, (now - lastPosRef.current.time) / 1000);
-          const dx = x - lastPosRef.current.x;
-          const dy = y - lastPosRef.current.y;
-          const dist = Math.hypot(dx, dy);
-
-          const vx = (dx / dt) * inherit;
-          const vy = (dy / dt) * inherit;
-
-          // Only spill confetti if density > 0 (prevents waterfall drip when set to 0)
-          if (density > 0 && dist > 15) {
-            const count = Math.min(6, Math.floor(dist * 0.05 * density));
-            for (let i = 0; i < count; i++) {
-              if (piecesRef.current.length < maxPieces) {
-                const spreadX = (Math.random() - 0.5) * 12 * spread;
-                const spreadY = (Math.random() - 0.5) * 12 * spread;
-                piecesRef.current.push(createPiece(x, y, vx + spreadX, vy + spreadY));
-              }
-            }
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !hasFiredIntroRef.current) {
+            hasFiredIntroRef.current = true;
+            setTimeout(() => {
+              fireCannons();
+            }, 380);
           }
+        },
+        { threshold: 0.15 }
+      );
 
-          lastPosRef.current = { x, y, time: now, vx, vy };
-        } else {
-          lastPosRef.current = { x, y, time: now, vx: 0, vy: 0 };
-        }
-      };
+      io.observe(container);
+      return () => io.disconnect();
+    }, [intro, disabled]);
 
-      const handlePointerDown = (e: MouseEvent) => {
-        if (!interactive || !enableBurst || disabled) return;
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        fireBurst(x, y, -90);
-      };
+    // Handle user click to fire interactive burst
+    const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!interactive || !enableBurst || disabled) return;
+      // Do not trigger if user clicked on an interactive button or link
+      const target = e.target as HTMLElement;
+      if (target.closest('button, a, input, select, textarea')) return;
 
-      container.addEventListener('pointermove', handlePointerMove);
-      container.addEventListener('click', handlePointerDown);
-
-      // Main Physics & Render Loop
-      const loop = (currentTime: number) => {
-        animId = requestAnimationFrame(loop);
-        const dt = Math.min((currentTime - lastFrameTime) / 1000, 0.05);
-        lastFrameTime = currentTime;
-
-        const rect = container.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-
-        ctx.clearRect(0, 0, width, height);
-
-        // Autoplay logic if pointer is idle
-        const timeSincePointer = (Date.now() - lastPointerTimeRef.current) / 1000;
-        if (autoplay && !disabled && timeSincePointer > idleDelay) {
-          autoplayAngleRef.current += dt * 1.5 * autoplaySpeed;
-          const autoX = width / 2 + Math.sin(autoplayAngleRef.current) * (width * 0.35);
-          const autoY = height * 0.25 + Math.cos(autoplayAngleRef.current * 0.8) * (height * 0.15);
-
-          if (Math.random() < 0.25 * autoplaySpeed && piecesRef.current.length < maxPieces) {
-            piecesRef.current.push(
-              createPiece(autoX, autoY, Math.sin(autoplayAngleRef.current) * 4, rand(-2, 2))
-            );
-          }
-        }
-
-        const currentPieces = piecesRef.current;
-        const gravityAcc = gravity * 380;
-        const windSpeed = wind * 60;
-
-        for (let i = currentPieces.length - 1; i >= 0; i--) {
-          const p = currentPieces[i];
-          p.age += dt;
-
-          if (p.age >= p.maxLife || p.y > height + 80) {
-            currentPieces.splice(i, 1);
-            continue;
-          }
-
-          if (!p.settled) {
-            // Apply air drag
-            const dragFactor = Math.max(0, 1 - drag * 1.2 * dt);
-            p.vx *= dragFactor;
-            p.vy *= dragFactor;
-
-            // Apply gravity
-            p.vy += gravityAcc * dt;
-
-            // Apply flutter & turbulence
-            p.wobble += p.wobbleSpeed * dt;
-            const flutterForce = Math.sin(p.wobble) * 45 * flutter;
-            const turbulenceOffset = (Math.random() - 0.5) * 30 * turbulence;
-
-            p.vx += (windSpeed + flutterForce + turbulenceOffset) * dt;
-
-            // Update position
-            p.x += p.vx * dt;
-            p.y += p.vy * dt;
-
-            // Update 3D tumbling rotation
-            p.rotX += p.vRotX * dt;
-            p.rotY += p.vRotY * dt;
-            p.rotZ += p.vRotZ * dt;
-
-            // Settle on bottom floor if enabled
-            if (settle && p.y >= height - p.size / 2) {
-              p.y = height - p.size / 2;
-              p.vy = 0;
-              p.vx = 0;
-              p.settled = true;
-            }
-          }
-
-          // Calculate visual projection
-          const cosX = Math.cos(p.rotX);
-          const cosY = Math.cos(p.rotY);
-
-          // Alpha fade out
-          const lifeProgress = p.age / p.maxLife;
-          const fadeStart = 1 - fade;
-          let alpha = opacity;
-          if (lifeProgress > fadeStart) {
-            alpha = opacity * (1 - (lifeProgress - fadeStart) / fade);
-          }
-          if (alpha <= 0) continue;
-
-          // Shading & Sheen
-          let lightFactor = 1;
-          if (shading > 0) {
-            lightFactor = 1 - Math.abs(cosX * cosY) * 0.4 * shading;
-          }
-          if (sheen > 0 && Math.abs(cosY) < 0.2) {
-            lightFactor += sheen * 0.4;
-          }
-
-          // Render Particle
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rotZ);
-          ctx.scale(cosY, cosX);
-
-          ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
-          ctx.fillStyle = p.color;
-
-          const w = p.size;
-          const h = p.size * p.aspect;
-
-          if (p.shape === 'circle') {
-            ctx.beginPath();
-            ctx.arc(0, 0, w / 2, 0, Math.PI * 2);
-            ctx.fill();
-          } else if (p.shape === 'triangle') {
-            ctx.beginPath();
-            ctx.moveTo(0, -h / 2);
-            ctx.lineTo(w / 2, h / 2);
-            ctx.lineTo(-w / 2, h / 2);
-            ctx.closePath();
-            ctx.fill();
-          } else {
-            // 'rect', 'square', 'strip'
-            ctx.fillRect(-w / 2, -h / 2, w, h);
-          }
-
-          ctx.restore();
-        }
-      };
-
-      animId = requestAnimationFrame(loop);
-
-      return () => {
-        cancelAnimationFrame(animId);
-        ro.disconnect();
-        container.removeEventListener('pointermove', handlePointerMove);
-        container.removeEventListener('click', handlePointerDown);
-      };
-    }, [
-      colors,
-      shapes,
-      size,
-      sizeVariance,
-      aspect,
-      density,
-      spread,
-      inherit,
-      gravity,
-      drag,
-      flutter,
-      spin,
-      wind,
-      turbulence,
-      life,
-      fade,
-      shading,
-      sheen,
-      opacity,
-      settle,
-      enableBurst,
-      burstCount,
-      burstPower,
-      burstSpread,
-      maxPieces,
-      autoplay,
-      autoplaySpeed,
-      idleDelay,
-      intro,
-      interactive,
-      disabled,
-    ]);
+      fireBurst(e.clientX, e.clientY, 90);
+    };
 
     return (
       <div
         ref={containerRef}
-        className={`relative w-full h-full min-h-[240px] overflow-hidden ${className}`}
+        onClick={handleContainerClick}
+        className={`relative w-full h-full min-h-[240px] ${className}`}
         style={style}
       >
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 pointer-events-none z-10"
-        />
-        <div className="relative z-20 w-full h-full">{children}</div>
+        <div className="relative z-10 w-full h-full">{children}</div>
       </div>
     );
   }
