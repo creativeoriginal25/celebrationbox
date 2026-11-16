@@ -17,7 +17,6 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
   animated = false,
   onAnimationComplete,
   variant = 'light',
-  interactive = true,
 }) => {
   const shouldReduceMotion = useReducedMotion();
   const isAnimated = animated && !shouldReduceMotion;
@@ -38,16 +37,13 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
       className={`${className} select-none overflow-visible`}
       role="img"
       aria-label="Celebration Box Logo"
-      whileHover={interactive ? 'hover' : undefined}
-      initial="initial"
-      animate="animate"
     >
       {/* ========================================================
           1. REFINED FLAT-VECTOR GIFT BOX ICON
          ======================================================== */}
       <g id="gift-box-icon">
 
-        {/* --- Confetti & Streamer Burst: Erupts when open, tucks away when closed --- */}
+        {/* --- Confetti & Streamer Burst: Erupts on intro, then tucks inside permanently --- */}
         <motion.g
           id="celebration-burst"
           initial={isAnimated ? { scale: 0, opacity: 0 } : { scale: 0, opacity: 0 }}
@@ -62,19 +58,12 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
           transition={
             isAnimated
               ? {
-                  duration: 3.2,
-                  times: [0, 0.22, 0.35, 0.72, 0.95],
+                  duration: 2.8,
+                  times: [0, 0.22, 0.35, 0.68, 0.95],
                   ease: smoothEase,
                 }
               : undefined
           }
-          variants={{
-            hover: {
-              scale: 1,
-              opacity: 1,
-              transition: { duration: 0.4, ease: smoothEase },
-            },
-          }}
           style={{ transformOrigin: '140px 170px' }}
         >
           {/* Golden Sparkle Star */}
@@ -114,7 +103,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
             fill={boxColor}
           />
 
-          {/* Box Interior Shadow Lip (revealed when lid opens) */}
+          {/* Box Interior Shadow Lip (revealed momentarily when lid pops) */}
           <rect
             x="64"
             y="170"
@@ -134,7 +123,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
           />
         </motion.g>
 
-        {/* --- Tilted Lid & Bow (Opens on celebration, closes back after animation, opens on hover) --- */}
+        {/* --- Lid & Bow: Opens during intro celebration, then closes and stays continuously closed --- */}
         <g transform="translate(58, 172)">
           <motion.g
             initial={isAnimated ? { rotate: 0 } : { rotate: 0 }}
@@ -148,18 +137,12 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
             transition={
               isAnimated
                 ? {
-                    duration: 3.2,
-                    times: [0, 0.2, 0.3, 0.72, 1],
+                    duration: 2.8,
+                    times: [0, 0.2, 0.3, 0.68, 1],
                     ease: smoothEase,
                   }
                 : undefined
             }
-            variants={{
-              hover: {
-                rotate: -24,
-                transition: { duration: 0.45, ease: smoothEase },
-              },
-            }}
             style={{ transformOrigin: '0px 0px' }}
           >
             {/* Elegant Two-Loop Gift Ribbon Bow on Top Edge of Lid */}
@@ -188,7 +171,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
               fill={boxColor}
             />
 
-            {/* Matching Vertical Ribbon Band on Lid (aligns with box ribbon when closed) */}
+            {/* Matching Vertical Ribbon Band on Lid (aligns continuously with box ribbon when closed) */}
             <rect
               x="58"
               y="-28"
@@ -241,9 +224,6 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
         initial={isAnimated ? { scale: 0, rotate: -45, opacity: 0 } : false}
         animate={{ scale: 1, rotate: 0, opacity: 1 }}
         transition={{ delay: 0.9, duration: 0.45, type: 'spring', bounce: 0.5 }}
-        variants={{
-          hover: { scale: [1, 1.4, 1], rotate: [0, 90, 0], transition: { duration: 0.5 } }
-        }}
         onAnimationComplete={() => {
           if (onAnimationComplete) {
             onAnimationComplete();

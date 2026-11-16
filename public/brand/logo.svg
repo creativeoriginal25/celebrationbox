@@ -1,34 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 340" role="img" aria-label="Celebration Box Logo">
-  <!-- 1. GIFT BOX ICON -->
+  <!-- 1. GIFT BOX ICON (CLOSED STATE) -->
   <g id="gift-box-icon">
-    <!-- Confetti & Streamer Burst -->
-    <g id="celebration-burst">
-      <path d="M 195 62 Q 195 78 211 78 Q 195 78 195 94 Q 195 78 179 78 Q 195 78 195 62 Z" fill="#FFB400" />
-      <path d="M 155 152 Q 175 125 195 135 T 225 108" fill="none" stroke="#00A8A8" stroke-width="6.5" stroke-linecap="round" />
-      <circle cx="182" cy="122" r="6" fill="#E91E63" />
-      <circle cx="142" cy="138" r="5" fill="#FFB400" />
-      <circle cx="162" cy="116" r="4.5" fill="#00A8A8" />
-    </g>
-
     <!-- Box Body with flat straight bottom & rounded corners -->
     <rect x="64" y="170" width="132" height="105" rx="10" fill="#E91E63" />
-    <!-- Box Interior Opening Lip -->
-    <rect x="64" y="170" width="132" height="12" rx="4" fill="#C2185B" />
     <!-- Vertical Yellow Ribbon -->
     <rect x="116" y="170" width="28" height="105" fill="#FFB400" />
 
-    <!-- Tilted Open Lid & Ribbon Bow (Tilted -24deg) -->
-    <g transform="translate(56, 166) rotate(-24)">
+    <!-- Closed Lid & Ribbon Bow (Capping the box body flush) -->
+    <g transform="translate(58, 172)">
       <!-- Yellow Ribbon Bow on Top Edge -->
-      <g transform="translate(73, -30)">
+      <g transform="translate(72, -28)">
         <path d="M 0 0 C -22 -28 -48 -14 -30 4 C -18 10 -8 4 0 0 Z" fill="#FFB400" />
         <path d="M 0 0 C 8 4 18 10 30 4 C 48 -14 22 -28 0 0 Z" fill="#FFB400" />
         <circle cx="0" cy="2" r="6.5" fill="#FFA000" />
       </g>
       <!-- Lid Bar -->
-      <rect x="0" y="-30" width="146" height="30" rx="8" fill="#E91E63" />
-      <!-- Lid Ribbon Band -->
-      <rect x="59" y="-30" width="28" height="30" fill="#FFB400" />
+      <rect x="0" y="-28" width="144" height="30" rx="8" fill="#E91E63" />
+      <!-- Lid Ribbon Band (aligned continuously with box ribbon) -->
+      <rect x="58" y="-28" width="28" height="30" fill="#FFB400" />
     </g>
   </g>
 
