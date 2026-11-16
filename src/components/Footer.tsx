@@ -2,6 +2,7 @@ import React from 'react';
 import { MessageCircle, Mail, MapPin } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/business';
 import { PolicyType } from './PolicyModal';
+import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 
 interface FooterProps {
   onOpenOrder: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
@@ -38,23 +39,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
           
           {/* Column 1: Brand Identity & Description (4 cols) */}
           <div className="lg:col-span-4 space-y-4">
-            {/* Logo in dedicated white container for clear rendering on dark backdrop */}
+            {/* Logo in clean white container for crisp rendering on dark backdrop */}
             <div className="bg-white px-3.5 py-1.5 rounded-xl inline-flex items-center shadow-xs border border-white/10">
-              <img
-                src="/brand/logo.webp"
-                alt="Celebration Box Logo"
-                className="h-8 sm:h-9 w-auto object-contain"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = 'none';
-                  if (target.nextElementSibling) {
-                    (target.nextElementSibling as HTMLElement).style.display = 'block';
-                  }
-                }}
-              />
-              <span className="hidden font-display font-extrabold text-base text-brand-ink">
-                Celebration <span className="text-brand-pink">Box</span>
-              </span>
+              <CelebrationBoxLogo className="h-8 sm:h-9 w-auto" animated={false} interactive={false} />
             </div>
 
             <p className="text-xs sm:text-sm text-gray-300 leading-relaxed max-w-sm">

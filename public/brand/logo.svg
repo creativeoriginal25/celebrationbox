@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 145" role="img" aria-label="Celebration Box Logo">
+  <defs>
+    <filter id="svgBoxGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="2.5" flood-color="#2B2B3A" flood-opacity="0.12" />
+    </filter>
+    <filter id="svgStarGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#FFB400" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- GIFT BOX GRAPHIC -->
+  <g filter="url(#svgBoxGlow)">
+    <!-- Confetti & Streamers -->
+    <g id="confetti-burst">
+      <!-- Sparkle Star -->
+      <path d="M 112 24 Q 112 32 120 32 Q 112 32 112 40 Q 112 32 104 32 Q 112 32 112 24 Z" fill="#FFB400" filter="url(#svgStarGlow)" />
+      <!-- Teal Serpentine Streamer -->
+      <path d="M 76 54 Q 90 38 102 46 T 118 36" fill="none" stroke="#00A8A8" stroke-width="5" stroke-linecap="round" />
+      <!-- Pink Confetti Dot -->
+      <circle cx="110" cy="56" r="4.5" fill="#E91E63" />
+      <!-- Yellow Drops -->
+      <path d="M 54 50 C 50 44 58 38 62 46 C 64 50 58 54 54 50 Z" fill="#FFB400" />
+      <path d="M 70 38 C 68 30 76 26 78 34 C 79 38 74 42 70 38 Z" fill="#FFB400" />
+    </g>
+
+    <!-- Gift Box Base -->
+    <path d="M 33 68 L 95 68 C 99 68 102 71 101 75 L 95 113 C 94 119 89 123 83 123 L 43 123 C 37 123 33 119 32 113 L 28 75 C 27 71 30 68 33 68 Z" fill="#E91E63" />
+    <!-- Yellow Vertical Ribbon -->
+    <path d="M 58 68 L 70 68 L 68 123 L 60 123 Z" fill="#FFB400" />
+
+    <!-- Gift Box Lid & Bow (Tilted) -->
+    <g transform="translate(-8, -6) rotate(-20 30 66)">
+      <!-- Ribbon Bow -->
+      <g transform="translate(48, 14)">
+        <path d="M 12 28 C 4 11 -5 19 3 28 C 9 32 12 30 14 30 Z" fill="#FFB400" />
+        <path d="M 16 30 C 18 30 21 32 27 28 C 35 19 26 11 18 28 Z" fill="#FFB400" />
+        <circle cx="15" cy="29" r="3.8" fill="#FFA000" />
+      </g>
+      <!-- Lid Rectangle -->
+      <rect x="22" y="43" width="80" height="17" rx="5.5" fill="#E91E63" stroke="#D81B60" stroke-width="0.8" />
+    </g>
+  </g>
+
+  <!-- TYPOGRAPHY -->
+  <text x="122" y="96" font-family="'Poppins', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="52" font-weight="800" fill="#2B2B3A" letter-spacing="-0.6">Celebration</text>
+  <text x="386" y="96" font-family="'Poppins', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="52" font-weight="900" fill="#E91E63" letter-spacing="-0.6">Box</text>
+
+  <!-- SWOOSH & SPARKLE -->
+  <path d="M 152 114 Q 236 97 315 106 Q 380 114 438 108" fill="none" stroke="#FFB400" stroke-width="4.5" stroke-linecap="round" />
+  <path d="M 450 102 Q 450 109 457 109 Q 450 109 450 116 Q 450 109 443 109 Q 450 109 450 102 Z" fill="#FFB400" filter="url(#svgStarGlow)" />
+</svg>

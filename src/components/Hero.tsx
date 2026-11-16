@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, MessageCircle, Sparkles, RotateCcw } from 'lucide-react';
+import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 
 interface HeroProps {
   onExplore: () => void;
@@ -7,38 +8,12 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasPlayed, setHasPlayed] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('celebration_box_intro_played') === 'true';
-    } catch {
-      return false;
-    }
-  });
+  const [animKey, setAnimKey] = useState<number>(0);
+  const [, setIsAnimationFinished] = useState<boolean>(false);
 
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-
-  useEffect(() => {
-    // If user has prefers-reduced-motion, skip video immediately to static logo
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setHasPlayed(true);
-      return;
-    }
-
-    if (!hasPlayed && videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // Autoplay may be restricted without user interaction; fallback gracefully
-      });
-    }
-  }, [hasPlayed]);
-
-  const handleVideoEnded = () => {
-    setHasPlayed(true);
-    try {
-      localStorage.setItem('celebration_box_intro_played', 'true');
-    } catch {
-      // ignore
-    }
+  const handleReplay = () => {
+    setIsAnimationFinished(false);
+    setAnimKey((prev) => prev + 1);
   };
 
   return (
@@ -65,30 +40,25 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
           <span>✦ CURATED DIY CELEBRATION KITS</span>
         </div>
 
-        {/* ELEMENT 2: CELEBRATION BOX ANIMATED LOGO / STATIC LOGO */}
-        <div className="h-20 sm:h-24 md:h-28 w-full max-w-md sm:max-w-xl mx-auto flex items-center justify-center mb-6 sm:mb-8 select-none">
-          {!hasPlayed ? (
-            <video
-              ref={videoRef}
-              src="/videos/celebration-box-intro.mp4"
-              poster="/brand/logo.webp"
-              autoPlay
-              muted
-              playsInline
-              onLoadedData={() => setIsVideoLoaded(true)}
-              onEnded={handleVideoEnded}
-              className={`h-full w-auto max-w-full object-contain mix-blend-multiply transition-opacity duration-700 ${
-                isVideoLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-              aria-label="Celebration Box Animated Logo"
-            />
-          ) : (
-            <img
-              src="/brand/logo.webp"
-              alt="Celebration Box Logo"
-              className="h-full w-auto max-w-full object-contain mx-auto animate-fadeIn"
-            />
-          )}
+        {/* ELEMENT 2: CELEBRATION BOX CODE-GENERATED ANIMATED LOGO */}
+        <div className="relative group w-full max-w-md sm:max-w-xl mx-auto flex flex-col items-center justify-center mb-6 sm:mb-8 select-none">
+          <CelebrationBoxLogo
+            key={animKey}
+            className="h-20 sm:h-24 md:h-28 w-auto max-w-full mx-auto"
+            animated={true}
+            onAnimationComplete={() => setIsAnimationFinished(true)}
+            interactive={true}
+          />
+          {/* Subtle replay button that appears smoothly on hover */}
+          <button
+            onClick={handleReplay}
+            title="Replay intro animation"
+            aria-label="Replay intro animation"
+            className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-brand-ink-muted hover:text-brand-pink bg-white/70 hover:bg-white rounded-full border border-brand-ink/10 shadow-2xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+          >
+            <RotateCcw className="w-3 h-3 text-brand-marigold" />
+            <span>Replay</span>
+          </button>
         </div>
 
         {/* ELEMENT 3: MAIN HEADLINE */}

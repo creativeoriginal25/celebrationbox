@@ -92,7 +92,7 @@ When a customer configures their kit and clicks **Send Order on WhatsApp**:
 
 - **Product Configuration**: Modify `src/config/products.ts` to adjust prices, descriptions, inclusions, or add upcoming themes.
 - **Product Images**: Place new PNG, SVG, or WebP files in `public/products/` and reference their file paths in `src/config/products.ts`.
-- **Brand Logo**: The logo is located at `public/brand/logo.webp`.
+- **Brand Logo & Animation**: Pure code-generated vector SVG and Framer Motion intro animation located at `src/components/CelebrationBoxLogo.tsx`, with standalone SVG at `public/brand/logo.svg`. Zero raster image dependencies!
 
 ---
 
@@ -130,11 +130,13 @@ npm run preview
 Celebration Box/
 ├── public/
 │   ├── brand/
-│   │   └── logo.webp              # Supplied brand logo asset
+│   │   └── logo.svg               # Pure code-generated vector logo
 │   └── products/
 │       ├── mini-box.svg           # Mini Celebration Box visual (₹249)
 │       └── signature-box.svg      # Signature Celebration Box visual (₹499)
 ├── src/
+│   ├── components/
+│   │   ├── CelebrationBoxLogo.tsx # Code-generated vector logo + Framer Motion animation
 │   ├── config/
 │   │   ├── business.ts            # Business info, contact, & owner response templates
 │   │   └── products.ts            # Admin-friendly product catalogue & themes

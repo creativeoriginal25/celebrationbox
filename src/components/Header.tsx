@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 
 interface HeaderProps {
   onShopClick: () => void;
@@ -32,31 +33,17 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
     <header className="sticky top-0 z-40 w-full surface-header transition-shadow duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18 py-3">
-          {/* Logo with accessible fallback */}
+          {/* Pure Code Vector Logo */}
           <a
             href="#home"
-            className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink rounded-lg"
+            className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink rounded-lg"
             onClick={(e) => {
               e.preventDefault();
               handleLinkClick('#home');
             }}
             aria-label="Celebration Box Home"
           >
-            <img
-              src="/brand/logo.webp"
-              alt="Celebration Box Logo"
-              className="h-10 sm:h-11 w-auto object-contain"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.style.display = 'none';
-                if (target.nextElementSibling) {
-                  (target.nextElementSibling as HTMLElement).style.display = 'block';
-                }
-              }}
-            />
-            <span className="hidden font-display font-extrabold text-xl text-brand-ink">
-              Celebration <span className="text-brand-pink">Box</span>
-            </span>
+            <CelebrationBoxLogo className="h-9 sm:h-10 w-auto" animated={false} />
           </a>
 
           {/* Desktop Navigation */}
