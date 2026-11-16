@@ -85,16 +85,21 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
             <span>✦ CURATED DIY CELEBRATION KITS</span>
           </div>
 
-          {/* ELEMENT 2: CELEBRATION BOX CODE-GENERATED ANIMATED LOGO */}
+          {/* ELEMENT 2: CELEBRATION BOX CODE-GENERATED ANIMATED LOGO (ENLARGED & HIGHLIGHTED) */}
           <div
             onClick={handleBoxClick}
             title="Click to celebrate!"
-            className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-center mb-5 sm:mb-9 select-none cursor-pointer px-2"
+            className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-center mb-6 sm:mb-9 select-none cursor-pointer px-2"
           >
-            {/* Mobile-only optical center offset (-18px on mobile, reset to 0 on sm+ desktop) */}
-            <div className="relative -translate-x-[18px] sm:translate-x-0 flex items-center justify-center w-full transition-transform">
+            {/* Mobile-only optical center offset (-16px on mobile, reset to 0 on sm+ desktop) */}
+            <div className="relative -translate-x-[16px] sm:translate-x-0 flex items-center justify-center w-full transition-transform">
+              {/* Soft celebratory ambient highlight glow behind the logo */}
+              <div
+                className="absolute w-72 sm:w-96 md:w-[32rem] h-20 sm:h-32 bg-gradient-to-r from-brand-pink/15 via-brand-marigold/15 to-brand-teal/15 rounded-full blur-2xl opacity-60 pointer-events-none"
+                aria-hidden="true"
+              />
               <CelebrationBoxLogo
-                className="h-16 xs:h-20 sm:h-32 md:h-40 lg:h-48 w-auto max-w-full mx-auto"
+                className="h-20 xs:h-24 sm:h-34 md:h-44 lg:h-52 w-auto max-w-full mx-auto relative z-10 filter drop-shadow-xs"
                 animated={true}
               />
             </div>

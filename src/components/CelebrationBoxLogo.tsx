@@ -38,10 +38,17 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
       role="img"
       aria-label="Celebration Box Logo"
     >
+      <defs>
+        {/* Subtle celebratory ambient glow filter for the gift box */}
+        <filter id="box-highlight-glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor={boxColor} floodOpacity="0.25" />
+        </filter>
+      </defs>
+
       {/* ========================================================
-          1. REFINED FLAT-VECTOR GIFT BOX ICON
+          1. REFINED FLAT-VECTOR GIFT BOX ICON (HIGHLIGHTED)
          ======================================================== */}
-      <g id="gift-box-icon">
+      <g id="gift-box-icon" filter={isMono ? undefined : 'url(#box-highlight-glow)'}>
 
         {/* --- Confetti & Streamer Burst: Erupts on intro, then tucks inside permanently --- */}
         <motion.g
@@ -97,34 +104,52 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
           <rect
             x="64"
             y="170"
-            width="132"
+            width="134"
             height="105"
-            rx="10"
+            rx="12"
             fill={boxColor}
+          />
+
+          {/* Elegant top highlight sheen on gift box */}
+          <path
+            d="M 68 172 Q 66 172 66 176 L 66 210 Q 72 174 105 172 Z"
+            fill="#FFFFFF"
+            opacity={isMono ? '0' : '0.22'}
           />
 
           {/* Box Interior Shadow Lip (revealed momentarily when lid pops) */}
           <rect
             x="64"
             y="170"
-            width="132"
+            width="134"
             height="12"
             rx="4"
             fill={boxInterior}
           />
 
-          {/* Clean Vertical Center Ribbon */}
+          {/* Clean Vertical Center Ribbon with highlight */}
           <rect
             x="116"
             y="170"
-            width="28"
+            width="30"
             height="105"
             fill={ribbonColor}
+          />
+
+          {/* Subtle center ribbon vertical sheen */}
+          <line
+            x1="122"
+            y1="170"
+            x2="122"
+            y2="275"
+            stroke="#FFFFFF"
+            strokeWidth="2"
+            opacity={isMono ? '0' : '0.35'}
           />
         </motion.g>
 
         {/* --- Lid & Bow: Opens during intro celebration, then closes and stays continuously closed --- */}
-        <g transform="translate(58, 172)">
+        <g transform="translate(56, 172)">
           <motion.g
             initial={isAnimated ? { rotate: 0 } : { rotate: 0 }}
             animate={
@@ -146,36 +171,59 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
             style={{ transformOrigin: '0px 0px' }}
           >
             {/* Elegant Two-Loop Gift Ribbon Bow on Top Edge of Lid */}
-            <g transform="translate(72, -28)">
+            <g transform="translate(75, -28)">
               {/* Left Bow Loop */}
               <path
-                d="M 0 0 C -22 -28 -48 -14 -30 4 C -18 10 -8 4 0 0 Z"
+                d="M 0 0 C -24 -30 -52 -16 -32 4 C -20 11 -9 4 0 0 Z"
                 fill={ribbonColor}
               />
+              <path
+                d="M -4 -4 C -20 -24 -40 -14 -24 2 Z"
+                fill="#FFFFFF"
+                opacity={isMono ? '0' : '0.3'}
+              />
+
               {/* Right Bow Loop */}
               <path
-                d="M 0 0 C 8 4 18 10 30 4 C 48 -14 22 -28 0 0 Z"
+                d="M 0 0 C 9 4 20 11 32 4 C 52 -16 24 -30 0 0 Z"
                 fill={ribbonColor}
               />
+              <path
+                d="M 4 -4 C 20 -24 40 -14 24 2 Z"
+                fill="#FFFFFF"
+                opacity={isMono ? '0' : '0.3'}
+              />
+
               {/* Center Bow Knot */}
-              <circle cx="0" cy="2" r="6.5" fill={ribbonKnotColor} />
+              <circle cx="0" cy="2" r="7" fill={ribbonKnotColor} />
             </g>
 
-            {/* Clearly Defined Rectangular Lid Bar with rounded corners */}
+            {/* Clearly Defined Rectangular Lid Bar with rounded corners & top highlight */}
             <rect
               x="0"
               y="-28"
-              width="144"
+              width="150"
               height="30"
               rx="8"
               fill={boxColor}
             />
 
+            {/* Subtle top edge lid highlight */}
+            <rect
+              x="6"
+              y="-26"
+              width="138"
+              height="3"
+              rx="1.5"
+              fill="#FFFFFF"
+              opacity={isMono ? '0' : '0.28'}
+            />
+
             {/* Matching Vertical Ribbon Band on Lid (aligns continuously with box ribbon when closed) */}
             <rect
-              x="58"
+              x="60"
               y="-28"
-              width="28"
+              width="30"
               height="30"
               fill={ribbonColor}
             />
@@ -185,13 +233,13 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
       </g>
 
       {/* ========================================================
-          2. PRESERVED WORDMARK: "Celebration Box"
+          2. PRESERVED & ENLARGED WORDMARK: "Celebration Box"
          ======================================================== */}
       <motion.text
-        x="268"
-        y="232"
+        x="254"
+        y="234"
         fontFamily="'Poppins', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
-        fontSize="122"
+        fontSize="130"
         fontWeight="800"
         letterSpacing="-1.8"
         initial={isAnimated ? { opacity: 0 } : false}
@@ -207,10 +255,10 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
          ======================================================== */}
       {/* Curved Swoosh starting under "Celebration" and flowing under "Box" */}
       <motion.path
-        d="M 330 268 Q 540 232 730 250 Q 865 264 965 250"
+        d="M 315 272 Q 535 234 735 252 Q 875 266 980 252"
         fill="none"
         stroke={ribbonColor}
-        strokeWidth="9"
+        strokeWidth="10"
         strokeLinecap="round"
         initial={isAnimated ? { pathLength: 0, opacity: 0 } : false}
         animate={{ pathLength: 1, opacity: 1 }}
@@ -219,7 +267,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
 
       {/* 4-pointed Sparkle Star at End of Swoosh */}
       <motion.path
-        d="M 988 232 Q 988 250 1006 250 Q 988 250 988 268 Q 988 250 970 250 Q 988 250 988 232 Z"
+        d="M 1002 232 Q 1002 252 1022 252 Q 1002 252 1002 272 Q 1002 252 982 252 Q 1002 252 1002 232 Z"
         fill={ribbonColor}
         initial={isAnimated ? { scale: 0, rotate: -45, opacity: 0 } : false}
         animate={{ scale: 1, rotate: 0, opacity: 1 }}
