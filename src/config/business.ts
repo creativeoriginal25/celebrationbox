@@ -4,7 +4,7 @@ export const BUSINESS_CONFIG: BusinessConfig = {
   name: 'Celebration Box',
   tagline: 'Make Every Moment Special.',
   descriptor: 'DIY Party & Celebration Kits',
-  whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '',
+  whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || '919100280705',
   instagramUrl: import.meta.env.VITE_INSTAGRAM_URL || 'https://instagram.com/celebrationbox.in',
   email: import.meta.env.VITE_CONTACT_EMAIL || 'hello@celebrationbox.in',
   campusLocation: 'Bhimavaram, Andhra Pradesh, India',
