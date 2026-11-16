@@ -111,20 +111,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout, onExplore })
                     <div className="flex items-center border border-brand-ink/15 rounded-lg bg-white">
                       <button
                         onClick={() => updateQuantity(item.id, -1)}
-                        className="p-1 px-2 text-xs font-bold text-brand-ink hover:bg-brand-cream-100 rounded-l-lg cursor-pointer"
+                        className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center text-xs font-bold text-brand-ink hover:bg-brand-cream-100 rounded-l-lg cursor-pointer active:scale-95 transition-all"
                         aria-label="Decrease quantity"
                       >
-                        <Minus className="w-3 h-3" />
+                        <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="px-2 text-xs font-bold text-brand-ink select-none">
+                      <span className="px-2.5 text-xs font-extrabold text-brand-ink select-none">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.id, 1)}
-                        className="p-1 px-2 text-xs font-bold text-brand-ink hover:bg-brand-cream-100 rounded-r-lg cursor-pointer"
+                        className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center text-xs font-bold text-brand-ink hover:bg-brand-cream-100 rounded-r-lg cursor-pointer active:scale-95 transition-all"
                         aria-label="Increase quantity"
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
@@ -151,13 +151,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout, onExplore })
               </p>
             </div>
 
-            <div className="pt-2 flex flex-col gap-2">
+            <div className="pt-2 flex flex-col gap-2.5 pb-[env(safe-area-inset-bottom)]">
               <button
                 onClick={() => {
                   setIsCartOpen(false);
                   onCheckout();
                 }}
-                className="w-full py-3 px-4 rounded-xl text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 px-4 min-h-[48px] rounded-xl text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Proceed to WhatsApp Checkout</span>
                 <ArrowRight className="w-4 h-4" />
@@ -165,7 +165,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onCheckout, onExplore })
 
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-brand-ink bg-white hover:bg-brand-cream-100 border border-brand-ink/15 transition-all text-center cursor-pointer"
+                className="w-full py-3 px-4 min-h-[44px] rounded-xl text-xs font-semibold text-brand-ink bg-white hover:bg-brand-cream-100 border border-brand-ink/15 transition-all text-center cursor-pointer"
               >
                 Continue Shopping
               </button>

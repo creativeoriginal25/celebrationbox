@@ -119,7 +119,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* 1. Buy Now (Primary rani-pink button, direct purchase) */}
         <button
           onClick={() => onBuyNow(product)}
-          className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3.5 px-4 min-h-[46px] rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
           <Zap className="w-4 h-4 fill-white" />
           <span>Buy Now</span>
@@ -128,7 +128,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* 2. Add to Cart (White/warm off-white background, dark ink text, subtle dark/pink border) */}
         <button
           onClick={() => addToCart(product, 1)}
-          className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 hover:border-brand-pink/50 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3.5 px-4 min-h-[46px] rounded-xl text-xs sm:text-sm font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 hover:border-brand-pink/50 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
           <ShoppingCart className="w-4 h-4 text-brand-ink" />
           <span>Add to Cart</span>

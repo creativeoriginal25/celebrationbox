@@ -112,14 +112,14 @@ export const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
 
       {/* Thumbnail Gallery Below Main Image */}
       {images.length > 1 && (
-        <div className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto pb-1 scrollbar-none">
+        <div className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto pb-2 scrollbar-none snap-x">
           {images.map((img, idx) => {
             const isSelected = idx === currentIndex;
             return (
               <button
                 key={img.id || idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl p-1.5 transition-all cursor-pointer bg-white overflow-hidden border ${
+                className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 min-w-[56px] min-h-[56px] snap-start rounded-xl p-1.5 transition-all cursor-pointer bg-white overflow-hidden border ${
                   isSelected
                     ? 'border-brand-pink ring-2 ring-brand-pink/30 shadow-sm scale-102'
                     : 'border-brand-ink/10 hover:border-brand-ink/30 opacity-75 hover:opacity-100'

@@ -44,23 +44,23 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         {/* Breadcrumb Navigation & Back Link */}
         <div className="bg-white border-b border-brand-ink/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between text-xs">
-            <nav className="flex items-center space-x-2 text-brand-ink-muted">
+            <nav className="flex items-center space-x-1.5 sm:space-x-2 text-brand-ink-muted overflow-hidden">
               <button
                 onClick={onNavigateHome}
-                className="hover:text-brand-pink flex items-center gap-1 font-semibold transition-colors cursor-pointer"
+                className="hover:text-brand-pink flex items-center gap-1 font-semibold transition-colors cursor-pointer shrink-0"
               >
                 <Home className="w-3.5 h-3.5" />
                 <span>Home</span>
               </button>
-              <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20" />
+              <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20 shrink-0" />
               <button
                 onClick={onNavigateHome}
-                className="hover:text-brand-pink font-semibold transition-colors cursor-pointer"
+                className="hover:text-brand-pink font-semibold transition-colors cursor-pointer shrink-0"
               >
                 Kits
               </button>
-              <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20" />
-              <span className="text-brand-ink font-bold truncate max-w-[180px] sm:max-w-none">
+              <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20 shrink-0" />
+              <span className="text-brand-ink font-bold truncate max-w-[120px] xs:max-w-[180px] sm:max-w-none">
                 {product.name}
               </span>
             </nav>

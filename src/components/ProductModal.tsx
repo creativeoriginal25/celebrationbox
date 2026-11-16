@@ -23,27 +23,27 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn"
       role="dialog"
       aria-modal="true"
       aria-labelledby="product-modal-title"
     >
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl p-6 sm:p-8 shadow-modal border border-brand-ink/10"
+        className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-white rounded-2xl p-4 sm:p-8 shadow-modal border border-brand-ink/10"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-lg text-brand-ink-muted hover:text-brand-pink hover:bg-brand-cream-50 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 rounded-lg text-brand-ink-muted hover:text-brand-pink hover:bg-brand-cream-50 transition-colors cursor-pointer"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header Content */}
-        <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start mb-6">
-          <div className="w-32 h-32 rounded-xl bg-brand-cream-100 p-2.5 shrink-0 flex items-center justify-center border border-brand-ink/10">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-center sm:items-start mb-6 pt-2 sm:pt-0">
+          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-brand-cream-100 p-2 shrink-0 flex items-center justify-center border border-brand-ink/10">
             <img
               src={product.image}
               alt={product.name}
@@ -119,21 +119,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         </div>
 
         {/* Footer Actions: Buy Now & Add to Cart */}
-        <div className="pt-4 border-t border-brand-ink/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div className="pt-4 border-t border-brand-ink/10 flex flex-col sm:flex-row gap-2.5 sm:gap-3 items-center justify-between">
           <button
             onClick={onClose}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/10 transition-colors cursor-pointer"
+            className="w-full sm:w-auto px-4 py-3 min-h-[44px] rounded-xl text-xs font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/10 transition-colors cursor-pointer order-2 sm:order-1"
           >
             Close
           </button>
 
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          <div className="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">
             <button
               onClick={() => {
                 addToCart(product, 1);
                 onClose();
               }}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 shadow-xs cursor-pointer"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-3 min-h-[46px] rounded-xl text-xs font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 shadow-xs cursor-pointer"
             >
               <ShoppingCart className="w-4 h-4" />
               <span>Add to Cart</span>
@@ -144,7 +144,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 onClose();
                 onBuyNow(product);
               }}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-5 py-3 min-h-[46px] rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
             >
               <Zap className="w-4 h-4 fill-white" />
               <span>Buy Now</span>

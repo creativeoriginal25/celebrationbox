@@ -139,7 +139,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
               type="button"
               onClick={handleDecreaseQty}
               disabled={quantity <= 1}
-              className="w-8 h-8 rounded-lg text-brand-ink hover:bg-brand-cream-100 disabled:opacity-40 flex items-center justify-center font-bold text-base cursor-pointer"
+              className="w-9 h-9 min-w-[36px] min-h-[36px] rounded-lg text-brand-ink hover:bg-brand-cream-100 disabled:opacity-40 flex items-center justify-center font-bold text-base cursor-pointer"
               aria-label="Decrease quantity"
             >
               -
@@ -151,7 +151,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
               type="button"
               onClick={handleIncreaseQty}
               disabled={quantity >= 10}
-              className="w-8 h-8 rounded-lg text-brand-ink hover:bg-brand-cream-100 disabled:opacity-40 flex items-center justify-center font-bold text-base cursor-pointer"
+              className="w-9 h-9 min-w-[36px] min-h-[36px] rounded-lg text-brand-ink hover:bg-brand-cream-100 disabled:opacity-40 flex items-center justify-center font-bold text-base cursor-pointer"
               aria-label="Increase quantity"
             >
               +
@@ -169,7 +169,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
           <button
             type="button"
             onClick={handleDirectBuy}
-            className="w-full py-3.5 px-5 rounded-xl text-sm font-extrabold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-card active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3.5 px-5 min-h-[48px] rounded-xl text-sm font-extrabold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-card active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <Zap className="w-4 h-4 fill-white" />
             <span>Buy Now</span>
@@ -179,7 +179,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
           <button
             type="button"
             onClick={handleAddToCart}
-            className="w-full py-3.5 px-5 rounded-xl text-sm font-extrabold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 hover:border-brand-pink/60 transition-all flex items-center justify-center gap-2 shadow-xs active:scale-98 cursor-pointer"
+            className="w-full py-3.5 px-5 min-h-[48px] rounded-xl text-sm font-extrabold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 hover:border-brand-pink/60 transition-all flex items-center justify-center gap-2 shadow-xs active:scale-98 cursor-pointer"
           >
             <ShoppingCart className="w-4 h-4 text-brand-ink" />
             <span>Add to Cart</span>

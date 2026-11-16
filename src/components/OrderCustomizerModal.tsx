@@ -183,12 +183,12 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn overflow-y-auto"
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-2xl my-6 bg-white rounded-2xl p-6 sm:p-8 shadow-modal border border-brand-ink/10 text-left max-h-[92vh] overflow-y-auto"
+        className="relative w-full max-w-2xl my-4 sm:my-6 bg-white rounded-2xl p-4 sm:p-8 shadow-modal border border-brand-ink/10 text-left max-h-[94vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -395,7 +395,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
                   placeholder="e.g. Rahul Sharma"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className={`w-full px-3.5 py-2.5 rounded-lg border text-xs sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
+                  className={`w-full px-3.5 py-3 min-h-[46px] rounded-lg border text-base sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
                     errors.customerName ? 'border-rose-500 bg-rose-50/30' : 'border-brand-ink/20 bg-white'
                   }`}
                 />
@@ -408,8 +408,8 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
                 <label className="block text-xs font-medium text-brand-ink mb-1">
                   WhatsApp Mobile Number *
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-xs font-bold text-brand-ink-muted">
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 text-xs font-bold text-brand-ink-muted select-none">
                     +91
                   </span>
                   <input
@@ -418,7 +418,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
                     placeholder="98765 43210"
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
-                    className={`w-full pl-11 pr-3.5 py-2.5 rounded-lg border text-xs sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
+                    className={`w-full pl-11 pr-3.5 py-3 min-h-[46px] rounded-lg border text-base sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
                       errors.customerPhone ? 'border-rose-500 bg-rose-50/30' : 'border-brand-ink/20 bg-white'
                     }`}
                   />
@@ -446,7 +446,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
                   min={todayString}
                   value={celebrationDate}
                   onChange={(e) => setCelebrationDate(e.target.value)}
-                  className={`w-full px-3.5 py-2.5 rounded-lg border text-xs sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
+                  className={`w-full px-3.5 py-3 min-h-[46px] rounded-lg border text-base sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
                     errors.celebrationDate ? 'border-rose-500 bg-rose-50/30' : 'border-brand-ink/20 bg-white'
                   }`}
                 />
@@ -462,7 +462,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
                 <select
                   value={preferredTime}
                   onChange={(e) => setPreferredTime(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-brand-ink/20 bg-white text-xs sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink"
+                  className="w-full px-3.5 py-3 min-h-[46px] rounded-lg border border-brand-ink/20 bg-white text-base sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink cursor-pointer"
                 >
                   <option value="Morning (10:00 AM - 1:00 PM)">Morning (10:00 AM - 1:00 PM)</option>
                   <option value="Afternoon (1:00 PM - 4:00 PM)">Afternoon (1:00 PM - 4:00 PM)</option>
@@ -543,7 +543,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
                   placeholder="e.g. Room 204, Royal Men's PG, near SRKR Engineering College, Chinna Amiram, Bhimavaram"
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
-                  className={`w-full px-3.5 py-2 rounded-lg border text-xs sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
+                  className={`w-full px-3.5 py-2.5 rounded-lg border text-base sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink ${
                     errors.deliveryAddress ? 'border-rose-500 bg-rose-50/30' : 'border-brand-ink/20 bg-white'
                   }`}
                 />
@@ -564,7 +564,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
               placeholder="e.g. 'Happy 21st Birthday Sneha! Best roommate ever!'"
               value={birthdayMessage}
               onChange={(e) => setBirthdayMessage(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-brand-ink/20 bg-white text-xs sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink"
+              className="w-full px-3.5 py-3 min-h-[46px] rounded-lg border border-brand-ink/20 bg-white text-base sm:text-sm text-brand-ink focus:outline-none focus:ring-2 focus:ring-brand-pink"
             />
           </div>
 
@@ -612,7 +612,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
           <div className="space-y-2.5 pt-1">
             <button
               type="submit"
-              className="w-full py-3.5 px-5 rounded-xl text-sm sm:text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-4 px-5 min-h-[48px] rounded-xl text-sm sm:text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <MessageCircle className="w-5 h-5" />
               <span>Send Order on WhatsApp</span>

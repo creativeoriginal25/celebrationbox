@@ -89,16 +89,16 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
           <div
             onClick={handleBoxClick}
             title="Click to celebrate!"
-            className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-center mb-6 sm:mb-9 select-none cursor-pointer"
+            className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-center mb-5 sm:mb-9 select-none cursor-pointer px-2"
           >
             <CelebrationBoxLogo
-              className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto max-w-full mx-auto"
+              className="h-16 xs:h-20 sm:h-32 md:h-40 lg:h-48 w-auto max-w-full mx-auto"
               animated={true}
             />
           </div>
 
           {/* ELEMENT 3: MAIN HEADLINE */}
-          <h1 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-brand-ink tracking-tight leading-[1.14] mb-4 sm:mb-5 max-w-3xl mx-auto">
+          <h1 className="font-display font-extrabold text-2xl xs:text-3xl sm:text-5xl lg:text-6xl text-brand-ink tracking-tight leading-[1.16] mb-3 sm:mb-5 max-w-3xl mx-auto px-2">
             Make Every Celebration{' '}
             <span className="text-brand-pink underline decoration-brand-marigold decoration-wavy decoration-3 underline-offset-8">
               Special.
@@ -106,20 +106,20 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
           </h1>
 
           {/* ELEMENT 4: SUPPORTING DESCRIPTION */}
-          <p className="text-sm sm:text-base md:text-lg text-brand-ink-light max-w-2xl mx-auto font-normal leading-relaxed mb-3">
+          <p className="text-xs xs:text-sm sm:text-base md:text-lg text-brand-ink-light max-w-2xl mx-auto font-normal leading-relaxed mb-3 px-2">
             Beautiful DIY birthday decorations, thoughtfully curated and packed into one celebration box.
           </p>
 
           {/* ELEMENT 5: BRAND SUPPORTING LINE */}
-          <p className="text-xs sm:text-sm font-medium text-brand-ink-muted mb-8 sm:mb-10">
+          <p className="text-[11px] xs:text-xs sm:text-sm font-medium text-brand-ink-muted mb-6 sm:mb-10 px-2">
             DIY Celebration Kits • Easy to Set Up • Made for Your Moments
           </p>
 
-          {/* ELEMENT 6: ACTION BUTTONS */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
+          {/* ELEMENT 6: ACTION BUTTONS (Touch-friendly 48px min height on mobile) */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto px-2">
             <button
               onClick={onExplore}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl text-sm sm:text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 min-h-[48px] rounded-xl text-sm sm:text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
             >
               <span>Explore Celebration Boxes</span>
               <ArrowRight className="w-4 h-4" />
@@ -127,7 +127,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
 
             <button
               onClick={() => onOpenOrder('signature-celebration-box')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-brand-ink bg-white hover:bg-brand-cream-100 border border-brand-ink/15 shadow-sm active:scale-98 transition-all cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 min-h-[48px] rounded-xl text-sm sm:text-base font-semibold text-brand-ink bg-white hover:bg-brand-cream-100 border border-brand-ink/15 shadow-sm active:scale-98 transition-all cursor-pointer"
             >
               <MessageCircle className="w-4 h-4 text-brand-teal" />
               <span>Order on WhatsApp</span>

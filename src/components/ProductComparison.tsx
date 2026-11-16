@@ -126,7 +126,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
           <div className="grid grid-cols-2 p-1 bg-white border border-brand-ink/10 rounded-xl shadow-xs">
             <button
               onClick={() => setMobileTab('mini')}
-              className={`py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`py-2.5 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
                 mobileTab === 'mini'
                   ? 'bg-brand-ink text-white shadow-xs'
                   : 'text-brand-ink hover:text-brand-pink'
@@ -136,7 +136,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
             </button>
             <button
               onClick={() => setMobileTab('signature')}
-              className={`py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`py-2.5 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
                 mobileTab === 'signature'
                   ? 'bg-brand-pink text-white shadow-xs'
                   : 'text-brand-ink hover:text-brand-pink'
@@ -192,7 +192,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
           <div className="pt-4 border-t border-brand-ink/10">
             <button
               onClick={() => onOrderNow(mobileTab === 'mini' ? PRODUCTS[0].id : PRODUCTS[1].id)}
-              className="w-full py-3 rounded-xl text-xs font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm flex items-center justify-center gap-1.5"
+              className="w-full py-3.5 min-h-[48px] rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-all"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>

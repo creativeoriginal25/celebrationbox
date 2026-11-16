@@ -213,10 +213,10 @@ const AppRouter: React.FC = () => {
 
       {/* Sticky Mobile Cart Floating Pill on all views */}
       {totalCount > 0 && (
-        <div className="fixed bottom-4 right-4 z-30 lg:hidden animate-fadeIn">
+        <div className="fixed bottom-5 right-4 z-40 lg:hidden animate-fadeIn pb-[env(safe-area-inset-bottom)]">
           <button
             onClick={() => setIsCartOpen(true)}
-            className="flex items-center gap-2 px-4 py-3 rounded-full bg-brand-pink text-white font-bold text-xs shadow-card-hover active:scale-95 transition-all cursor-pointer"
+            className="flex items-center gap-2.5 px-5 py-3.5 min-h-[48px] rounded-full bg-brand-pink text-white font-extrabold text-xs shadow-modal active:scale-95 transition-all cursor-pointer border-2 border-white/40"
             aria-label="View Cart"
           >
             <ShoppingBag className="w-4 h-4" />

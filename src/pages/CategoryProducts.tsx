@@ -207,12 +207,12 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
                         )}
 
                         {/* 7 & 8. Buy Now & Add to Cart Buttons */}
-                        <div className="grid grid-cols-2 gap-3 pt-1">
+                        <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
                           {/* Buy Now Button */}
                           <button
                             type="button"
                             onClick={() => onBuyNow(product)}
-                            className="w-full py-3.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-xs active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                            className="w-full py-3.5 px-3 min-h-[46px] rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-xs active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                           >
                             <span>Buy Now</span>
                             <ArrowRight className="w-4 h-4" />
@@ -222,7 +222,7 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
                           <button
                             type="button"
                             onClick={() => addToCart(product, 1)}
-                            className="w-full py-3.5 px-3 rounded-xl text-xs sm:text-sm font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/15 active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                            className="w-full py-3.5 px-3 min-h-[46px] rounded-xl text-xs sm:text-sm font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/15 active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                           >
                             <ShoppingBag className="w-4 h-4 text-brand-pink" />
                             <span>Add to Cart</span>

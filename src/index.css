@@ -5,12 +5,18 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     background-color: #FFF8F0;
     color: #2B2B3A;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    width: 100%;
+    min-width: 320px;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -21,6 +27,24 @@
   :focus-visible {
     outline: 2px solid #E91E63;
     outline-offset: 2px;
+  }
+
+  /* Optimize touch responsiveness and tap highlight */
+  button, a, input, select, textarea {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Prevent iOS Safari auto-zoom on input focus by ensuring at least 16px font size on mobile */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="email"],
+  select,
+  textarea {
+    font-size: 16px !important;
   }
 }
 

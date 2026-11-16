@@ -70,12 +70,12 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
         {/* Horizontal Cards Scrollable Track */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-6 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory"
+          className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory"
         >
           {relatedList.map((product) => (
             <div
               key={product.id}
-              className="shrink-0 w-[290px] sm:w-[340px] snap-start surface-card rounded-2xl p-5 border border-brand-ink/10 hover:border-brand-pink/40 shadow-xs hover:shadow-card transition-all flex flex-col justify-between group"
+              className="shrink-0 w-[260px] xs:w-[290px] sm:w-[340px] snap-start surface-card rounded-2xl p-4 sm:p-5 border border-brand-ink/10 hover:border-brand-pink/40 shadow-xs hover:shadow-card transition-all flex flex-col justify-between group"
             >
               <div>
                 {/* Product Thumbnail Stage */}

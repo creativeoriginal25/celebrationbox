@@ -258,20 +258,6 @@ export const HomeContent: React.FC<HomeProps> = ({
         policyType={activePolicy}
         onClose={() => setActivePolicy(null)}
       />
-
-      {/* Floating Sticky Mobile Cart Button */}
-      {totalCount > 0 && (
-        <div className="fixed bottom-4 right-4 z-30 lg:hidden animate-fadeIn">
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="flex items-center gap-2 px-4 py-3 rounded-full bg-brand-pink text-white font-bold text-xs shadow-card-hover active:scale-95 transition-all cursor-pointer"
-            aria-label="View Cart"
-          >
-            <ShoppingBag className="w-4 h-4" />
-            <span>View Cart ({totalCount})</span>
-          </button>
-        </div>
-      )}
     </div>
   );
 };

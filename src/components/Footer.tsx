@@ -50,12 +50,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
               {BUSINESS_CONFIG.descriptor}. Curated DIY birthday party kits designed for students, hostels, and bedrooms in Bhimavaram, AP.
             </p>
 
-            <div className="flex items-center gap-2.5 pt-1">
+            <div className="flex items-center gap-3 pt-1">
               <a
                 href={BUSINESS_CONFIG.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-lg bg-white/10 hover:bg-brand-pink flex items-center justify-center transition-colors text-white"
+                className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl bg-white/10 hover:bg-brand-pink flex items-center justify-center transition-colors text-white"
                 aria-label="Instagram"
               >
                 <InstagramIcon className="w-4 h-4" />
@@ -63,7 +63,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
 
               <a
                 href={`mailto:${BUSINESS_CONFIG.email}`}
-                className="w-8 h-8 rounded-lg bg-white/10 hover:bg-brand-teal flex items-center justify-center transition-colors text-white"
+                className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl bg-white/10 hover:bg-brand-teal flex items-center justify-center transition-colors text-white"
                 aria-label="Email"
               >
                 <Mail className="w-4 h-4" />
@@ -71,7 +71,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
 
               <button
                 onClick={() => onOpenOrder()}
-                className="w-8 h-8 rounded-lg bg-white/10 hover:bg-emerald-600 flex items-center justify-center transition-colors text-white cursor-pointer"
+                className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl bg-white/10 hover:bg-emerald-600 flex items-center justify-center transition-colors text-white cursor-pointer"
                 aria-label="Order on WhatsApp"
               >
                 <MessageCircle className="w-4 h-4" />
