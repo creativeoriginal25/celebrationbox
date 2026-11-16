@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowRight, MessageCircle, Sparkles, RotateCcw } from 'lucide-react';
+import React from 'react';
+import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 
 interface HeroProps {
@@ -8,14 +8,6 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
-  const [animKey, setAnimKey] = useState<number>(0);
-  const [, setIsAnimationFinished] = useState<boolean>(false);
-
-  const handleReplay = () => {
-    setIsAnimationFinished(false);
-    setAnimKey((prev) => prev + 1);
-  };
-
   return (
     <section
       id="home"
@@ -41,24 +33,12 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
         </div>
 
         {/* ELEMENT 2: CELEBRATION BOX CODE-GENERATED ANIMATED LOGO */}
-        <div className="relative group w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex flex-col items-center justify-center mb-6 sm:mb-9 select-none">
+        <div className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-center mb-6 sm:mb-9 select-none">
           <CelebrationBoxLogo
-            key={animKey}
             className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto max-w-full mx-auto"
             animated={true}
-            onAnimationComplete={() => setIsAnimationFinished(true)}
             interactive={true}
           />
-          {/* Subtle replay button for user exploration */}
-          <button
-            onClick={handleReplay}
-            title="Replay brand intro animation"
-            aria-label="Replay brand intro animation"
-            className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-brand-ink-muted hover:text-brand-pink bg-white/80 hover:bg-white rounded-full border border-brand-ink/10 shadow-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-brand-marigold" />
-            <span>Replay Animation</span>
-          </button>
         </div>
 
         {/* ELEMENT 3: MAIN HEADLINE */}
