@@ -138,56 +138,57 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
           />
         </motion.g>
 
-        {/* --- Gift Box Lid & Bow (Unified Object Rotating Together) --- */}
-        <motion.g
-          transform="translate(68, 178)"
-          initial={isAnimated ? { rotate: 0 } : { rotate: -28 }}
-          animate={{ rotate: -28 }}
-          transition={
-            isAnimated
-              ? {
-                  delay: 0.22,
-                  duration: 0.75,
-                  ease: smoothEase,
-                }
-              : undefined
-          }
-          variants={{
-            hover: {
-              rotate: [-28, -34, -25, -28],
-              transition: { duration: 0.6, ease: 'easeInOut' }
+        {/* --- Gift Box Lid & Bow (Outer group anchors position, inner group rotates) --- */}
+        <g transform="translate(68, 178)">
+          <motion.g
+            initial={isAnimated ? { rotate: 0 } : { rotate: -28 }}
+            animate={{ rotate: -28 }}
+            transition={
+              isAnimated
+                ? {
+                    delay: 0.22,
+                    duration: 0.75,
+                    ease: smoothEase,
+                  }
+                : undefined
             }
-          }}
-          style={{ transformOrigin: '0px 0px' }}
-        >
-          {/* Yellow Ribbon Bow sitting on the TOP edge of the lid */}
-          <g transform="translate(80, -34)">
-            {/* Left Bow Loop */}
-            <path
-              d="M -6 0 C -26 -32 -52 -16 -34 4 C -22 10 -12 6 -6 0 Z"
-              fill={ribbonColor}
-            />
-            {/* Right Bow Loop */}
-            <path
-              d="M 6 0 C 12 6 22 10 34 4 C 52 -16 26 -32 6 0 Z"
-              fill={ribbonColor}
-            />
-            {/* Center Bow Knot */}
-            <circle cx="0" cy="2" r="8" fill={ribbonAccent} />
-          </g>
+            variants={{
+              hover: {
+                rotate: [-28, -34, -25, -28],
+                transition: { duration: 0.6, ease: 'easeInOut' }
+              }
+            }}
+            style={{ transformOrigin: '0px 0px' }}
+          >
+            {/* Yellow Ribbon Bow sitting on the TOP edge of the lid */}
+            <g transform="translate(80, -34)">
+              {/* Left Bow Loop */}
+              <path
+                d="M -6 0 C -26 -32 -52 -16 -34 4 C -22 10 -12 6 -6 0 Z"
+                fill={ribbonColor}
+              />
+              {/* Right Bow Loop */}
+              <path
+                d="M 6 0 C 12 6 22 10 34 4 C 52 -16 26 -32 6 0 Z"
+                fill={ribbonColor}
+              />
+              {/* Center Bow Knot */}
+              <circle cx="0" cy="2" r="8" fill={ribbonAccent} />
+            </g>
 
-          {/* Lid Rectangle with soft rounded corners */}
-          <rect
-            x="0"
-            y="-34"
-            width="172"
-            height="34"
-            rx="11"
-            fill={boxColor}
-            stroke={lidStrokeColor}
-            strokeWidth="1.5"
-          />
-        </motion.g>
+            {/* Lid Rectangle with soft rounded corners */}
+            <rect
+              x="0"
+              y="-34"
+              width="172"
+              height="34"
+              rx="11"
+              fill={boxColor}
+              stroke={lidStrokeColor}
+              strokeWidth="1.5"
+            />
+          </motion.g>
+        </g>
 
       </g>
 
