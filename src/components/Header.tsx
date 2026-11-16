@@ -13,6 +13,7 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
 
   const navLinks = [
     { label: 'Home', href: '#home' },
+    { label: 'Occasions', href: '#categories' },
     { label: 'Shop Kits', href: '#shop' },
     { label: 'Compare', href: '#compare' },
     { label: 'How It Works', href: '#how-it-works' },
@@ -23,6 +24,16 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
 
   const handleLinkClick = (href: string) => {
     setMobileMenuOpen(false);
+    if (window.location.hash.startsWith('#/product') || window.location.hash.startsWith('#/category')) {
+      window.location.hash = '';
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 50);
+      return;
+    }
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sigWallBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FAF5EE" />
+      <stop offset="70%" stop-color="#F1E7D9" />
+      <stop offset="70%" stop-color="#D5C5B5" />
+      <stop offset="100%" stop-color="#BAA591" />
+    </linearGradient>
+    <linearGradient id="foilShimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="25%" stop-color="#FFFBEB" />
+      <stop offset="50%" stop-color="#FDE047" />
+      <stop offset="75%" stop-color="#FFFBEB" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="sigWallShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#2B2B3A" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#sigWallBg)" />
+
+  <!-- Setup Header Badge -->
+  <rect x="50" y="25" width="700" height="42" rx="10" fill="#FFFFFF" stroke="#E2D9CF" />
+  <text x="75" y="51" font-family="system-ui, sans-serif" font-size="13" font-weight="800" fill="#2B2B3A">SIGNATURE BOX — LIVING ROOM &amp; HALL PARTY SETUP</text>
+  <text x="725" y="51" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#E91E63" text-anchor="end">Instagrammable Photo Wall • 6-Foot Backdrop</text>
+
+  <!-- 1. 6-Foot Foil Shimmer Fringe Curtain Hanging in Center Background -->
+  <g filter="url(#sigWallShadow)" transform="translate(240, 85)">
+    <rect width="320" height="340" fill="url(#foilShimmer)" opacity="0.85" rx="4" />
+    <!-- Foil Fringe Strands -->
+    <g stroke="#B45309" stroke-width="1.2" opacity="0.6">
+      <line x1="20" y1="0" x2="20" y2="340" /><line x1="40" y1="0" x2="40" y2="340" /><line x1="60" y1="0" x2="60" y2="340" />
+      <line x1="80" y1="0" x2="80" y2="340" /><line x1="100" y1="0" x2="100" y2="340" /><line x1="120" y1="0" x2="120" y2="340" />
+      <line x1="140" y1="0" x2="140" y2="340" /><line x1="160" y1="0" x2="160" y2="340" /><line x1="180" y1="0" x2="180" y2="340" />
+      <line x1="200" y1="0" x2="200" y2="340" /><line x1="220" y1="0" x2="220" y2="340" /><line x1="240" y1="0" x2="240" y2="340" />
+      <line x1="260" y1="0" x2="260" y2="340" /><line x1="280" y1="0" x2="280" y2="340" /><line x1="300" y1="0" x2="300" y2="340" />
+    </g>
+    <!-- Shimmer Glints -->
+    <circle cx="80" cy="120" r="3" fill="#FFF" /><circle cx="220" cy="90" r="3" fill="#FFF" /><circle cx="160" cy="200" r="4" fill="#FFF" />
+  </g>
+
+  <!-- 2. Statement 18-Inch Gold Foil Balloon in Center -->
+  <g filter="url(#sigWallShadow)" transform="translate(400, 200)">
+    <circle cx="0" cy="0" r="64" fill="#FDE047" stroke="#D97706" stroke-width="3" />
+    <text x="0" y="-6" font-family="system-ui, sans-serif" font-size="14" font-weight="900" fill="#78350F" text-anchor="middle">HAPPY</text>
+    <text x="0" y="16" font-family="system-ui, sans-serif" font-size="12" font-weight="800" fill="#78350F" text-anchor="middle">BIRTHDAY</text>
+  </g>
+
+  <!-- 3. Happy Birthday Banner stretched across top -->
+  <g filter="url(#sigWallShadow)" transform="translate(180, 80)">
+    <path d="M 0 20 Q 220 50 440 20" stroke="#78350F" stroke-width="2" fill="none" />
+    <g transform="translate(60, 20)">
+      <polygon points="0,0 22,0 11,26" fill="#E91E63" /><polygon points="26,0 48,0 37,26" fill="#00A8A8" />
+      <polygon points="52,0 74,0 63,26" fill="#FFB400" /><polygon points="78,0 100,0 89,26" fill="#E91E63" />
+      <polygon points="104,0 126,0 115,26" fill="#00A8A8" />
+      <!-- BIRTHDAY -->
+      <polygon points="144,0 166,0 155,26" fill="#E91E63" /><polygon points="170,0 192,0 181,26" fill="#FFB400" />
+      <polygon points="196,0 218,0 207,26" fill="#00A8A8" /><polygon points="222,0 244,0 233,26" fill="#E91E63" />
+      <polygon points="248,0 270,0 259,26" fill="#00A8A8" /><polygon points="274,0 296,0 285,26" fill="#FFB400" />
+      <polygon points="300,0 322,0 311,26" fill="#E91E63" />
+    </g>
+  </g>
+
+  <!-- 4. L-Shaped Organic Balloon Garland Arch (20 Balloons with 2m strip) -->
+  <g filter="url(#sigWallShadow)" transform="translate(150, 70)">
+    <!-- Garland wrapping along left side and over top -->
+    <!-- Top horizontal balloons -->
+    <ellipse cx="60" cy="50" rx="34" ry="44" fill="#FFBE98" />
+    <ellipse cx="110" cy="40" rx="32" ry="42" fill="#D8B4E2" />
+    <ellipse cx="160" cy="35" rx="30" ry="40" fill="#FFF5E5" stroke="#E2D9CF" />
+    <ellipse cx="210" cy="40" rx="32" ry="42" fill="#FFBE98" />
+    <ellipse cx="260" cy="35" rx="30" ry="40" fill="#D8B4E2" />
+
+    <!-- Left vertical cascade -->
+    <ellipse cx="40" cy="100" rx="34" ry="44" fill="#D8B4E2" />
+    <ellipse cx="75" cy="125" rx="30" ry="38" fill="#FFF5E5" stroke="#E2D9CF" />
+    <ellipse cx="35" cy="160" rx="36" ry="46" fill="#FFBE98" />
+    <ellipse cx="70" cy="190" rx="32" ry="40" fill="#D8B4E2" />
+    <ellipse cx="30" cy="230" rx="34" ry="44" fill="#FFF5E5" stroke="#E2D9CF" />
+    <ellipse cx="65" cy="265" rx="32" ry="42" fill="#FFBE98" />
+    <ellipse cx="30" cy="305" rx="36" ry="46" fill="#D8B4E2" />
+    <ellipse cx="65" cy="345" rx="30" ry="38" fill="#FFF5E5" stroke="#E2D9CF" />
+    <ellipse cx="40" cy="385" rx="34" ry="44" fill="#FFBE98" />
+  </g>
+
+  <!-- Photo Booth Props Holder in front right -->
+  <g filter="url(#sigWallShadow)" transform="translate(620, 360)">
+    <!-- Glass Vase / Holder -->
+    <rect x="20" y="50" width="60" height="70" rx="8" fill="#FFFFFF" opacity="0.8" stroke="#CBD5E1" stroke-width="1.5" />
+    <text x="50" y="88" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#00A8A8" text-anchor="middle">PROPS</text>
+    <!-- Props sticking out -->
+    <line x1="50" y1="50" x2="30" y2="10" stroke="#B45309" stroke-width="2" />
+    <rect x="10" y="0" width="36" height="16" rx="4" fill="#E91E63" />
+    <line x1="50" y1="50" x2="60" y2="8" stroke="#B45309" stroke-width="2" />
+    <path d="M 60 8 C 50 -2 40 8 40 12 C 50 12 58 8 60 9 C 62 8 70 12 80 12 C 80 8 70 -2 60 8 Z" fill="#1E293B" />
+    <line x1="50" y1="50" x2="80" y2="18" stroke="#B45309" stroke-width="2" />
+    <polygon points="70,18 78,4 88,14 98,4 106,18" fill="#FFB400" />
+  </g>
+
+  <!-- Callout annotation -->
+  <rect x="520" y="490" width="230" height="48" rx="8" fill="#FFFFFF" stroke="#E91E63" stroke-width="1.5" filter="url(#sigWallShadow)" />
+  <text x="635" y="510" font-family="system-ui, sans-serif" font-size="10.5" font-weight="bold" fill="#E91E63" text-anchor="middle">✓ Instant Selfie Backstage</text>
+  <text x="635" y="526" font-family="system-ui, sans-serif" font-size="9" fill="#64748B" text-anchor="middle">6-Foot photo wall + pump + props in 1 kit</text>
+</svg>

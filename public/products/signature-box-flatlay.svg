@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="sigFlatBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#FAF4EE" />
+      <stop offset="100%" stop-color="#F2E8DC" />
+    </radialGradient>
+    <linearGradient id="peachG2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE0D0" /><stop offset="100%" stop-color="#FF9E68" />
+    </linearGradient>
+    <linearGradient id="lilacG2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E6FA" /><stop offset="100%" stop-color="#B885C6" />
+    </linearGradient>
+    <linearGradient id="creamG2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" /><stop offset="100%" stop-color="#E8CEAA" />
+    </linearGradient>
+    <linearGradient id="goldCurtain" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFF9C4" /><stop offset="50%" stop-color="#FDE047" /><stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="sigItemShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#2B2B3A" flood-opacity="0.1" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#sigFlatBg)" />
+
+  <!-- Flatlay Header Label -->
+  <rect x="40" y="25" width="720" height="42" rx="10" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1" />
+  <text x="60" y="51" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#2B2B3A" letter-spacing="1">SIGNATURE CELEBRATION BOX — COMPLETE KIT FLAT-LAY</text>
+  <text x="740" y="51" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#E91E63" text-anchor="end">60 Pieces Total • 12 Kit Items</text>
+
+  <!-- Item 1: 6-Foot Foil Shimmer Curtain (Top Left) -->
+  <g filter="url(#sigItemShadow)" transform="translate(50, 85)">
+    <rect width="180" height="155" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="22" font-family="system-ui, sans-serif" font-size="10" font-weight="800" fill="#2B2B3A">ITEM 1: SHIMMER CURTAIN</text>
+    <text x="14" y="36" font-family="system-ui, sans-serif" font-size="8.5" fill="#64748B">6-Foot Foil Fringe Backdrop</text>
+    <!-- Fringe curtain strands -->
+    <rect x="20" y="46" width="140" height="95" rx="4" fill="url(#goldCurtain)" opacity="0.8" />
+    <g stroke="#CA8A04" stroke-width="1">
+      <line x1="30" y1="46" x2="30" y2="141" /><line x1="42" y1="46" x2="42" y2="141" /><line x1="54" y1="46" x2="54" y2="141" />
+      <line x1="66" y1="46" x2="66" y2="141" /><line x1="78" y1="46" x2="78" y2="141" /><line x1="90" y1="46" x2="90" y2="141" />
+      <line x1="102" y1="46" x2="102" y2="141" /><line x1="114" y1="46" x2="114" y2="141" /><line x1="126" y1="46" x2="126" y2="141" />
+      <line x1="138" y1="46" x2="138" y2="141" /><line x1="150" y1="46" x2="150" y2="141" />
+    </g>
+  </g>
+
+  <!-- Item 2: 18-inch Foil Balloon (Top Center) -->
+  <g filter="url(#sigItemShadow)" transform="translate(245, 85)">
+    <rect width="165" height="155" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="22" font-family="system-ui, sans-serif" font-size="10" font-weight="800" fill="#2B2B3A">ITEM 2: FOIL BALLOON</text>
+    <text x="14" y="36" font-family="system-ui, sans-serif" font-size="8.5" fill="#64748B">18-Inch Statement Piece</text>
+    <circle cx="82" cy="94" r="46" fill="url(#goldCurtain)" stroke="#D97706" stroke-width="2" />
+    <text x="82" y="90" font-family="system-ui, sans-serif" font-size="9" font-weight="900" fill="#78350F" text-anchor="middle">HAPPY</text>
+    <text x="82" y="104" font-family="system-ui, sans-serif" font-size="8" font-weight="800" fill="#78350F" text-anchor="middle">BIRTHDAY</text>
+    <!-- Metallic star shine -->
+    <path d="M 60 70 L 62 66 L 64 70 L 68 71 L 64 72 L 62 76 L 60 72 L 56 71 Z" fill="#FFF" />
+  </g>
+
+  <!-- Item 3: 6 Photo Booth Props on Sticks (Top Right) -->
+  <g filter="url(#sigItemShadow)" transform="translate(425, 85)">
+    <rect width="325" height="155" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="22" font-family="system-ui, sans-serif" font-size="10" font-weight="800" fill="#2B2B3A">ITEM 3: 6 PHOTO BOOTH PROPS</text>
+    <text x="14" y="36" font-family="system-ui, sans-serif" font-size="8.5" fill="#64748B">Sturdy wooden sticks included for group selfies</text>
+    <!-- 6 Props laid out -->
+    <g transform="translate(20, 50)">
+      <!-- Prop 1: Mustache -->
+      <line x1="20" y1="35" x2="20" y2="90" stroke="#B45309" stroke-width="2" />
+      <path d="M 20 35 C 10 25 0 35 0 40 C 10 40 18 36 20 37 C 22 36 30 40 40 40 C 40 35 30 25 20 35 Z" fill="#1E293B" />
+
+      <!-- Prop 2: Party Glasses -->
+      <line x1="75" y1="35" x2="75" y2="90" stroke="#B45309" stroke-width="2" />
+      <rect x="52" y="24" width="46" height="18" rx="4" fill="#E91E63" />
+      <circle cx="63" cy="33" r="6" fill="#FFF" /><circle cx="87" cy="33" r="6" fill="#FFF" />
+
+      <!-- Prop 3: Crown -->
+      <line x1="135" y1="35" x2="135" y2="90" stroke="#B45309" stroke-width="2" />
+      <polygon points="115,38 123,20 135,32 147,20 155,38" fill="#FFB400" />
+
+      <!-- Prop 4: Bowtie -->
+      <line x1="190" y1="35" x2="190" y2="90" stroke="#B45309" stroke-width="2" />
+      <polygon points="172,25 208,45 208,25 172,45" fill="#00A8A8" />
+
+      <!-- Prop 5: Speech Bubble "PARTY!" -->
+      <line x1="255" y1="35" x2="255" y2="90" stroke="#B45309" stroke-width="2" />
+      <rect x="232" y="20" width="46" height="22" rx="4" fill="#F43F5E" />
+      <text x="255" y="34" font-family="system-ui, sans-serif" font-size="7" font-weight="900" fill="#FFF" text-anchor="middle">PARTY!</text>
+    </g>
+  </g>
+
+  <!-- Item 4: 20 Latex Balloons (Middle Left) -->
+  <g filter="url(#sigItemShadow)" transform="translate(50, 255)">
+    <rect width="260" height="175" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="22" font-family="system-ui, sans-serif" font-size="10" font-weight="800" fill="#2B2B3A">ITEM 4: 20 LATEX BALLOONS</text>
+    <text x="14" y="36" font-family="system-ui, sans-serif" font-size="8.5" fill="#64748B">Balanced Pastel Pop Color Palette</text>
+    <!-- 20 Balloons Grid 5x4 -->
+    <g transform="translate(18, 48)">
+      <ellipse cx="14" cy="14" rx="10" ry="13" fill="url(#peachG2)" /><ellipse cx="42" cy="14" rx="10" ry="13" fill="url(#lilacG2)" />
+      <ellipse cx="70" cy="14" rx="10" ry="13" fill="url(#creamG2)" /><ellipse cx="98" cy="14" rx="10" ry="13" fill="url(#peachG2)" />
+      <ellipse cx="126" cy="14" rx="10" ry="13" fill="url(#lilacG2)" />
+
+      <ellipse cx="14" cy="42" rx="10" ry="13" fill="url(#lilacG2)" /><ellipse cx="42" cy="42" rx="10" ry="13" fill="url(#creamG2)" />
+      <ellipse cx="70" cy="42" rx="10" ry="13" fill="url(#peachG2)" /><ellipse cx="98" cy="42" rx="10" ry="13" fill="url(#lilacG2)" />
+      <ellipse cx="126" cy="42" rx="10" ry="13" fill="url(#creamG2)" />
+
+      <ellipse cx="14" cy="70" rx="10" ry="13" fill="url(#peachG2)" /><ellipse cx="42" cy="70" rx="10" ry="13" fill="url(#lilacG2)" />
+      <ellipse cx="70" cy="70" rx="10" ry="13" fill="url(#creamG2)" /><ellipse cx="98" cy="70" rx="10" ry="13" fill="url(#peachG2)" />
+      <ellipse cx="126" cy="70" rx="10" ry="13" fill="url(#lilacG2)" />
+
+      <ellipse cx="14" cy="98" rx="10" ry="13" fill="url(#lilacG2)" /><ellipse cx="42" cy="98" rx="10" ry="13" fill="url(#creamG2)" />
+      <ellipse cx="70" cy="98" rx="10" ry="13" fill="url(#peachG2)" /><ellipse cx="98" cy="98" rx="10" ry="13" fill="url(#lilacG2)" />
+      <ellipse cx="126" cy="98" rx="10" ry="13" fill="url(#creamG2)" />
+    </g>
+    <rect x="150" y="135" width="95" height="26" rx="6" fill="#FCE7F3" />
+    <text x="197" y="152" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#BE123C" text-anchor="middle">20 Balloons</text>
+  </g>
+
+  <!-- Item 5: Manual Dual-Action Balloon Pump (Middle Center) -->
+  <g filter="url(#sigItemShadow)" transform="translate(325, 255)">
+    <rect width="215" height="175" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="22" font-family="system-ui, sans-serif" font-size="10" font-weight="800" fill="#2B2B3A">ITEM 5: MANUAL BALLOON PUMP</text>
+    <text x="14" y="36" font-family="system-ui, sans-serif" font-size="8.5" fill="#64748B">Zero breath fatigue • Effortless DIY</text>
+    <!-- Pump illustration -->
+    <g transform="translate(35, 60)">
+      <polygon points="18,0 24,0 26,18 16,18" fill="#E91E63" />
+      <rect x="10" y="18" width="22" height="60" rx="4" fill="#00A8A8" />
+      <line x1="10" y1="35" x2="32" y2="35" stroke="#008080" stroke-width="2" />
+      <line x1="10" y1="50" x2="32" y2="50" stroke="#008080" stroke-width="2" />
+      <rect x="18" y="78" width="6" height="18" fill="#64748B" />
+      <ellipse cx="21" cy="98" rx="15" ry="6" fill="#E91E63" />
+    </g>
+    <rect x="85" y="135" width="115" height="26" rx="6" fill="#CCFBF1" />
+    <text x="142" y="152" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#0F766E" text-anchor="middle">Included in Box</text>
+  </g>
+
+  <!-- Items 6, 7, 8: Banner, Candles, Ribbon (Middle Right) -->
+  <g filter="url(#sigItemShadow)" transform="translate(555, 255)">
+    <rect width="195" height="175" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="22" font-family="system-ui, sans-serif" font-size="10" font-weight="800" fill="#2B2B3A">ITEMS 6, 7 &amp; 8</text>
+    <text x="14" y="36" font-family="system-ui, sans-serif" font-size="8.5" fill="#64748B">Banner, Candles &amp; 3m Ribbon</text>
+    <g transform="translate(18, 48)">
+      <rect x="0" y="0" width="160" height="26" rx="4" fill="#F8FAFC" stroke="#CBD5E1" />
+      <text x="80" y="16" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#2B2B3A" text-anchor="middle">★ HAPPY BIRTHDAY BANNER ★</text>
+      <!-- Candles 6 pack -->
+      <rect x="0" y="34" width="75" height="42" rx="4" fill="#FFFBEB" stroke="#FDE68A" />
+      <text x="37" y="58" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#B45309" text-anchor="middle">6 Candles Pack</text>
+      <!-- 3m ribbon -->
+      <rect x="85" y="34" width="75" height="42" rx="4" fill="#FEF3C7" stroke="#FDE68A" />
+      <text x="122" y="58" font-family="system-ui, sans-serif" font-size="8" font-weight="bold" fill="#B45309" text-anchor="middle">3m Ribbon Roll</text>
+    </g>
+    <text x="97" y="152" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#00A8A8" text-anchor="middle">Premium Finishing Items</text>
+  </g>
+
+  <!-- Bottom Row: 2m Arch Strip, 20 Glue Dots, Guide, Sticker -->
+  <g filter="url(#sigItemShadow)" transform="translate(50, 445)">
+    <rect width="700" height="120" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="24" y="24" font-family="system-ui, sans-serif" font-size="10.5" font-weight="800" fill="#2B2B3A">ITEMS 9, 10, 11 &amp; 12: ASSEMBLY &amp; PRESENTATION ESSENTIALS</text>
+    <g transform="translate(24, 38)">
+      <!-- 2m strip -->
+      <rect x="0" y="0" width="150" height="65" rx="6" fill="#F1F5F9" stroke="#CBD5E1" />
+      <text x="75" y="24" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">2 Metres Arch Strip</text>
+      <text x="75" y="44" font-family="system-ui, sans-serif" font-size="8" fill="#64748B" text-anchor="middle">Double-hole garland track</text>
+
+      <!-- 20 glue dots -->
+      <rect x="165" y="0" width="150" height="65" rx="6" fill="#CCFBF1" stroke="#99F6E4" />
+      <text x="240" y="24" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#0F766E" text-anchor="middle">20 Glue Dots</text>
+      <text x="240" y="44" font-family="system-ui, sans-serif" font-size="8" fill="#0F766E" text-anchor="middle">Wall safe &amp; high-hold</text>
+
+      <!-- DIY Guide -->
+      <rect x="330" y="0" width="165" height="65" rx="6" fill="#F8FAFC" stroke="#E2E8F0" />
+      <text x="412" y="24" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#2B2B3A" text-anchor="middle">DIY Instruction Guide</text>
+      <text x="412" y="44" font-family="system-ui, sans-serif" font-size="8" fill="#64748B" text-anchor="middle">Illustrated step-by-step</text>
+
+      <!-- Sticker -->
+      <rect x="510" y="0" width="140" height="65" rx="6" fill="#FDF2F8" stroke="#F472B6" />
+      <text x="580" y="24" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#E91E63" text-anchor="middle">Branded Sticker</text>
+      <text x="580" y="44" font-family="system-ui, sans-serif" font-size="8" fill="#BE123C" text-anchor="middle">Official Package Seal</text>
+    </g>
+  </g>
+</svg>

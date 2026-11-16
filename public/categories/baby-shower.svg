@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="babyBg" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#F0FDFA" />
+      <stop offset="100%" stop-color="#E0F2FE" />
+    </radialGradient>
+    <linearGradient id="pastelYellowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF9C3" />
+      <stop offset="100%" stop-color="#FDE047" />
+    </linearGradient>
+    <linearGradient id="softMintGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A7F3D0" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+    <linearGradient id="softBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#BAE6FD" />
+      <stop offset="100%" stop-color="#60A5FA" />
+    </linearGradient>
+    <linearGradient id="softPinkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCE7F3" />
+      <stop offset="100%" stop-color="#F472B6" />
+    </linearGradient>
+    <filter id="shadowBaby" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#2B2B3A" flood-opacity="0.1" />
+    </filter>
+  </defs>
+
+  <circle cx="80" cy="80" r="76" fill="url(#babyBg)" />
+
+  <g filter="url(#shadowBaby)">
+    <!-- Soft Cloud in upper background -->
+    <path d="M 46 54 C 46 47 52 42 59 42 C 63 36 71 34 78 37 C 84 32 94 33 98 40 C 105 40 110 46 110 53 C 110 60 104 65 97 65 L 58 65 C 50 65 46 60 46 54 Z" fill="#FFFFFF" opacity="0.85" />
+
+    <!-- Pastel Balloons floating from cloud -->
+    <ellipse cx="62" cy="62" rx="15" ry="19" fill="url(#softMintGrad)" transform="rotate(-8 62 62)" />
+    <path d="M 62 81 L 59 84 L 65 84 Z" fill="#10B981" />
+    <path d="M 62 84 Q 60 96 66 112" stroke="#94A3B8" stroke-width="1.2" fill="none" />
+
+    <ellipse cx="98" cy="60" rx="15" ry="19" fill="url(#softPinkGrad)" transform="rotate(8 98 60)" />
+    <path d="M 98 79 L 95 82 L 101 82 Z" fill="#EC4899" />
+    <path d="M 98 82 Q 100 96 92 112" stroke="#94A3B8" stroke-width="1.2" fill="none" />
+
+    <ellipse cx="80" cy="52" rx="16" ry="20" fill="url(#softBlueGrad)" />
+    <ellipse cx="75" cy="44" rx="4" ry="6" fill="#FFFFFF" opacity="0.5" />
+    <path d="M 80 72 L 77 75 L 83 75 Z" fill="#3B82F6" />
+    <path d="M 80 75 L 80 108" stroke="#94A3B8" stroke-width="1.2" fill="none" />
+
+    <!-- Baby Rattle in foreground -->
+    <g transform="translate(62, 78) rotate(15)">
+      <!-- Ring Top -->
+      <circle cx="18" cy="18" r="14" fill="none" stroke="url(#pastelYellowGrad)" stroke-width="5" />
+      <circle cx="18" cy="18" r="8" fill="#F472B6" />
+      <circle cx="18" cy="18" r="4" fill="#FFFFFF" />
+      <!-- Handle -->
+      <rect x="15" y="32" width="6" height="18" rx="3" fill="url(#softBlueGrad)" />
+      <!-- Base Ring -->
+      <circle cx="18" cy="52" r="5" fill="url(#pastelYellowGrad)" />
+      <!-- Pastel beads on ring -->
+      <circle cx="8" cy="12" r="3" fill="#60A5FA" />
+      <circle cx="28" cy="12" r="3" fill="#34D399" />
+    </g>
+  </g>
+
+  <!-- Cute Little Stars -->
+  <path d="M 38 78 L 40 74 L 42 78 L 46 80 L 42 82 L 40 86 L 38 82 L 34 80 Z" fill="#FBBF24" />
+  <circle cx="124" cy="50" r="3" fill="#60A5FA" opacity="0.6" />
+  <circle cx="34" cy="46" r="2.5" fill="#F472B6" opacity="0.6" />
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="adultBg" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFF1F2" />
+      <stop offset="100%" stop-color="#FCE7F3" />
+    </radialGradient>
+    <linearGradient id="champagneGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF08A" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+    <linearGradient id="roseMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FECDD3" />
+      <stop offset="40%" stop-color="#FB7185" />
+      <stop offset="100%" stop-color="#BE123C" />
+    </linearGradient>
+    <linearGradient id="blackLuxury" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4B5563" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <filter id="shadowAdult" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#2B2B3A" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <circle cx="80" cy="80" r="76" fill="url(#adultBg)" />
+
+  <g filter="url(#shadowAdult)">
+    <!-- Black luxury balloon behind -->
+    <ellipse cx="58" cy="62" rx="19" ry="24" fill="url(#blackLuxury)" transform="rotate(-10 58 62)" />
+    <ellipse cx="52" cy="54" rx="4" ry="7" fill="#FFFFFF" opacity="0.25" transform="rotate(-20 52 54)" />
+    <path d="M 57 86 L 54 90 L 60 90 Z" fill="#111827" />
+    <path d="M 57 90 Q 52 105 62 122" stroke="#B45309" stroke-width="1.2" fill="none" stroke-linecap="round" />
+
+    <!-- Rose Metallic Balloon -->
+    <ellipse cx="104" cy="62" rx="19" ry="24" fill="url(#roseMetallic)" transform="rotate(12 104 62)" />
+    <ellipse cx="98" cy="54" rx="4" ry="7" fill="#FFFFFF" opacity="0.4" transform="rotate(-15 98 54)" />
+    <path d="M 105 86 L 102 90 L 108 90 Z" fill="#BE123C" />
+    <path d="M 105 90 Q 110 105 98 122" stroke="#B45309" stroke-width="1.2" fill="none" stroke-linecap="round" />
+
+    <!-- Champagne Gold Center Balloon -->
+    <ellipse cx="80" cy="52" rx="21" ry="26" fill="url(#champagneGold)" />
+    <ellipse cx="73" cy="42" rx="5" ry="8" fill="#FFFFFF" opacity="0.6" transform="rotate(-20 73 42)" />
+    <path d="M 80 78 L 76 83 L 84 83 Z" fill="#92400E" />
+    <path d="M 80 83 Q 76 100 80 124" stroke="#B45309" stroke-width="1.2" fill="none" stroke-linecap="round" />
+
+    <!-- Champagne Flute Toast / Elegant Star Motif -->
+    <!-- Gift Box Base -->
+    <rect x="62" y="98" width="36" height="26" rx="4" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" />
+    <rect x="60" y="94" width="40" height="7" rx="3" fill="#BE123C" />
+    <!-- Ribbon vertical & bow -->
+    <rect x="77" y="94" width="6" height="30" fill="#F59E0B" />
+    <path d="M 80 94 C 74 86 64 88 74 94 Z" fill="#F59E0B" />
+    <path d="M 80 94 C 86 86 96 88 86 94 Z" fill="#F59E0B" />
+  </g>
+
+  <!-- Sparkles -->
+  <path d="M 38 48 L 40 42 L 42 48 L 48 50 L 42 52 L 40 58 L 38 52 L 32 50 Z" fill="#F59E0B" />
+  <path d="M 124 50 L 125 45 L 126 50 L 131 51 L 126 52 L 125 57 L 124 52 L 119 51 Z" fill="#F59E0B" />
+  <circle cx="126" cy="85" r="2.5" fill="#BE123C" opacity="0.7" />
+  <circle cx="34" cy="88" r="2.5" fill="#F59E0B" opacity="0.7" />
+</svg>

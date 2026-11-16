@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="packStudioBg" cx="50%" cy="40%" r="75%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="65%" stop-color="#FAF4EE" />
+      <stop offset="100%" stop-color="#ECE1D2" />
+    </radialGradient>
+    <linearGradient id="kraftBox" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDFBF7" />
+      <stop offset="50%" stop-color="#F5EFE6" />
+      <stop offset="100%" stop-color="#E5D8C5" />
+    </linearGradient>
+    <linearGradient id="kraftLid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F0E5D4" />
+    </linearGradient>
+    <filter id="packShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#2B2B3A" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#packStudioBg)" />
+
+  <!-- Package View Header Badge -->
+  <rect x="50" y="30" width="700" height="42" rx="10" fill="#FFFFFF" stroke="#E2D9CF" />
+  <text x="75" y="56" font-family="system-ui, sans-serif" font-size="13" font-weight="800" fill="#2B2B3A">MINI CELEBRATION BOX — PACKAGING &amp; UNBOXING PRESENTATION</text>
+  <text x="725" y="56" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#E91E63" text-anchor="end">Compact 22 x 16 x 6 cm • Ready to Gift &amp; Surprise</text>
+
+  <!-- Centered Isometric Presentation Box -->
+  <g filter="url(#packShadow)" transform="translate(180, 140)">
+    <!-- Main Box Body -->
+    <path d="M 220 70 L 410 160 L 220 250 L 30 160 Z" fill="url(#kraftLid)" stroke="#D5C5B5" stroke-width="1.5" />
+    <path d="M 30 160 L 220 250 L 220 370 L 30 280 Z" fill="url(#kraftBox)" stroke="#D5C5B5" stroke-width="1.5" />
+    <path d="M 220 250 L 410 160 L 410 280 L 220 370 Z" fill="#D8C8B5" stroke="#C5B5A2" stroke-width="1.5" />
+
+    <!-- Satin Brand Ribbon around the Box -->
+    <path d="M 125 115 L 145 125 L 145 330 L 125 320 Z" fill="#E91E63" opacity="0.95" />
+    <path d="M 220 70 L 240 80 L 315 208 L 295 198 Z" fill="#E91E63" opacity="0.85" />
+
+    <!-- Brand Emblem Label on Top Lid -->
+    <g transform="translate(220, 160)">
+      <ellipse cx="0" cy="0" rx="60" ry="32" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1" />
+      <circle cx="0" cy="0" r="18" fill="#E91E63" />
+      <text x="0" y="4" font-family="system-ui, sans-serif" font-size="10" font-weight="900" fill="#FFFFFF" text-anchor="middle">CB</text>
+      <text x="0" y="22" font-family="system-ui, sans-serif" font-size="7" font-weight="800" fill="#2B2B3A" text-anchor="middle" letter-spacing="1">CELEBRATION BOX</text>
+    </g>
+
+    <!-- Side Sticker Label on Front Panel -->
+    <g transform="translate(115, 230)">
+      <rect x="0" y="0" width="70" height="48" rx="4" fill="#FFFFFF" stroke="#CBD5E1" transform="skewY(24)" />
+      <text x="35" y="18" font-family="system-ui, sans-serif" font-size="6" font-weight="bold" fill="#E91E63" text-anchor="middle" transform="skewY(24)">MINI BOX</text>
+      <text x="35" y="28" font-family="system-ui, sans-serif" font-size="5" font-weight="600" fill="#64748B" text-anchor="middle" transform="skewY(24)">Pastel Pop Edition</text>
+      <text x="35" y="38" font-family="system-ui, sans-serif" font-size="5.5" font-weight="bold" fill="#00A8A8" text-anchor="middle" transform="skewY(24)">₹249 Complete</text>
+    </g>
+  </g>
+
+  <!-- Left Side: Unboxing Highlights List -->
+  <g filter="url(#packShadow)" transform="translate(70, 420)">
+    <rect width="280" height="120" rx="12" fill="#FFFFFF" stroke="#E2D9CF" />
+    <text x="20" y="26" font-family="system-ui, sans-serif" font-size="11" font-weight="800" fill="#2B2B3A">UNBOXING EXPERIENCE</text>
+    <text x="20" y="48" font-family="system-ui, sans-serif" font-size="9.5" fill="#475569">✓ Neatly organized interior compartments</text>
+    <text x="20" y="68" font-family="system-ui, sans-serif" font-size="9.5" fill="#475569">✓ 100% Recyclable kraft exterior</text>
+    <text x="20" y="88" font-family="system-ui, sans-serif" font-size="9.5" fill="#475569">✓ Discreet campus pickup &amp; delivery friendly</text>
+    <text x="20" y="106" font-family="system-ui, sans-serif" font-size="9.5" fill="#475569">✓ Includes printed DIY styling instruction card</text>
+  </g>
+
+  <!-- Right Side: Dimensions & Weight Badge -->
+  <g filter="url(#packShadow)" transform="translate(480, 440)">
+    <rect width="250" height="100" rx="12" fill="#F0FDF4" stroke="#BBF7D0" />
+    <text x="20" y="26" font-family="system-ui, sans-serif" font-size="11" font-weight="800" fill="#166534">PACKAGING SPECIFICATIONS</text>
+    <text x="20" y="46" font-family="system-ui, sans-serif" font-size="9.5" font-weight="600" fill="#15803D">Dimensions: 22 cm × 16 cm × 6 cm</text>
+    <text x="20" y="64" font-family="system-ui, sans-serif" font-size="9.5" font-weight="600" fill="#15803D">Weight: ~280 grams (Travel-ready)</text>
+    <text x="20" y="82" font-family="system-ui, sans-serif" font-size="9.5" font-weight="600" fill="#15803D">Storage: Store in cool, dry place</text>
+  </g>
+</svg>

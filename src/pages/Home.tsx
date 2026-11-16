@@ -15,12 +15,21 @@ import { WhatsAppFallbackModal } from '../components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from '../components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from '../components/PolicyModal';
 import { ScrollReveal } from '../components/react-bits/ScrollReveal';
+import { OccasionCategoryGrid } from '../components/OccasionCategoryGrid';
 import { PRODUCTS } from '../config/products';
-import { Product } from '../types';
+import { Product, OccasionCategory } from '../types';
 import { useCart } from '../context/CartContext';
 import { ShoppingBag, CheckCircle2 } from 'lucide-react';
 
-export const HomeContent: React.FC = () => {
+export interface HomeProps {
+  onNavigateToProduct?: (productId: string) => void;
+  onNavigateToCategory?: (categorySlug: string) => void;
+}
+
+export const HomeContent: React.FC<HomeProps> = ({
+  onNavigateToProduct,
+  onNavigateToCategory,
+}) => {
   const { toastMessage, totalCount, setIsCartOpen } = useCart();
 
   // Modals & Drawers state
@@ -82,6 +91,22 @@ export const HomeContent: React.FC = () => {
     setIsFallbackConfigured(isConfigured);
   };
 
+  const handleViewDetails = (product: Product) => {
+    if (onNavigateToProduct) {
+      onNavigateToProduct(product.id);
+    } else {
+      window.location.hash = `/product/${product.id}`;
+    }
+  };
+
+  const handleSelectCategory = (category: OccasionCategory) => {
+    if (onNavigateToCategory) {
+      onNavigateToCategory(category.slug);
+    } else {
+      window.location.hash = `/category/${category.slug}`;
+    }
+  };
+
   const scrollToShop = () => {
     const el = document.getElementById('shop');
     if (el) {
@@ -116,6 +141,9 @@ export const HomeContent: React.FC = () => {
           onOpenOrder={handleDirectWhatsAppOrder}
         />
 
+        {/* Visual Celebration Categories Discovery Grid */}
+        <OccasionCategoryGrid onSelectCategory={handleSelectCategory} />
+
         {/* Shop Kits Section */}
         <section id="shop" className="py-16 md:py-24 relative scroll-mt-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -138,7 +166,7 @@ export const HomeContent: React.FC = () => {
                 <ScrollReveal key={product.id} delay={idx * 0.1} yOffset={24}>
                   <ProductCard
                     product={product}
-                    onViewDetails={(prod) => setSelectedProductDetails(prod)}
+                    onViewDetails={handleViewDetails}
                     onBuyNow={handleBuyNow}
                   />
                 </ScrollReveal>
@@ -248,6 +276,6 @@ export const HomeContent: React.FC = () => {
   );
 };
 
-export const Home: React.FC = () => {
-  return <HomeContent />;
+export const Home: React.FC<HomeProps> = (props) => {
+  return <HomeContent {...props} />;
 };

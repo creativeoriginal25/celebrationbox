@@ -24,7 +24,7 @@
     <path d="M 124 175 L 156 175 L 151 280 L 129 280 Z" fill="#FFB400" />
 
     <!-- Gift Box Lid & Bow -->
-    <g transform="translate(-14, -10) rotate(-22 68 165)">
+    <g transform="rotate(-22 72 175)">
       <g transform="translate(140, 130)">
         <path d="M -8 -2 C -28 -35 -50 -20 -32 -2 C -20 6 -12 2 -8 2 Z" fill="#FFB400" />
         <path d="M 8 2 C 12 2 20 6 32 -2 C 50 -20 28 -35 8 -2 Z" fill="#FFB400" />

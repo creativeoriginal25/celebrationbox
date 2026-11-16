@@ -1,3 +1,34 @@
+export interface ProductPackItem {
+  name: string;
+  quantity: string;
+  pieceCount: number;
+  specification?: string;
+  note?: string;
+}
+
+export interface ProductGalleryImage {
+  id: string;
+  url: string;
+  alt: string;
+  title: string;
+  caption: string;
+  type: 'main' | 'flatlay' | 'details' | 'setup' | 'packaging';
+}
+
+export interface OccasionCategory {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  description: string;
+  image: string;
+  bgColor: string;
+  isAvailable: boolean;
+  badge?: string;
+  availableNotice?: string;
+  relatedProductIds?: ('mini-celebration-box' | 'signature-celebration-box')[];
+}
+
 export interface Product {
   id: 'mini-celebration-box' | 'signature-celebration-box';
   name: string;
@@ -13,6 +44,9 @@ export interface Product {
   active: boolean;
   availableThemes: string[];
   dimensionsOrSpecs?: string[];
+  totalPieces?: number;
+  packItems?: ProductPackItem[];
+  inventoryStatus?: 'in_stock' | 'low_stock' | 'out_of_stock';
 }
 
 export interface ThemeOption {

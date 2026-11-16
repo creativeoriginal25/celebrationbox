@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="giftBg" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFF5F5" />
+      <stop offset="100%" stop-color="#FED7AA" />
+    </radialGradient>
+    <linearGradient id="boxBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDA4AF" />
+      <stop offset="100%" stop-color="#E11D48" />
+    </linearGradient>
+    <linearGradient id="boxLidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB7185" />
+      <stop offset="100%" stop-color="#BE123C" />
+    </linearGradient>
+    <linearGradient id="satinGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF08A" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <filter id="shadowGift" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#2B2B3A" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <circle cx="80" cy="80" r="76" fill="url(#giftBg)" />
+
+  <g filter="url(#shadowGift)">
+    <!-- Greeting Card leaning behind -->
+    <g transform="translate(86, 38) rotate(16)">
+      <rect x="0" y="0" width="42" height="56" rx="4" fill="#FFFFFF" stroke="#FBCFE8" stroke-width="1.5" />
+      <line x1="8" y1="12" x2="34" y2="12" stroke="#FDA4AF" stroke-width="2.5" stroke-linecap="round" />
+      <line x1="8" y1="20" x2="28" y2="20" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" />
+      <line x1="8" y1="26" x2="30" y2="26" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" />
+      <!-- Small Heart Stamp -->
+      <path d="M 28 40 C 28 36 24 35 23 38 C 22 35 18 36 18 40 C 18 44 23 48 23 48 C 23 48 28 44 28 40 Z" fill="#E11D48" />
+    </g>
+
+    <!-- Main Gift Box Body -->
+    <rect x="42" y="74" width="66" height="54" rx="6" fill="url(#boxBodyGrad)" />
+    <!-- Box Lid -->
+    <rect x="38" y="65" width="74" height="15" rx="4" fill="url(#boxLidGrad)" />
+
+    <!-- Ribbon Vertical -->
+    <rect x="70" y="65" width="10" height="63" fill="url(#satinGold)" />
+    <!-- Ribbon Horizontal -->
+    <rect x="42" y="94" width="66" height="9" fill="url(#satinGold)" />
+
+    <!-- Big Satin Bow -->
+    <!-- Left Loop -->
+    <path d="M 72 66 C 54 50 48 64 68 66 Z" fill="url(#satinGold)" />
+    <path d="M 68 66 C 58 56 56 62 66 66 Z" fill="#D97706" opacity="0.4" />
+    <!-- Right Loop -->
+    <path d="M 78 66 C 96 50 102 64 82 66 Z" fill="url(#satinGold)" />
+    <path d="M 82 66 C 92 56 94 62 84 66 Z" fill="#D97706" opacity="0.4" />
+    <!-- Bow Knot -->
+    <ellipse cx="75" cy="66" rx="6" ry="5" fill="#FEF08A" stroke="#D97706" stroke-width="1" />
+    <!-- Ribbon Tails -->
+    <path d="M 72 68 Q 64 82 58 86 L 64 88 Q 72 80 75 70 Z" fill="url(#satinGold)" />
+    <path d="M 78 68 Q 86 82 92 86 L 86 88 Q 78 80 75 70 Z" fill="url(#satinGold)" />
+  </g>
+
+  <!-- Sparkles -->
+  <path d="M 32 48 L 34 44 L 36 48 L 40 49 L 36 50 L 34 54 L 32 50 L 28 49 Z" fill="#F59E0B" />
+  <circle cx="128" cy="112" r="3" fill="#E11D48" opacity="0.7" />
+  <circle cx="34" cy="110" r="2.5" fill="#F59E0B" opacity="0.7" />
+</svg>

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="anniBg" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFF1F2" />
+      <stop offset="100%" stop-color="#FFE4E6" />
+    </radialGradient>
+    <linearGradient id="roseRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB7185" />
+      <stop offset="60%" stop-color="#E11D48" />
+      <stop offset="100%" stop-color="#9F1239" />
+    </linearGradient>
+    <linearGradient id="roseGoldHeart" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE4E6" />
+      <stop offset="40%" stop-color="#FDA4AF" />
+      <stop offset="100%" stop-color="#F43F5E" />
+    </linearGradient>
+    <linearGradient id="candleBody" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFBEB" />
+      <stop offset="100%" stop-color="#FEF3C7" />
+    </linearGradient>
+    <filter id="shadowAnni" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#2B2B3A" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <circle cx="80" cy="80" r="76" fill="url(#anniBg)" />
+
+  <g filter="url(#shadowAnni)">
+    <!-- Right Heart Balloon (Rose Red) -->
+    <g transform="translate(62, 38) rotate(14 26 26)">
+      <path d="M 26 12 C 16 -4 0 6 0 22 C 0 38 20 48 26 54 C 32 48 52 38 52 22 C 52 6 36 -4 26 12 Z" fill="url(#roseRed)" />
+      <!-- Highlight -->
+      <ellipse cx="14" cy="16" rx="4" ry="7" fill="#FFFFFF" opacity="0.4" transform="rotate(-25 14 16)" />
+      <path d="M 26 54 L 23 58 L 29 58 Z" fill="#9F1239" />
+      <path d="M 26 58 Q 30 78 18 94" stroke="#BE123C" stroke-width="1.2" fill="none" />
+    </g>
+
+    <!-- Left Heart Balloon (Rose Gold, slightly in front) -->
+    <g transform="translate(42, 44) rotate(-12 24 24)">
+      <path d="M 24 10 C 14 -4 0 5 0 20 C 0 35 18 45 24 50 C 30 45 48 35 48 20 C 48 5 34 -4 24 10 Z" fill="url(#roseGoldHeart)" />
+      <!-- Highlight -->
+      <ellipse cx="12" cy="14" rx="4" ry="6" fill="#FFFFFF" opacity="0.6" transform="rotate(-25 12 14)" />
+      <path d="M 24 50 L 21 54 L 27 54 Z" fill="#F43F5E" />
+      <path d="M 24 54 Q 20 74 30 90" stroke="#BE123C" stroke-width="1.2" fill="none" />
+    </g>
+
+    <!-- Romantic Pillar Candle & Rose Petals at bottom -->
+    <rect x="72" y="96" width="16" height="26" rx="3" fill="url(#candleBody)" stroke="#E2E8F0" stroke-width="1" />
+    <!-- Candle Wick & Flame -->
+    <line x1="80" y1="96" x2="80" y2="92" stroke="#475569" stroke-width="1.5" />
+    <path d="M 80 84 C 77 88 78 91 80 92 C 82 91 83 88 80 84 Z" fill="#F59E0B" />
+    <circle cx="80" cy="88" r="4" fill="#FDE047" opacity="0.4" />
+
+    <!-- Rose Petals scattered -->
+    <path d="M 58 116 C 54 114 54 110 58 110 C 62 110 66 114 62 118 Z" fill="#E11D48" />
+    <path d="M 96 115 C 92 113 94 109 98 110 C 102 111 102 116 98 118 Z" fill="#FB7185" />
+    <path d="M 68 120 C 66 118 68 115 72 116 C 74 118 72 121 68 120 Z" fill="#E11D48" />
+  </g>
+
+  <!-- Sparkles -->
+  <path d="M 34 52 L 36 47 L 38 52 L 43 53 L 38 54 L 36 59 L 34 54 L 29 53 Z" fill="#F59E0B" />
+  <path d="M 124 56 L 125 52 L 126 56 L 130 57 L 126 58 L 125 62 L 124 58 L 120 57 Z" fill="#F59E0B" />
+  <circle cx="126" cy="94" r="2.5" fill="#E11D48" opacity="0.6" />
+</svg>

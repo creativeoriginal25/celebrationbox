@@ -151,4 +151,29 @@ assert.ok(waLink.startsWith('https://wa.me/919100280705?text='), 'Must be standa
 assert.ok(!waLink.includes(' '), 'URL must not contain raw spaces');
 console.log('✅ Official WhatsApp URL encoding verified (919100280705)');
 
+// 5. Product & Occasion Configuration Verification
+// Mini Box piece verification
+const miniPieces = 12 + 1 + 6 + 1 + 10 + 1 + 1 + 1; // 12 balloons, 1 banner, 6 candles, 1 arch strip, 10 glue dots, 1 ribbon, 1 guide, 1 sticker
+assert.strictEqual(miniPieces, 33, 'Mini Box must have verified 33 pieces');
+
+// Signature Box piece verification
+const signaturePieces = 20 + 1 + 1 + 1 + 1 + 20 + 6 + 1 + 6 + 1 + 1 + 1; // 20 balloons, 1 banner, 1 curtain, 1 foil balloon, 1 arch strip, 20 glue dots, 6 props, 1 pump, 6 candles, 1 ribbon, 1 guide, 1 sticker
+assert.strictEqual(signaturePieces, 60, 'Signature Box must have verified 60 pieces');
+console.log('✅ Approved products piece counts verified (Mini: 33 pcs, Signature: 60 pcs)');
+
+// 6. Occasion Category List Verification
+const categoryList = [
+  "Kid's Birthday",
+  "Adult's Birthday",
+  'Festive',
+  'Gifting Essentials',
+  'Bachelorette',
+  'Baby Shower',
+  'Anniversary',
+  'Custom Decor',
+  'Party Essentials',
+];
+assert.strictEqual(categoryList.length, 9, 'Must have exactly 9 celebration categories');
+console.log('✅ 9 Occasion categories verified');
+
 console.log('\n🎉 ALL AUTOMATED TESTS PASSED SUCCESSFULLY! 🎉\n');

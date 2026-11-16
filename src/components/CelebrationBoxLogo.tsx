@@ -131,8 +131,8 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
 
         {/* --- Gift Box Lid & Bow (Animated Elastic Pop) --- */}
         <motion.g
-          initial={isAnimated ? { rotate: 0, y: 28, x: 10 } : { rotate: -22, y: -10, x: -14 }}
-          animate={{ rotate: -22, y: -10, x: -14 }}
+          initial={isAnimated ? { rotate: 0 } : false}
+          animate={{ rotate: -22 }}
           transition={
             isAnimated
               ? {
@@ -145,11 +145,10 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
           variants={{
             hover: {
               rotate: [-22, -28, -19, -22],
-              y: [-10, -18, -8, -10],
               transition: { duration: 0.6, ease: 'easeInOut' }
             }
           }}
-          style={{ transformOrigin: '68px 165px' }}
+          style={{ transformOrigin: '72px 175px' }}
         >
           {/* Yellow Ribbon Bow on Lid */}
           <g transform="translate(140, 130)">
@@ -185,6 +184,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
       {/* ========================================================
           2. UNIFIED TYPOGRAPHY: "Celebration Box"
           Using a single <text> with <tspan> so text NEVER overlaps!
+          Base y coordinate is 232. Motion y MUST BE 0 to avoid offset!
          ======================================================== */}
       <motion.text
         x="276"
@@ -193,8 +193,8 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
         fontSize="122"
         fontWeight="800"
         letterSpacing="-1.8"
-        initial={isAnimated ? { opacity: 0, y: 245 } : false}
-        animate={{ opacity: 1, y: 232 }}
+        initial={isAnimated ? { opacity: 0, y: 12 } : false}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25, duration: 0.65, ease: smoothEase }}
       >
         <tspan fill={celebrationTextColor}>Celebration </tspan>

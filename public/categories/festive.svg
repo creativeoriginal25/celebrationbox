@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <radialGradient id="festiveBg" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFFBEB" />
+      <stop offset="100%" stop-color="#FEF3C7" />
+    </radialGradient>
+    <linearGradient id="brassGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <radialGradient id="flameGrad" cx="50%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#FDE047" />
+      <stop offset="70%" stop-color="#F97316" />
+      <stop offset="100%" stop-color="#DC2626" />
+    </radialGradient>
+    <linearGradient id="lanternTeal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2DD4BF" />
+      <stop offset="100%" stop-color="#0F766E" />
+    </linearGradient>
+    <filter id="shadowFestive" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#2B2B3A" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <circle cx="80" cy="80" r="76" fill="url(#festiveBg)" />
+
+  <g filter="url(#shadowFestive)">
+    <!-- Fairy lights wire at top -->
+    <path d="M 28 42 Q 54 52 80 44 Q 106 36 132 44" stroke="#92400E" stroke-width="1.5" fill="none" />
+    <!-- Small glowing light bulbs -->
+    <circle cx="44" cy="47" r="4.5" fill="#FDE047" />
+    <circle cx="68" cy="47" r="4.5" fill="#F43F5E" />
+    <circle cx="94" cy="40" r="4.5" fill="#38BDF8" />
+    <circle cx="116" cy="43" r="4.5" fill="#F59E0B" />
+
+    <!-- Hanging Festive Lantern (Kandil / Akasadeepa motif) -->
+    <!-- Hanging cord -->
+    <line x1="80" y1="44" x2="80" y2="60" stroke="#B45309" stroke-width="1.5" />
+    <!-- Lantern Diamond Frame -->
+    <path d="M 80 60 L 98 78 L 80 96 L 62 78 Z" fill="url(#brassGold)" />
+    <!-- Center teal cutout -->
+    <path d="M 80 67 L 91 78 L 80 89 L 69 78 Z" fill="url(#lanternTeal)" />
+    <circle cx="80" cy="78" r="4" fill="#FEF08A" />
+    <!-- Lantern Streamers -->
+    <path d="M 68 96 L 64 116 L 70 116 L 73 96 Z" fill="#F43F5E" />
+    <path d="M 77 96 L 77 122 L 83 122 L 83 96 Z" fill="#F59E0B" />
+    <path d="M 87 96 L 90 116 L 96 116 L 92 96 Z" fill="#F43F5E" />
+
+    <!-- Traditional Clay Diya in front right -->
+    <g transform="translate(42, 48)">
+      <ellipse cx="64" cy="62" rx="22" ry="9" fill="url(#brassGold)" />
+      <path d="M 42 62 Q 64 78 86 62 Z" fill="#B45309" />
+      <!-- Diya Flame -->
+      <path d="M 64 45 C 58 53 60 59 64 60 C 68 59 70 53 64 45 Z" fill="url(#flameGrad)" />
+      <!-- Glow halo -->
+      <circle cx="64" cy="54" r="8" fill="#FDE047" opacity="0.3" />
+    </g>
+  </g>
+
+  <!-- Sparkles -->
+  <path d="M 32 75 L 34 71 L 36 75 L 40 76 L 36 77 L 34 81 L 32 77 L 28 76 Z" fill="#F59E0B" />
+  <circle cx="128" cy="74" r="3" fill="#D97706" opacity="0.8" />
+</svg>

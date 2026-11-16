@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="flatBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#FAF4EE" />
+      <stop offset="100%" stop-color="#F2E8DC" />
+    </radialGradient>
+    <linearGradient id="peachG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE0D0" /><stop offset="100%" stop-color="#FF9E68" />
+    </linearGradient>
+    <linearGradient id="lilacG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E6FA" /><stop offset="100%" stop-color="#B885C6" />
+    </linearGradient>
+    <linearGradient id="creamG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" /><stop offset="100%" stop-color="#E8CEAA" />
+    </linearGradient>
+    <filter id="itemShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#2B2B3A" flood-opacity="0.1" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#flatBg)" />
+
+  <!-- Flatlay Header Label -->
+  <rect x="40" y="30" width="720" height="42" rx="10" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1" />
+  <text x="60" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" fill="#2B2B3A" letter-spacing="1">MINI CELEBRATION BOX — COMPLETE KIT FLAT-LAY</text>
+  <text x="740" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#E91E63" text-anchor="end">33 Pieces Total • 8 Kit Items</text>
+
+  <!-- 1. Happy Birthday Banner (Top Center) -->
+  <g filter="url(#itemShadow)" transform="translate(60, 95)">
+    <rect width="680" height="70" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="24" y="24" font-family="system-ui, sans-serif" font-size="10" font-weight="800" fill="#94A3B8" letter-spacing="1">ITEM 1: HAPPY BIRTHDAY CARDSTOCK BANNER</text>
+    <path d="M 30 42 Q 340 54 650 42" stroke="#B45309" stroke-width="1.5" fill="none" />
+    <!-- Mini pennants -->
+    <g transform="translate(100, 36)">
+      <polygon points="0,0 24,0 12,24" fill="#E91E63" /><text x="12" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">H</text>
+      <polygon points="30,0 54,0 42,24" fill="#00A8A8" /><text x="42" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">A</text>
+      <polygon points="60,0 84,0 72,24" fill="#FFB400" /><text x="72" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">P</text>
+      <polygon points="90,0 114,0 102,24" fill="#E91E63" /><text x="102" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">P</text>
+      <polygon points="120,0 144,0 132,24" fill="#00A8A8" /><text x="132" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">Y</text>
+      <!-- BIRTHDAY -->
+      <polygon points="165,0 189,0 177,24" fill="#E91E63" /><text x="177" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">B</text>
+      <polygon points="195,0 219,0 207,24" fill="#FFB400" /><text x="207" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">I</text>
+      <polygon points="225,0 249,0 237,24" fill="#00A8A8" /><text x="237" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">R</text>
+      <polygon points="255,0 279,0 267,24" fill="#E91E63" /><text x="267" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">T</text>
+      <polygon points="285,0 309,0 297,24" fill="#00A8A8" /><text x="297" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">H</text>
+      <polygon points="315,0 339,0 327,24" fill="#FFB400" /><text x="327" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">D</text>
+      <polygon points="345,0 369,0 357,24" fill="#E91E63" /><text x="357" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">A</text>
+      <polygon points="375,0 399,0 387,24" fill="#00A8A8" /><text x="387" y="14" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">Y</text>
+    </g>
+  </g>
+
+  <!-- 2. Latex Balloons 12 pcs (Middle Left) -->
+  <g filter="url(#itemShadow)" transform="translate(60, 185)">
+    <rect width="320" height="200" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="20" y="26" font-family="system-ui, sans-serif" font-size="11" font-weight="800" fill="#2B2B3A">ITEM 2: 12 LATEX BALLOONS</text>
+    <text x="20" y="44" font-family="system-ui, sans-serif" font-size="10" fill="#64748B">Pastel Pop: 4 Peach, 4 Lilac, 4 Cream</text>
+    <!-- Balloon grid -->
+    <g transform="translate(24, 60)">
+      <!-- Row 1: Peach -->
+      <ellipse cx="20" cy="20" rx="14" ry="18" fill="url(#peachG)" />
+      <ellipse cx="60" cy="20" rx="14" ry="18" fill="url(#peachG)" />
+      <ellipse cx="100" cy="20" rx="14" ry="18" fill="url(#peachG)" />
+      <ellipse cx="140" cy="20" rx="14" ry="18" fill="url(#peachG)" />
+      <!-- Row 2: Lilac -->
+      <ellipse cx="20" cy="65" rx="14" ry="18" fill="url(#lilacG)" />
+      <ellipse cx="60" cy="65" rx="14" ry="18" fill="url(#lilacG)" />
+      <ellipse cx="100" cy="65" rx="14" ry="18" fill="url(#lilacG)" />
+      <ellipse cx="140" cy="65" rx="14" ry="18" fill="url(#lilacG)" />
+      <!-- Row 3: Cream -->
+      <ellipse cx="20" cy="110" rx="14" ry="18" fill="url(#creamG)" stroke="#CBD5E1" stroke-width="0.5" />
+      <ellipse cx="60" cy="110" rx="14" ry="18" fill="url(#creamG)" stroke="#CBD5E1" stroke-width="0.5" />
+      <ellipse cx="100" cy="110" rx="14" ry="18" fill="url(#creamG)" stroke="#CBD5E1" stroke-width="0.5" />
+      <ellipse cx="140" cy="110" rx="14" ry="18" fill="url(#creamG)" stroke="#CBD5E1" stroke-width="0.5" />
+    </g>
+    <!-- Label Pill -->
+    <rect x="195" y="150" width="105" height="30" rx="6" fill="#FCE7F3" />
+    <text x="247" y="169" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#BE123C" text-anchor="middle">12 Pcs Premium</text>
+  </g>
+
+  <!-- 3. Six-Piece Cake Candle Pack (Middle Right) -->
+  <g filter="url(#itemShadow)" transform="translate(400, 185)">
+    <rect width="165" height="200" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="26" font-family="system-ui, sans-serif" font-size="10.5" font-weight="800" fill="#2B2B3A">ITEM 3: CANDLE PACK</text>
+    <text x="14" y="42" font-family="system-ui, sans-serif" font-size="9" fill="#64748B">6 Sparkling Cake Candles</text>
+    <!-- 6 Candles blister card -->
+    <rect x="20" y="55" width="125" height="120" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1" />
+    <g transform="translate(32, 70)">
+      <rect x="0" y="12" width="6" height="65" rx="2" fill="#E91E63" /><circle cx="3" cy="6" r="3" fill="#F59E0B" />
+      <rect x="18" y="12" width="6" height="65" rx="2" fill="#FFB400" /><circle cx="21" cy="6" r="3" fill="#F59E0B" />
+      <rect x="36" y="12" width="6" height="65" rx="2" fill="#00A8A8" /><circle cx="39" cy="6" r="3" fill="#F59E0B" />
+      <rect x="54" y="12" width="6" height="65" rx="2" fill="#E91E63" /><circle cx="57" cy="6" r="3" fill="#F59E0B" />
+      <rect x="72" y="12" width="6" height="65" rx="2" fill="#FFB400" /><circle cx="75" cy="6" r="3" fill="#F59E0B" />
+      <rect x="90" y="12" width="6" height="65" rx="2" fill="#00A8A8" /><circle cx="93" cy="6" r="3" fill="#F59E0B" />
+    </g>
+    <text x="82" y="165" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#B45309" text-anchor="middle">6 Candles Pack</text>
+  </g>
+
+  <!-- 4. Balloon Arch Strip & Glue Dots (Middle Far Right) -->
+  <g filter="url(#itemShadow)" transform="translate(585, 185)">
+    <rect width="155" height="200" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="24" font-family="system-ui, sans-serif" font-size="10.5" font-weight="800" fill="#2B2B3A">ITEMS 4 &amp; 5</text>
+    <text x="14" y="38" font-family="system-ui, sans-serif" font-size="9" fill="#64748B">1m Strip + 10 Dots</text>
+    <!-- Arch strip illustration -->
+    <rect x="20" y="52" width="115" height="48" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-dasharray="3 3" />
+    <circle cx="36" cy="76" r="5" fill="#FFFFFF" stroke="#94A3B8" />
+    <circle cx="56" cy="76" r="5" fill="#FFFFFF" stroke="#94A3B8" />
+    <circle cx="76" cy="76" r="5" fill="#FFFFFF" stroke="#94A3B8" />
+    <circle cx="96" cy="76" r="5" fill="#FFFFFF" stroke="#94A3B8" />
+    <circle cx="116" cy="76" r="5" fill="#FFFFFF" stroke="#94A3B8" />
+    <text x="77" y="66" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#475569" text-anchor="middle">1 Metre Arch Strip</text>
+    <!-- 10 Glue dots -->
+    <rect x="20" y="112" width="115" height="65" rx="6" fill="#CCFBF1" stroke="#99F6E4" />
+    <text x="77" y="128" font-family="system-ui, sans-serif" font-size="8.5" font-weight="bold" fill="#0F766E" text-anchor="middle">10 Balloon Glue Dots</text>
+    <g transform="translate(28, 136)">
+      <circle cx="10" cy="8" r="4" fill="#00A8A8" /><circle cx="28" cy="8" r="4" fill="#00A8A8" /><circle cx="46" cy="8" r="4" fill="#00A8A8" /><circle cx="64" cy="8" r="4" fill="#00A8A8" /><circle cx="82" cy="8" r="4" fill="#00A8A8" />
+      <circle cx="10" cy="24" r="4" fill="#00A8A8" /><circle cx="28" cy="24" r="4" fill="#00A8A8" /><circle cx="46" cy="24" r="4" fill="#00A8A8" /><circle cx="64" cy="24" r="4" fill="#00A8A8" /><circle cx="82" cy="24" r="4" fill="#00A8A8" />
+    </g>
+  </g>
+
+  <!-- 5. Bottom Row: Curling Ribbon, Guide Card, Branded Sticker -->
+  <!-- Item 6: Curling Ribbon -->
+  <g filter="url(#itemShadow)" transform="translate(60, 405)">
+    <rect width="215" height="150" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="16" y="26" font-family="system-ui, sans-serif" font-size="10.5" font-weight="800" fill="#2B2B3A">ITEM 6: CURLING RIBBON</text>
+    <text x="16" y="42" font-family="system-ui, sans-serif" font-size="9" fill="#64748B">2 Metres Pastel Styling Ribbon</text>
+    <!-- Ribbon coil -->
+    <path d="M 40 100 Q 80 60 120 100 Q 160 140 180 90" stroke="#FFB400" stroke-width="4" fill="none" stroke-linecap="round" />
+    <rect x="55" y="112" width="105" height="24" rx="4" fill="#FEF3C7" />
+    <text x="107" y="128" font-family="system-ui, sans-serif" font-size="9" font-weight="bold" fill="#B45309" text-anchor="middle">2 Metres Spool</text>
+  </g>
+
+  <!-- Item 7: DIY Instruction Guide Card -->
+  <g filter="url(#itemShadow)" transform="translate(295, 405)">
+    <rect width="240" height="150" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="16" y="26" font-family="system-ui, sans-serif" font-size="10.5" font-weight="800" fill="#2B2B3A">ITEM 7: DIY INSTRUCTION CARD</text>
+    <text x="16" y="42" font-family="system-ui, sans-serif" font-size="9" fill="#64748B">Step-by-step room styling guide</text>
+    <!-- Guide Card layout -->
+    <rect x="18" y="55" width="204" height="80" rx="6" fill="#F8FAFC" stroke="#E2E8F0" />
+    <circle cx="36" cy="74" r="8" fill="#E91E63" /><text x="36" y="78" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">1</text>
+    <line x1="52" y1="74" x2="190" y2="74" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+    <circle cx="36" cy="98" r="8" fill="#00A8A8" /><text x="36" y="102" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">2</text>
+    <line x1="52" y1="98" x2="170" y2="98" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+    <circle cx="36" cy="120" r="8" fill="#FFB400" /><text x="36" y="124" fill="#FFF" font-size="9" font-weight="bold" text-anchor="middle">3</text>
+    <line x1="52" y1="120" x2="150" y2="120" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Item 8: Branded Sticker -->
+  <g filter="url(#itemShadow)" transform="translate(555, 405)">
+    <rect width="185" height="150" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="14" y="26" font-family="system-ui, sans-serif" font-size="10.5" font-weight="800" fill="#2B2B3A">ITEM 8: BOX STICKER</text>
+    <text x="14" y="42" font-family="system-ui, sans-serif" font-size="9" fill="#64748B">Official celebration seal</text>
+    <!-- Circular Seal -->
+    <circle cx="92" cy="96" r="36" fill="#FDF2F8" stroke="#F472B6" stroke-width="2" stroke-dasharray="4 2" />
+    <circle cx="92" cy="96" r="28" fill="#E91E63" />
+    <text x="92" y="94" font-family="system-ui, sans-serif" font-size="7.5" font-weight="900" fill="#FFFFFF" text-anchor="middle">CELEBRATION</text>
+    <text x="92" y="104" font-family="system-ui, sans-serif" font-size="7" font-weight="700" fill="#FEF08A" text-anchor="middle">BOX ★ SEAL</text>
+  </g>
+</svg>
