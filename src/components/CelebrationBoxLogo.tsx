@@ -5,11 +5,11 @@ interface CelebrationBoxLogoProps {
   className?: string;
   animated?: boolean;
   onAnimationComplete?: () => void;
-  variant?: 'light' | 'dark'; // 'light' (default) for cream/white surfaces; 'dark' for dark surfaces
-  interactive?: boolean; // Hover micro-interactions
+  variant?: 'light' | 'dark';
+  interactive?: boolean;
 }
 
-// Smooth luxurious cubic-bezier easing curve for silky fluid animations
+// Smooth luxurious cubic-bezier easing curve
 const smoothEase = [0.16, 1, 0.3, 1] as const;
 
 export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
@@ -22,7 +22,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
   const shouldReduceMotion = useReducedMotion();
   const isAnimated = animated && !shouldReduceMotion;
 
-  // Exact Brand Colors
+  // Exact Brand Palette
   const celebrationTextColor = variant === 'dark' ? '#FFFFFF' : '#2B2B3A';
   const boxTextColor = '#E91E63'; // Rani pink
   const ribbonColor = '#FFB400'; // Marigold yellow
@@ -43,7 +43,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
       <defs>
         {/* Soft Drop Shadow for Box and Bow */}
         <filter id="logoBoxShadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#2B2B3A" floodOpacity="0.14" />
+          <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#2B2B3A" floodOpacity="0.12" />
         </filter>
         {/* Luminous Glow for Sparkle Stars */}
         <filter id="logoStarGlow" x="-30%" y="-30%" width="160%" height="160%">
@@ -52,15 +52,15 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
       </defs>
 
       {/* ========================================================
-          1. FESTIVE GIFT BOX ICON (LEFT SIDE)
+          1. FESTIVE GIFT BOX WITH OPENING LID & BURST
          ======================================================== */}
       <g filter="url(#logoBoxShadow)">
 
-        {/* --- Confetti & Streamers Erupting from the Open Box --- */}
+        {/* --- Confetti, Streamers & Spray Bursting from inside Box --- */}
         <g id="celebration-burst">
           {/* Top-Right Golden Sparkle Star */}
           <motion.path
-            d="M 260 28 Q 260 50 282 50 Q 260 50 260 72 Q 260 50 238 50 Q 260 50 260 28 Z"
+            d="M 246 40 Q 246 62 268 62 Q 246 62 246 84 Q 246 62 224 62 Q 246 62 246 40 Z"
             fill={ribbonColor}
             filter="url(#logoStarGlow)"
             initial={isAnimated ? { scale: 0, opacity: 0 } : false}
@@ -73,10 +73,10 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
 
           {/* Teal Serpentine Streamer */}
           <motion.path
-            d="M 160 145 C 185 105 215 130 240 95 C 255 75 275 88 270 70"
+            d="M 195 150 C 215 120 240 140 258 112 C 268 96 280 102 276 88"
             fill="none"
             stroke={tealColor}
-            strokeWidth="8"
+            strokeWidth="8.5"
             strokeLinecap="round"
             initial={isAnimated ? { pathLength: 0, opacity: 0 } : false}
             animate={{ pathLength: 1, opacity: 1 }}
@@ -85,54 +85,64 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
 
           {/* Pink Confetti Dot */}
           <motion.circle
-            cx="255"
-            cy="125"
+            cx="242"
+            cy="156"
             r="9.5"
             fill={boxColor}
-            initial={isAnimated ? { scale: 0, y: 25, opacity: 0 } : false}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
+            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.44, duration: 0.5, ease: smoothEase }}
           />
 
-          {/* Yellow Confetti / Firework Droplets */}
+          {/* Yellow Spray Droplets (Fountain Spray) */}
           <motion.path
-            d="M 115 135 C 105 118 125 102 136 118 C 142 128 130 140 115 135 Z"
+            d="M 148 174 C 140 156 156 140 166 148 C 172 154 162 172 148 174 Z"
             fill={ribbonColor}
-            initial={isAnimated ? { scale: 0, y: 20, opacity: 0 } : false}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
+            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.36, duration: 0.55, ease: smoothEase }}
           />
           <motion.path
-            d="M 152 110 C 146 92 168 80 174 100 C 178 112 162 122 152 110 Z"
+            d="M 178 176 C 174 156 198 142 205 156 C 209 166 193 178 178 176 Z"
             fill={ribbonColor}
-            initial={isAnimated ? { scale: 0, y: 22, opacity: 0 } : false}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
+            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.55, ease: smoothEase }}
+          />
+
+          {/* Pink Spray Droplet */}
+          <motion.path
+            d="M 194 180 C 200 166 222 158 228 170 C 230 176 212 184 194 180 Z"
+            fill={boxColor}
+            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.42, duration: 0.55, ease: smoothEase }}
           />
         </g>
 
-        {/* --- Gift Box Base --- */}
+        {/* --- Box Base with 3D Curved Top Rim --- */}
         <motion.g
-          initial={isAnimated ? { scale: 0.85, opacity: 0, y: 15 } : false}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: smoothEase }}
+          initial={isAnimated ? { scale: 0.9, opacity: 0 } : false}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.55, ease: smoothEase }}
         >
-          {/* Main Box Body (Tapered with rounded corners) */}
+          {/* Main Box Body */}
           <path
-            d="M 72 175 L 208 175 C 216 175 221 180 219 188 L 204 266 C 201 274 193 280 184 280 L 96 280 C 87 280 79 274 76 266 L 61 188 C 59 180 64 175 72 175 Z"
+            d="M 72 175 C 112 182 174 192 234 184 C 240 183 244 188 242 195 L 228 268 C 226 276 218 282 209 282 L 97 282 C 88 282 80 276 78 268 L 66 186 C 64 179 67 174 72 175 Z"
             fill={boxColor}
           />
           {/* Vertical Warm Yellow Ribbon */}
           <path
-            d="M 124 175 L 156 175 L 151 280 L 129 280 Z"
+            d="M 138 187 C 150 189 162 189 170 187 L 168 282 L 140 282 Z"
             fill={ribbonColor}
           />
         </motion.g>
 
-        {/* --- Gift Box Lid & Bow (Animated Elastic Pop) --- */}
+        {/* --- Gift Box Lid & Bow (Unified Object Rotating Together) --- */}
         <motion.g
-          initial={isAnimated ? { rotate: 0 } : false}
-          animate={{ rotate: -22 }}
+          transform="translate(68, 178)"
+          initial={isAnimated ? { rotate: 0 } : { rotate: -28 }}
+          animate={{ rotate: -28 }}
           transition={
             isAnimated
               ? {
@@ -144,34 +154,34 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
           }
           variants={{
             hover: {
-              rotate: [-22, -28, -19, -22],
+              rotate: [-28, -34, -25, -28],
               transition: { duration: 0.6, ease: 'easeInOut' }
             }
           }}
-          style={{ transformOrigin: '72px 175px' }}
+          style={{ transformOrigin: '0px 0px' }}
         >
-          {/* Yellow Ribbon Bow on Lid */}
-          <g transform="translate(140, 130)">
+          {/* Yellow Ribbon Bow sitting on the TOP edge of the lid */}
+          <g transform="translate(80, -34)">
             {/* Left Bow Loop */}
             <path
-              d="M -8 -2 C -28 -35 -50 -20 -32 -2 C -20 6 -12 2 -8 2 Z"
+              d="M -6 0 C -26 -32 -52 -16 -34 4 C -22 10 -12 6 -6 0 Z"
               fill={ribbonColor}
             />
             {/* Right Bow Loop */}
             <path
-              d="M 8 2 C 12 2 20 6 32 -2 C 50 -20 28 -35 8 -2 Z"
+              d="M 6 0 C 12 6 22 10 34 4 C 52 -16 26 -32 6 0 Z"
               fill={ribbonColor}
             />
             {/* Center Bow Knot */}
-            <circle cx="0" cy="0" r="8" fill={ribbonAccent} />
+            <circle cx="0" cy="2" r="8" fill={ribbonAccent} />
           </g>
 
           {/* Lid Rectangle with soft rounded corners */}
           <rect
-            x="52"
-            y="130"
-            width="176"
-            height="36"
+            x="0"
+            y="-34"
+            width="172"
+            height="34"
             rx="11"
             fill={boxColor}
             stroke={lidStrokeColor}
@@ -183,8 +193,6 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
 
       {/* ========================================================
           2. UNIFIED TYPOGRAPHY: "Celebration Box"
-          Using a single <text> with <tspan> so text NEVER overlaps!
-          Base y coordinate is 232. Motion y MUST BE 0 to avoid offset!
          ======================================================== */}
       <motion.text
         x="276"
@@ -193,8 +201,8 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
         fontSize="122"
         fontWeight="800"
         letterSpacing="-1.8"
-        initial={isAnimated ? { opacity: 0, y: 12 } : false}
-        animate={{ opacity: 1, y: 0 }}
+        initial={isAnimated ? { opacity: 0 } : false}
+        animate={{ opacity: 1 }}
         transition={{ delay: 0.25, duration: 0.65, ease: smoothEase }}
       >
         <tspan fill={celebrationTextColor}>Celebration </tspan>
