@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 import { Confetti, ConfettiRef } from './react-bits/Confetti';
+import GradientText from './react-bits/GradientText';
 
 interface HeroProps {
   onExplore: () => void;
@@ -80,9 +81,16 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
           
           {/* ELEMENT 1: TOP BRAND BADGE */}
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-pink-50 border border-brand-pink-200/80 text-brand-pink-700 text-xs font-bold tracking-wider uppercase mb-6 sm:mb-8 shadow-xs select-none">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-pink-50 border border-brand-pink-200/80 text-xs font-bold tracking-wider uppercase mb-6 sm:mb-8 shadow-xs select-none">
             <Sparkles className="w-3.5 h-3.5 text-brand-pink fill-brand-pink/20" />
-            <span>✦ CURATED DIY CELEBRATION KITS</span>
+            <GradientText
+              colors={['#E91E63', '#FF4081', '#FFB400', '#00A8A8']}
+              animationSpeed={6}
+              variant="flow"
+              className="font-bold tracking-wider"
+            >
+              ✦ CURATED DIY CELEBRATION KITS
+            </GradientText>
           </div>
 
           {/* ELEMENT 2: CELEBRATION BOX CODE-GENERATED ANIMATED LOGO (ENLARGED & HIGHLIGHTED) */}
@@ -108,8 +116,15 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
           {/* ELEMENT 3: MAIN HEADLINE */}
           <h1 className="font-display font-extrabold text-2xl xs:text-3xl sm:text-5xl lg:text-6xl text-brand-ink tracking-tight leading-[1.16] mb-3 sm:mb-5 max-w-3xl mx-auto px-2">
             Make Every Celebration{' '}
-            <span className="text-brand-pink underline decoration-brand-marigold decoration-wavy decoration-3 underline-offset-8">
-              Special.
+            <span className="relative inline-block underline decoration-brand-marigold decoration-wavy decoration-3 underline-offset-8">
+              <GradientText
+                colors={['#E91E63', '#FF4081', '#9C27B0', '#E91E63']}
+                animationSpeed={6}
+                variant="flow"
+                glow={0.3}
+              >
+                Special.
+              </GradientText>
             </span>
           </h1>
 
