@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Menu, X, ShoppingBag } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 interface HeaderProps {
-  onOpenOrder: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
+  onShopClick: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenOrder }) => {
+export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { totalCount, setIsCartOpen } = useCart();
 
   const navLinks = [
     { label: 'Home', href: '#home' },
@@ -28,14 +30,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrder }) => {
 
   return (
     <header className="sticky top-0 z-40 w-full surface-header transition-shadow duration-200">
-      {/* Top Announcement Bar */}
-      <div className="bg-brand-pink text-white text-xs py-1.5 px-4 text-center font-medium flex items-center justify-center gap-2">
-        <span>✨ Student-founded in Bhimavaram • DIY Birthday Kits from ₹249 • Free Campus Pickup</span>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-18 py-3">
-          {/* Logo with clean fallback */}
+          {/* Logo with accessible fallback */}
           <a
             href="#home"
             className="flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink rounded-lg"
@@ -50,7 +47,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrder }) => {
               alt="Celebration Box Logo"
               className="h-10 sm:h-11 w-auto object-contain"
               onError={(e) => {
-                // Graceful fallback to text-based brand if image fails
                 const target = e.currentTarget;
                 target.style.display = 'none';
                 if (target.nextElementSibling) {
@@ -76,29 +72,34 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrder }) => {
             ))}
           </nav>
 
-          {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* Actions: Cart Icon + Shop Now CTA */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* Cart Button */}
             <button
-              onClick={() => onOpenOrder()}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Shop Now</span>
-            </button>
-          </div>
-
-          {/* Mobile Menu Toggle & Quick Order */}
-          <div className="flex lg:hidden items-center gap-2">
-            <button
-              onClick={() => onOpenOrder()}
-              className="inline-flex items-center justify-center p-2 rounded-xl text-white bg-brand-pink shadow-sm"
-              aria-label="Shop Kits"
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2.5 rounded-xl border border-brand-ink/10 bg-white hover:bg-brand-cream-50 text-brand-ink hover:text-brand-pink transition-colors cursor-pointer"
+              aria-label={`View cart with ${totalCount} items`}
             >
               <ShoppingBag className="w-5 h-5" />
+              {totalCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-brand-pink text-white text-[11px] font-black flex items-center justify-center shadow-xs">
+                  {totalCount}
+                </span>
+              )}
             </button>
+
+            {/* Shop Now CTA */}
+            <button
+              onClick={onShopClick}
+              className="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
+            >
+              <span>Shop Kits</span>
+            </button>
+
+            {/* Mobile Menu Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-brand-ink hover:text-brand-pink hover:bg-brand-cream-100 border border-brand-ink/10 transition-colors focus:outline-none"
+              className="lg:hidden p-2.5 rounded-xl text-brand-ink hover:text-brand-pink hover:bg-brand-cream-50 border border-brand-ink/10 transition-colors focus:outline-none"
               aria-label="Toggle Navigation Menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -124,16 +125,26 @@ export const Header: React.FC<HeaderProps> = ({ onOpenOrder }) => {
             ))}
           </nav>
 
-          <div className="mt-4 pt-3 border-t border-brand-ink/10">
+          <div className="mt-4 pt-3 border-t border-brand-ink/10 flex flex-col gap-2">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onOpenOrder();
+                setIsCartOpen(true);
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-brand-ink bg-brand-cream-100 hover:bg-brand-cream-200 transition-colors"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              <span>View Cart ({totalCount} items)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onShopClick();
               }}
               className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white bg-brand-pink shadow-sm active:scale-98 transition-all"
             >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Order Celebration Box</span>
+              <span>Explore Celebration Boxes</span>
             </button>
           </div>
         </div>

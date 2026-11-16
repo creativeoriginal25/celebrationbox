@@ -1,19 +1,21 @@
 import React from 'react';
-import { X, Check, AlertCircle, ShoppingBag, Clock, Sparkles } from 'lucide-react';
+import { X, Check, AlertCircle, ShoppingCart, Zap, Clock, Sparkles } from 'lucide-react';
 import { Product } from '../types';
 import { formatPrice } from '../utils/currency';
+import { useCart } from '../context/CartContext';
 
 interface ProductModalProps {
   product: Product | null;
   onClose: () => void;
-  onOrderNow: (product: Product) => void;
+  onBuyNow: (product: Product) => void;
 }
 
 export const ProductModal: React.FC<ProductModalProps> = ({
   product,
   onClose,
-  onOrderNow,
+  onBuyNow,
 }) => {
+  const { addToCart } = useCart();
   if (!product) return null;
 
   const isSignature = product.id === 'signature-celebration-box';
@@ -52,7 +54,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           <div className="text-center sm:text-left space-y-1.5 flex-1">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide uppercase badge-pink">
               <Sparkles className="w-3 h-3" />
-              <span>{isSignature ? 'Complete Party Edition' : 'Compact Hostel Pick'}</span>
+              <span>{isSignature ? 'Signature Edition' : 'Mini Edition'}</span>
             </div>
             <h2 id="product-modal-title" className="text-2xl sm:text-3xl font-extrabold text-brand-ink">
               {product.name}
@@ -116,29 +118,36 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           </ul>
         </div>
 
-        {/* Footer Actions */}
+        {/* Footer Actions: Buy Now & Add to Cart */}
         <div className="pt-4 border-t border-brand-ink/10 flex flex-col sm:flex-row gap-3 items-center justify-between">
-          <div className="text-xs text-brand-ink-muted text-center sm:text-left">
-            <span>Theme: </span>
-            <span className="font-bold text-brand-ink">Pastel Pop (Peach, Lilac, Cream)</span>
-          </div>
+          <button
+            onClick={onClose}
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/10 transition-colors cursor-pointer"
+          >
+            Close
+          </button>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <button
-              onClick={onClose}
-              className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/10 transition-colors cursor-pointer"
+              onClick={() => {
+                addToCart(product, 1);
+                onClose();
+              }}
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 shadow-xs cursor-pointer"
             >
-              Back to Catalog
+              <ShoppingCart className="w-4 h-4" />
+              <span>Add to Cart</span>
             </button>
+
             <button
               onClick={() => {
                 onClose();
-                onOrderNow(product);
+                onBuyNow(product);
               }}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer"
             >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Customize & Order</span>
+              <Zap className="w-4 h-4 fill-white" />
+              <span>Buy Now</span>
             </button>
           </div>
         </div>

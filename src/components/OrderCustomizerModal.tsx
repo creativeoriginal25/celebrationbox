@@ -11,34 +11,44 @@ import {
   Settings,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { OrderDetails, DeliveryMethod } from '../types';
+import { OrderDetails, CartOrderDetails, DeliveryMethod } from '../types';
 import { PRODUCTS, AVAILABLE_THEMES } from '../config/products';
 import { BUSINESS_CONFIG, isWhatsAppConfigured } from '../config/business';
 import { formatPrice, calculateSubtotal } from '../utils/currency';
 import { validateOrderForm, ValidationErrors } from '../utils/validation';
 import {
   generateWhatsAppOrderMessage,
+  generateCartWhatsAppOrderMessage,
   prepareWhatsAppOrder,
+  prepareCartWhatsAppOrder,
 } from '../services/whatsappService';
 import { saveOrderToLocalHistory, getOrderSummary } from '../services/orderService';
+import { useCart } from '../context/CartContext';
 
 interface OrderCustomizerModalProps {
   initialProductId?: 'mini-celebration-box' | 'signature-celebration-box';
+  mode?: 'buy-now' | 'cart';
   onClose: () => void;
   onOpenFallback: (message: string, isConfigured: boolean) => void;
 }
 
 export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
   initialProductId = 'signature-celebration-box',
+  mode = 'buy-now',
   onClose,
   onOpenFallback,
 }) => {
-  // Form State
+  const { items: cartItems, clearCart } = useCart();
+  const isCartMode = mode === 'cart' && cartItems.length > 0;
+
+  // Single-product Buy Now state
   const [selectedProductId, setSelectedProductId] = useState<'mini-celebration-box' | 'signature-celebration-box'>(
     initialProductId
   );
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedTheme] = useState<string>('Pastel Pop');
+
+  // Customer & Fulfillment details (shared between Buy Now and Cart Checkout)
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
   const [celebrationDate, setCelebrationDate] = useState<string>('');
@@ -47,7 +57,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
   const [deliveryAddress, setDeliveryAddress] = useState<string>('');
   const [birthdayMessage, setBirthdayMessage] = useState<string>('');
 
-  // UI & Validation State
+  // UI state
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [showConfigHelper, setShowConfigHelper] = useState<boolean>(false);
@@ -55,10 +65,14 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
 
   const activeProduct = PRODUCTS.find((p) => p.id === selectedProductId) || PRODUCTS[1];
   const activeTheme = AVAILABLE_THEMES.find((t) => t.name === selectedTheme) || AVAILABLE_THEMES[0];
-  const subtotal = calculateSubtotal(activeProduct.price, quantity);
+
+  const subtotal = isCartMode
+    ? cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    : calculateSubtotal(activeProduct.price, quantity);
+
   const summary = getOrderSummary({
-    productPrice: activeProduct.price,
-    quantity,
+    productPrice: isCartMode ? subtotal : activeProduct.price,
+    quantity: isCartMode ? 1 : quantity,
     deliveryMethod,
   });
 
@@ -97,6 +111,17 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
     birthdayMessage: birthdayMessage ? birthdayMessage : undefined,
   };
 
+  const currentCartOrderDetails: CartOrderDetails = {
+    items: cartItems,
+    customerName,
+    customerPhone,
+    celebrationDate,
+    preferredTime,
+    deliveryMethod,
+    deliveryAddress: deliveryMethod === 'delivery' ? deliveryAddress : undefined,
+    birthdayMessage: birthdayMessage ? birthdayMessage : undefined,
+  };
+
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -113,8 +138,13 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       return;
     }
 
-    saveOrderToLocalHistory(currentOrderDetails);
-    const payload = prepareWhatsAppOrder(currentOrderDetails, effectiveNumber);
+    if (!isCartMode) {
+      saveOrderToLocalHistory(currentOrderDetails);
+    }
+
+    const payload = isCartMode
+      ? prepareCartWhatsAppOrder(currentCartOrderDetails, effectiveNumber)
+      : prepareWhatsAppOrder(currentOrderDetails, effectiveNumber);
 
     if (!payload.isConfigured) {
       onOpenFallback(payload.formattedMessage, false);
@@ -132,6 +162,10 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       // ignore
     }
 
+    if (isCartMode) {
+      clearCart();
+    }
+
     const opened = window.open(payload.waMeUrl, '_blank', 'noopener,noreferrer');
     if (!opened) {
       onOpenFallback(payload.formattedMessage, true);
@@ -139,7 +173,9 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
   };
 
   const handleCopyMessage = () => {
-    const message = generateWhatsAppOrderMessage(currentOrderDetails);
+    const message = isCartMode
+      ? generateCartWhatsAppOrderMessage(currentCartOrderDetails)
+      : generateWhatsAppOrderMessage(currentOrderDetails);
     navigator.clipboard.writeText(message);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2500);
@@ -163,17 +199,17 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
             </div>
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-brand-ink">
-                Customize Your Celebration Box
+                {isCartMode ? 'Cart Checkout' : 'Buy Now — Customize Your Box'}
               </h2>
               <p className="text-xs text-brand-ink-muted">
-                Order via WhatsApp • Direct coordination with student founders
+                Fast WhatsApp-assisted booking • Direct student coordination
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
             className="p-2 rounded-lg text-brand-ink-muted hover:text-brand-pink hover:bg-brand-cream-50 transition-colors cursor-pointer"
-            aria-label="Close customizer"
+            aria-label="Close checkout"
           >
             <X className="w-5 h-5" />
           </button>
@@ -220,101 +256,128 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
         {/* Customization Form */}
         <form onSubmit={handleOrderSubmit} className="space-y-5">
           
-          {/* 1. SELECT PRODUCT */}
+          {/* 1. ORDER SUMMARY BREAKDOWN */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-brand-ink mb-2">
-              1. Choose Box Option
+              1. Selected Products
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {PRODUCTS.map((prod) => {
-                const isSelected = selectedProductId === prod.id;
-                return (
+
+            {isCartMode ? (
+              /* Cart mode: Show summary of all items in cart */
+              <div className="space-y-2 mb-2">
+                {cartItems.map((item) => (
                   <div
-                    key={prod.id}
-                    onClick={() => setSelectedProductId(prod.id)}
-                    className={`cursor-pointer rounded-xl p-3.5 border-2 transition-all flex items-start gap-3 ${
-                      isSelected
-                        ? 'border-brand-pink bg-brand-pink-50/40 shadow-xs'
-                        : 'border-brand-ink/10 bg-white hover:border-brand-ink/20'
-                    }`}
+                    key={item.id}
+                    className="p-3 rounded-xl border border-brand-ink/10 bg-brand-cream-50 flex items-center justify-between"
                   >
-                    <div className="w-12 h-12 rounded-lg bg-brand-cream-100 shrink-0 p-1 flex items-center justify-center border border-brand-ink/10">
-                      <img src={prod.image} alt={prod.name} className="w-full h-full object-contain" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-xs sm:text-sm font-bold text-brand-ink truncate">{prod.name}</h4>
-                        <span className="text-sm font-black text-brand-pink">{formatPrice(prod.price)}</span>
+                    <div className="flex items-center gap-3">
+                      <img src={item.image} alt={item.name} className="w-10 h-10 object-contain rounded" />
+                      <div>
+                        <h4 className="text-xs sm:text-sm font-bold text-brand-ink">{item.name}</h4>
+                        <p className="text-[11px] text-brand-ink-muted">
+                          {formatPrice(item.price)} each • Qty: <strong>{item.quantity}</strong>
+                        </p>
                       </div>
-                      <p className="text-[11px] text-brand-ink-muted truncate mt-0.5">{prod.tagline}</p>
-                      <span className="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-brand-teal/10 text-brand-teal">
-                        {prod.inclusions.length} items included
-                      </span>
                     </div>
+                    <span className="text-xs sm:text-sm font-black text-brand-pink">
+                      {formatPrice(item.price * item.quantity)}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            ) : (
+              /* Buy Now mode: Select or switch product */
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {PRODUCTS.map((prod) => {
+                  const isSelected = selectedProductId === prod.id;
+                  return (
+                    <div
+                      key={prod.id}
+                      onClick={() => setSelectedProductId(prod.id)}
+                      className={`cursor-pointer rounded-xl p-3.5 border-2 transition-all flex items-start gap-3 ${
+                        isSelected
+                          ? 'border-brand-pink bg-brand-pink-50/40 shadow-xs'
+                          : 'border-brand-ink/10 bg-white hover:border-brand-ink/20'
+                      }`}
+                    >
+                      <div className="w-12 h-12 rounded-lg bg-brand-cream-100 shrink-0 p-1 flex items-center justify-center border border-brand-ink/10">
+                        <img src={prod.image} alt={prod.name} className="w-full h-full object-contain" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-xs sm:text-sm font-bold text-brand-ink truncate">{prod.name}</h4>
+                          <span className="text-sm font-black text-brand-pink">{formatPrice(prod.price)}</span>
+                        </div>
+                        <p className="text-[11px] text-brand-ink-muted truncate mt-0.5">{prod.tagline}</p>
+                        <span className="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-brand-teal/10 text-brand-teal">
+                          {prod.inclusions.length} items included
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* 2. QUANTITY & THEME */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            {/* Quantity */}
-            <div className="p-3.5 rounded-xl bg-brand-cream-50 border border-brand-ink/10">
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-ink mb-1.5">
-                Quantity
-              </label>
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange(-1)}
-                  disabled={quantity <= 1}
-                  className="w-8 h-8 rounded-lg bg-white border border-brand-ink/15 flex items-center justify-center font-bold text-brand-ink disabled:opacity-40 hover:bg-brand-cream-100 cursor-pointer"
-                  aria-label="Decrease quantity"
-                >
-                  -
-                </button>
-                <span className="text-base font-extrabold text-brand-ink w-6 text-center">{quantity}</span>
-                <button
-                  type="button"
-                  onClick={() => handleQuantityChange(1)}
-                  disabled={quantity >= 10}
-                  className="w-8 h-8 rounded-lg bg-white border border-brand-ink/15 flex items-center justify-center font-bold text-brand-ink disabled:opacity-40 hover:bg-brand-cream-100 cursor-pointer"
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
-                <span className="text-xs text-brand-ink-muted ml-auto font-medium">
-                  Subtotal: <strong className="text-brand-ink">{formatPrice(subtotal)}</strong>
-                </span>
-              </div>
-            </div>
-
-            {/* Theme */}
-            <div className="p-3.5 rounded-xl bg-brand-cream-50 border border-brand-ink/10">
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-ink mb-1.5">
-                Curated Theme
-              </label>
-              <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-brand-ink/10 text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-1">
-                    {activeTheme.colors.map((c, i) => (
-                      <span
-                        key={i}
-                        className="w-3.5 h-3.5 rounded-full border border-white shadow-xs"
-                        style={{ backgroundColor: c.hex }}
-                        title={c.name}
-                      />
-                    ))}
-                  </div>
-                  <span className="font-bold text-brand-ink">{activeTheme.name}</span>
+          {/* 2. QUANTITY & THEME (Shown for single Buy Now) */}
+          {!isCartMode && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="p-3.5 rounded-xl bg-brand-cream-50 border border-brand-ink/10">
+                <label className="block text-xs font-bold uppercase tracking-wider text-brand-ink mb-1.5">
+                  Quantity
+                </label>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(-1)}
+                    disabled={quantity <= 1}
+                    className="w-8 h-8 rounded-lg bg-white border border-brand-ink/15 flex items-center justify-center font-bold text-brand-ink disabled:opacity-40 hover:bg-brand-cream-100 cursor-pointer"
+                    aria-label="Decrease quantity"
+                  >
+                    -
+                  </button>
+                  <span className="text-base font-extrabold text-brand-ink w-6 text-center">{quantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(1)}
+                    disabled={quantity >= 10}
+                    className="w-8 h-8 rounded-lg bg-white border border-brand-ink/15 flex items-center justify-center font-bold text-brand-ink disabled:opacity-40 hover:bg-brand-cream-100 cursor-pointer"
+                    aria-label="Increase quantity"
+                  >
+                    +
+                  </button>
+                  <span className="text-xs text-brand-ink-muted ml-auto font-medium">
+                    Subtotal: <strong className="text-brand-ink">{formatPrice(subtotal)}</strong>
+                  </span>
                 </div>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                  Included
-                </span>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-brand-cream-50 border border-brand-ink/10">
+                <label className="block text-xs font-bold uppercase tracking-wider text-brand-ink mb-1.5">
+                  Curated Theme
+                </label>
+                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-brand-ink/10 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-1">
+                      {activeTheme.colors.map((c, i) => (
+                        <span
+                          key={i}
+                          className="w-3.5 h-3.5 rounded-full border border-white shadow-xs"
+                          style={{ backgroundColor: c.hex }}
+                          title={c.name}
+                        />
+                      ))}
+                    </div>
+                    <span className="font-bold text-brand-ink">{activeTheme.name}</span>
+                  </div>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                    Included
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* 3. CUSTOMER DETAILS */}
           <div>
@@ -511,23 +574,36 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
               Live Order Breakdown
             </h4>
 
-            <div className="flex items-center justify-between text-xs sm:text-sm text-brand-ink">
-              <span>{activeProduct.name} (x{quantity})</span>
-              <span className="font-bold">{formatPrice(summary.subtotal)}</span>
-            </div>
+            {isCartMode ? (
+              <div className="space-y-1">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between text-xs text-brand-ink">
+                    <span>{item.name} (x{item.quantity})</span>
+                    <span className="font-bold">{formatPrice(item.price * item.quantity)}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex items-center justify-between text-xs sm:text-sm text-brand-ink">
+                <span>{activeProduct.name} (x{quantity})</span>
+                <span className="font-bold">{formatPrice(subtotal)}</span>
+              </div>
+            )}
 
-            <div className="flex items-center justify-between text-xs text-brand-ink-muted">
+            <div className="flex items-center justify-between text-xs text-brand-ink-muted pt-1 border-t border-brand-ink/5">
               <span>Fulfillment Charge:</span>
               <span className="font-medium text-brand-ink">{summary.deliveryChargeNote}</span>
             </div>
 
             <div className="pt-2 border-t border-brand-ink/10 flex items-center justify-between">
               <div>
-                <span className="text-xs sm:text-sm font-bold text-brand-ink block">Total Known Amount:</span>
+                <span className="text-xs sm:text-sm font-bold text-brand-ink block">
+                  {isCartMode ? 'Total Product Value:' : 'Total Known Amount:'}
+                </span>
                 <span className="text-[10px] text-brand-ink-muted">Payable after WhatsApp confirmation</span>
               </div>
               <span className="text-xl sm:text-2xl font-black text-brand-pink">
-                {formatPrice(summary.totalKnownAmount)}
+                {formatPrice(subtotal)}
               </span>
             </div>
           </div>

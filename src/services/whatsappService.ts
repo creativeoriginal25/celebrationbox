@@ -1,4 +1,4 @@
-import { OrderDetails } from '../types';
+import { OrderDetails, CartOrderDetails } from '../types';
 import { BUSINESS_CONFIG, isWhatsAppConfigured } from '../config/business';
 import { calculateSubtotal, formatPrice } from '../utils/currency';
 
@@ -10,7 +10,7 @@ export interface WhatsAppPayload {
 }
 
 /**
- * Constructs the standard, clean customer order message formatted for WhatsApp
+ * Builds standard single-product Buy Now WhatsApp order message
  */
 export const generateWhatsAppOrderMessage = (order: OrderDetails): string => {
   const subtotal = calculateSubtotal(order.productPrice, order.quantity);
@@ -63,6 +63,67 @@ export const generateWhatsAppOrderMessage = (order: OrderDetails): string => {
 };
 
 /**
+ * Builds multi-product shopping cart WhatsApp order message
+ */
+export const generateCartWhatsAppOrderMessage = (cartOrder: CartOrderDetails): string => {
+  const totalValue = cartOrder.items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const deliveryLabel =
+    cartOrder.deliveryMethod === 'pickup'
+      ? 'College Pickup (Bhimavaram)'
+      : 'Nearby Delivery (Bhimavaram)';
+
+  const lines: string[] = [
+    'Hello Celebration Box! 🎉',
+    '',
+    'I would like to place an order.',
+    '',
+    'ORDER SUMMARY:',
+    '',
+  ];
+
+  cartOrder.items.forEach((item) => {
+    lines.push(
+      item.name,
+      `Quantity: ${item.quantity}`,
+      `Price: ₹${item.price} each`,
+      `Subtotal: ₹${item.price * item.quantity}`,
+      ''
+    );
+  });
+
+  lines.push(
+    `TOTAL PRODUCT VALUE: ₹${totalValue}`,
+    '',
+    'CUSTOMER DETAILS:',
+    '',
+    `Name: ${cartOrder.customerName}`,
+    `Phone: ${cartOrder.customerPhone}`,
+    `Celebration Date: ${cartOrder.celebrationDate}`,
+    `Preferred Time: ${cartOrder.preferredTime}`,
+    '',
+    'FULFILMENT:',
+    '',
+    deliveryLabel
+  );
+
+  if (cartOrder.deliveryMethod === 'delivery' && cartOrder.deliveryAddress) {
+    lines.push(`Delivery Address: ${cartOrder.deliveryAddress}`);
+  }
+
+  if (cartOrder.birthdayMessage && cartOrder.birthdayMessage.trim()) {
+    lines.push('', `Special Note: "${cartOrder.birthdayMessage.trim()}"`);
+  }
+
+  lines.push('', 'Please confirm availability and delivery charges.', '', 'Thank you!');
+
+  return lines.join('\n');
+};
+
+/**
  * Builds the official wa.me click-to-chat link with URL-encoded message
  */
 export const buildWhatsAppLink = (number: string, message: string): string => {
@@ -72,7 +133,7 @@ export const buildWhatsAppLink = (number: string, message: string): string => {
 };
 
 /**
- * Main service method to prepare the WhatsApp order dispatch
+ * Prepares single-product Buy Now order payload
  */
 export const prepareWhatsAppOrder = (
   order: OrderDetails,
@@ -92,8 +153,27 @@ export const prepareWhatsAppOrder = (
 };
 
 /**
- * Dispatches the order by opening WhatsApp in a new tab/app,
- * or returns false if cannot open or not configured
+ * Prepares multi-item shopping cart order payload
+ */
+export const prepareCartWhatsAppOrder = (
+  cartOrder: CartOrderDetails,
+  customNumberOverride?: string
+): WhatsAppPayload => {
+  const targetNumber = customNumberOverride || BUSINESS_CONFIG.whatsappNumber;
+  const isConfigured = isWhatsAppConfigured(targetNumber);
+  const formattedMessage = generateCartWhatsAppOrderMessage(cartOrder);
+  const waMeUrl = buildWhatsAppLink(targetNumber, formattedMessage);
+
+  return {
+    recipientNumber: targetNumber,
+    formattedMessage,
+    waMeUrl,
+    isConfigured,
+  };
+};
+
+/**
+ * Dispatches order by opening WhatsApp in a new tab/app
  */
 export const triggerWhatsAppChat = (url: string): boolean => {
   try {
@@ -104,4 +184,3 @@ export const triggerWhatsAppChat = (url: string): boolean => {
     return false;
   }
 };
-

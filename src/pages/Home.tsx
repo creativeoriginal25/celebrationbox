@@ -9,18 +9,24 @@ import { WhyChooseUs } from '../components/WhyChooseUs';
 import { FAQ } from '../components/FAQ';
 import { AboutUs } from '../components/AboutUs';
 import { Footer } from '../components/Footer';
+import { CartDrawer } from '../components/CartDrawer';
 import { OrderCustomizerModal } from '../components/OrderCustomizerModal';
 import { WhatsAppFallbackModal } from '../components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from '../components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from '../components/PolicyModal';
+import { ScrollReveal } from '../components/react-bits/ScrollReveal';
 import { PRODUCTS } from '../config/products';
 import { Product } from '../types';
-import { Sparkles, MessageCircle } from 'lucide-react';
+import { useCart } from '../context/CartContext';
+import { ShoppingBag, CheckCircle2 } from 'lucide-react';
 
-export const Home: React.FC = () => {
-  // Modal states
+export const HomeContent: React.FC = () => {
+  const { toastMessage, totalCount, setIsCartOpen } = useCart();
+
+  // Modals & Drawers state
   const [selectedProductDetails, setSelectedProductDetails] = useState<Product | null>(null);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
+  const [orderModalMode, setOrderModalMode] = useState<'buy-now' | 'cart'>('buy-now');
   const [orderModalProductId, setOrderModalProductId] = useState<
     'mini-celebration-box' | 'signature-celebration-box'
   >('signature-celebration-box');
@@ -50,10 +56,24 @@ export const Home: React.FC = () => {
     }
   }, []);
 
-  const handleOpenOrder = (productId?: 'mini-celebration-box' | 'signature-celebration-box') => {
+  const handleBuyNow = (product: Product) => {
+    setOrderModalProductId(product.id);
+    setOrderModalMode('buy-now');
+    setIsOrderModalOpen(true);
+  };
+
+  const handleCartCheckout = () => {
+    setOrderModalMode('cart');
+    setIsOrderModalOpen(true);
+  };
+
+  const handleDirectWhatsAppOrder = (
+    productId?: 'mini-celebration-box' | 'signature-celebration-box'
+  ) => {
     if (productId) {
       setOrderModalProductId(productId);
     }
+    setOrderModalMode('buy-now');
     setIsOrderModalOpen(true);
   };
 
@@ -70,77 +90,104 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-cream-50 text-brand-ink selection:bg-brand-pink-100 selection:text-brand-pink">
+    <div className="min-h-screen flex flex-col bg-brand-cream-50 text-brand-ink selection:bg-brand-pink-100 selection:text-brand-pink relative">
+      {/* Toast Confirmation for Cart additions */}
+      {toastMessage && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>{toastMessage}</span>
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="ml-2 text-brand-pink font-bold underline hover:text-white"
+          >
+            View Cart
+          </button>
+        </div>
+      )}
+
       {/* Header */}
-      <Header onOpenOrder={handleOpenOrder} />
+      <Header onShopClick={scrollToShop} />
 
       {/* Main Content */}
       <main className="flex-1">
-        {/* Hero Section */}
-        <Hero onExplore={scrollToShop} onOpenOrder={handleOpenOrder} />
+        {/* Hero Section with 10s brand intro video */}
+        <Hero onExplore={scrollToShop} onOpenOrder={handleDirectWhatsAppOrder} />
 
-        {/* Product Catalogue Section */}
+        {/* Shop Kits Section */}
         <section id="shop" className="py-16 md:py-24 relative scroll-mt-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {/* Catalogue Header */}
-            <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full badge-pink text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Curated DIY Kits</span>
+            {/* Catalogue Header with ScrollReveal */}
+            <ScrollReveal yOffset={20}>
+              <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 space-y-3">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-ink">
+                  Shop Celebration Boxes
+                </h2>
+                <p className="text-sm sm:text-base text-brand-ink-light leading-relaxed">
+                  Everything you need to style a birthday setup, packed into one box. Choose your kit below and purchase with <strong>Buy Now</strong> or <strong>Add to Cart</strong>.
+                </p>
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-ink">
-                Choose Your Celebration Box
-              </h2>
-              <p className="text-sm sm:text-base text-brand-ink-light leading-relaxed">
-                Two complete options in our signature{' '}
-                <strong className="text-brand-ink">Pastel Pop</strong> palette (peach, lilac & cream).
-                Packed with 100% of the decor accessories you need to style your room.
-              </p>
-            </div>
+            </ScrollReveal>
 
-            {/* Product Cards Grid: Exactly Two Approved Products */}
+            {/* Product Cards Grid: Exactly Two Products */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {PRODUCTS.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onViewDetails={(prod) => setSelectedProductDetails(prod)}
-                  onOrderNow={(prod) => handleOpenOrder(prod.id)}
-                />
+              {PRODUCTS.map((product, idx) => (
+                <ScrollReveal key={product.id} delay={idx * 0.1} yOffset={24}>
+                  <ProductCard
+                    product={product}
+                    onViewDetails={(prod) => setSelectedProductDetails(prod)}
+                    onBuyNow={handleBuyNow}
+                  />
+                </ScrollReveal>
               ))}
             </div>
 
-            {/* Bottom Quick Callout */}
+            {/* Bottom Inclusions Note */}
             <div className="mt-12 text-center">
               <p className="text-xs text-brand-ink-muted">
-                Need help deciding? Compare full item specifications below or message us directly on WhatsApp.
+                Need to compare full kit items side-by-side? See the complete comparison table below.
               </p>
             </div>
 
           </div>
         </section>
 
-        {/* Product Comparison Section */}
-        <ProductComparison onOrderNow={handleOpenOrder} />
+        {/* Product Comparison Section with ScrollReveal */}
+        <ScrollReveal yOffset={24}>
+          <ProductComparison onOrderNow={handleDirectWhatsAppOrder} />
+        </ScrollReveal>
 
-        {/* How It Works Section */}
-        <HowItWorks />
+        {/* How It Works Section with ScrollReveal */}
+        <ScrollReveal yOffset={24}>
+          <HowItWorks />
+        </ScrollReveal>
 
-        {/* Why Celebration Box Section */}
-        <WhyChooseUs />
+        {/* Why Celebration Box Section with ScrollReveal */}
+        <ScrollReveal yOffset={24}>
+          <WhyChooseUs />
+        </ScrollReveal>
 
-        {/* FAQ Section */}
-        <FAQ />
+        {/* FAQ Section with ScrollReveal */}
+        <ScrollReveal yOffset={24}>
+          <FAQ />
+        </ScrollReveal>
 
         {/* About Us Section */}
-        <AboutUs />
+        <ScrollReveal yOffset={24}>
+          <AboutUs />
+        </ScrollReveal>
       </main>
 
       {/* Footer */}
       <Footer
-        onOpenOrder={handleOpenOrder}
+        onOpenOrder={handleDirectWhatsAppOrder}
         onOpenPolicy={(policy) => setActivePolicy(policy)}
+      />
+
+      {/* Cart Drawer */}
+      <CartDrawer
+        onCheckout={handleCartCheckout}
+        onExplore={scrollToShop}
       />
 
       {/* Modals */}
@@ -148,13 +195,14 @@ export const Home: React.FC = () => {
       <ProductModal
         product={selectedProductDetails}
         onClose={() => setSelectedProductDetails(null)}
-        onOrderNow={(prod) => handleOpenOrder(prod.id)}
+        onBuyNow={handleBuyNow}
       />
 
-      {/* 2. Order Customizer & Checkout Modal */}
+      {/* 2. Order Customizer & Checkout Modal (Handles both Buy Now and Cart Checkout) */}
       {isOrderModalOpen && (
         <OrderCustomizerModal
           initialProductId={orderModalProductId}
+          mode={orderModalMode}
           onClose={() => setIsOrderModalOpen(false)}
           onOpenFallback={handleOpenFallback}
         />
@@ -180,17 +228,23 @@ export const Home: React.FC = () => {
         onClose={() => setActivePolicy(null)}
       />
 
-      {/* Floating Sticky Mobile WhatsApp CTA */}
-      <div className="fixed bottom-4 right-4 z-30 lg:hidden">
-        <button
-          onClick={() => handleOpenOrder()}
-          className="flex items-center gap-2 px-4 py-3 rounded-full bg-brand-pink hover:bg-brand-pink-hover text-white font-bold text-xs shadow-card-hover active:scale-95 transition-all cursor-pointer"
-          aria-label="Order Celebration Box"
-        >
-          <MessageCircle className="w-4 h-4" />
-          <span>Order Box</span>
-        </button>
-      </div>
+      {/* Floating Sticky Mobile Cart Button */}
+      {totalCount > 0 && (
+        <div className="fixed bottom-4 right-4 z-30 lg:hidden animate-fadeIn">
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="flex items-center gap-2 px-4 py-3 rounded-full bg-brand-pink text-white font-bold text-xs shadow-card-hover active:scale-95 transition-all cursor-pointer"
+            aria-label="View Cart"
+          >
+            <ShoppingBag className="w-4 h-4" />
+            <span>View Cart ({totalCount})</span>
+          </button>
+        </div>
+      )}
     </div>
   );
+};
+
+export const Home: React.FC = () => {
+  return <HomeContent />;
 };

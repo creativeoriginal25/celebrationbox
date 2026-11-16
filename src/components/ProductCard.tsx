@@ -1,50 +1,41 @@
 import React from 'react';
-import { Check, Info, Sparkles, Clock, ShoppingBag } from 'lucide-react';
+import { Check, Info, Clock, ShoppingCart, Zap } from 'lucide-react';
 import { Product } from '../types';
 import { formatPrice } from '../utils/currency';
+import { useCart } from '../context/CartContext';
 
 interface ProductCardProps {
   product: Product;
   onViewDetails: (product: Product) => void;
-  onOrderNow: (product: Product) => void;
+  onBuyNow: (product: Product) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onViewDetails,
-  onOrderNow,
+  onBuyNow,
 }) => {
+  const { addToCart } = useCart();
   const isSignature = product.id === 'signature-celebration-box';
   const setupTime = isSignature ? '30–40 mins DIY' : '15–20 mins DIY';
 
   return (
     <div
       className={`surface-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between surface-card-hover transition-all ${
-        isSignature ? 'border-2 border-brand-pink/40 shadow-card' : 'border border-brand-ink/10'
+        isSignature ? 'border-2 border-brand-pink/30 shadow-card' : 'border border-brand-ink/10'
       }`}
     >
       <div>
-        {/* Top Header Badge & Price Row */}
-        <div className="flex items-center justify-between mb-4">
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${
-              isSignature ? 'badge-pink' : 'badge-yellow'
-            }`}
-          >
-            {product.badge}
-          </span>
-          <div className="flex items-center gap-1.5 text-xs text-brand-ink-muted">
-            <Clock className="w-3.5 h-3.5 text-brand-ink-subtle" />
-            <span>{setupTime}</span>
-          </div>
-        </div>
-
-        {/* Product Image Box */}
-        <div className="relative rounded-xl bg-brand-cream-100 p-4 mb-5 aspect-[4/3] flex items-center justify-center overflow-hidden border border-brand-ink/5">
+        {/* Product Image Stage */}
+        <div
+          onClick={() => onViewDetails(product)}
+          className="relative rounded-xl bg-brand-cream-100 p-4 mb-5 aspect-[4/3] flex items-center justify-center overflow-hidden border border-brand-ink/5 cursor-pointer group"
+          title="Click to view full contents"
+        >
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-102"
             loading="lazy"
           />
           <div className="absolute bottom-2.5 left-3">
@@ -52,29 +43,51 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               Theme: Pastel Pop
             </span>
           </div>
+          <div className="absolute top-2.5 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="bg-brand-ink/80 text-white text-[10px] font-bold px-2 py-1 rounded shadow-xs">
+              View Details
+            </span>
+          </div>
         </div>
 
-        {/* Title, Price, Subtitle */}
+        {/* Title & Price Header */}
         <div className="mb-4">
           <div className="flex items-baseline justify-between gap-2">
-            <h3 className="text-xl sm:text-2xl font-bold text-brand-ink">{product.name}</h3>
+            <h3
+              onClick={() => onViewDetails(product)}
+              className="text-xl sm:text-2xl font-bold text-brand-ink hover:text-brand-pink transition-colors cursor-pointer"
+            >
+              {product.name}
+            </h3>
             <span className="text-2xl sm:text-3xl font-black text-brand-pink">
               {formatPrice(product.price)}
             </span>
           </div>
-          <p className="text-xs font-semibold text-brand-teal mt-0.5">{product.tagline}</p>
-          <p className="text-xs sm:text-sm text-brand-ink-light mt-2 leading-relaxed">{product.description}</p>
+          <div className="flex items-center justify-between mt-1">
+            <p className="text-xs font-semibold text-brand-teal">{product.tagline}</p>
+            <div className="flex items-center gap-1 text-[11px] text-brand-ink-muted">
+              <Clock className="w-3 h-3 text-brand-marigold" />
+              <span>{setupTime}</span>
+            </div>
+          </div>
+          <p className="text-xs sm:text-sm text-brand-ink-light mt-2 leading-relaxed">
+            {product.description}
+          </p>
         </div>
 
-        {/* Contents Summary */}
+        {/* Included Items Summary */}
         <div className="space-y-2 mb-5 pt-3 border-t border-brand-ink/10">
           <div className="flex items-center justify-between">
             <h4 className="text-xs font-bold uppercase tracking-wider text-brand-ink-muted">
-              What's Inside ({product.inclusions.length} items):
+              Included In Box ({product.inclusions.length} items):
             </h4>
-            <span className="text-[11px] font-medium text-brand-teal">
-              {isSignature ? 'Includes Manual Pump' : 'Compact Setup'}
-            </span>
+            <button
+              type="button"
+              onClick={() => onViewDetails(product)}
+              className="text-[11px] font-semibold text-brand-pink hover:underline cursor-pointer"
+            >
+              View All Inclusions →
+            </button>
           </div>
 
           <ul className="space-y-1.5">
@@ -87,15 +100,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               </li>
             ))}
           </ul>
-
-          {product.inclusions.length > 4 && (
-            <p className="text-[11px] text-brand-ink-muted pl-5">
-              + {product.inclusions.length - 4} more items (see full details below)
-            </p>
-          )}
         </div>
 
-        {/* Exclusions Notice */}
+        {/* Honest Exclusions Notice */}
         <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/60 mb-6 text-left">
           <div className="flex items-center gap-1.5 text-amber-900 text-[11px] font-bold mb-0.5">
             <Info className="w-3.5 h-3.5 text-amber-700 shrink-0" />
@@ -107,21 +114,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
       </div>
 
-      {/* Buttons */}
-      <div className="grid grid-cols-2 gap-3 pt-2">
+      {/* TWO PRIMARY SHOPPING BUTTONS: Buy Now & Add to Cart */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-brand-ink/10">
+        {/* 1. Buy Now (Primary rani-pink button, direct purchase) */}
         <button
-          onClick={() => onViewDetails(product)}
-          className="w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 transition-all text-center cursor-pointer"
+          onClick={() => onBuyNow(product)}
+          className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
-          View Full List
+          <Zap className="w-4 h-4 fill-white" />
+          <span>Buy Now</span>
         </button>
 
+        {/* 2. Add to Cart (White/warm off-white background, dark ink text, subtle dark/pink border) */}
         <button
-          onClick={() => onOrderNow(product)}
-          className="w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          onClick={() => addToCart(product, 1)}
+          className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 hover:border-brand-pink/50 transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
-          <ShoppingBag className="w-4 h-4" />
-          <span>Order Now</span>
+          <ShoppingCart className="w-4 h-4 text-brand-ink" />
+          <span>Add to Cart</span>
         </button>
       </div>
     </div>

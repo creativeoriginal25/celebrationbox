@@ -28,12 +28,32 @@ export interface ThemeOption {
 
 export type DeliveryMethod = 'pickup' | 'delivery';
 
+export interface CartItem {
+  id: 'mini-celebration-box' | 'signature-celebration-box';
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  theme: string;
+}
+
 export interface OrderDetails {
   productId: 'mini-celebration-box' | 'signature-celebration-box';
   productName: string;
   productPrice: number;
   quantity: number;
   theme: string;
+  customerName: string;
+  customerPhone: string;
+  celebrationDate: string;
+  preferredTime: string;
+  deliveryMethod: DeliveryMethod;
+  deliveryAddress?: string;
+  birthdayMessage?: string;
+}
+
+export interface CartOrderDetails {
+  items: CartItem[];
   customerName: string;
   customerPhone: string;
   celebrationDate: string;
@@ -59,4 +79,3 @@ export interface BusinessConfig {
   campusLocation: string;
   currencySymbol: string;
 }
-
