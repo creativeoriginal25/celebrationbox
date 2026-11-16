@@ -41,23 +41,23 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
         </div>
 
         {/* ELEMENT 2: CELEBRATION BOX CODE-GENERATED ANIMATED LOGO */}
-        <div className="relative group w-full max-w-md sm:max-w-xl mx-auto flex flex-col items-center justify-center mb-6 sm:mb-8 select-none">
+        <div className="relative group w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex flex-col items-center justify-center mb-6 sm:mb-9 select-none">
           <CelebrationBoxLogo
             key={animKey}
-            className="h-20 sm:h-24 md:h-28 w-auto max-w-full mx-auto"
+            className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto max-w-full mx-auto"
             animated={true}
             onAnimationComplete={() => setIsAnimationFinished(true)}
             interactive={true}
           />
-          {/* Subtle replay button that appears smoothly on hover */}
+          {/* Subtle replay button for user exploration */}
           <button
             onClick={handleReplay}
-            title="Replay intro animation"
-            aria-label="Replay intro animation"
-            className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-brand-ink-muted hover:text-brand-pink bg-white/70 hover:bg-white rounded-full border border-brand-ink/10 shadow-2xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+            title="Replay brand intro animation"
+            aria-label="Replay brand intro animation"
+            className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-brand-ink-muted hover:text-brand-pink bg-white/80 hover:bg-white rounded-full border border-brand-ink/10 shadow-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           >
-            <RotateCcw className="w-3 h-3 text-brand-marigold" />
-            <span>Replay</span>
+            <RotateCcw className="w-3.5 h-3.5 text-brand-marigold" />
+            <span>Replay Animation</span>
           </button>
         </div>
 
