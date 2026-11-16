@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "slate",
+    "cssVariables": false
+  },
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/utils"
+  },
+  "registries": {
+    "@reactbits-starter": "https://pro.reactbits.dev/r/starter/{name}.json",
+    "@reactbits-pro": "https://pro.reactbits.dev/r/pro/{name}.json"
+  }
+}
