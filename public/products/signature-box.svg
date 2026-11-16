@@ -1,173 +1,210 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
   <defs>
-    <!-- Background Gradients -->
-    <linearGradient id="sigBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFDF7" />
-      <stop offset="50%" stop-color="#FFF5EC" />
-      <stop offset="100%" stop-color="#FCE7F3" />
+    <radialGradient id="sigStudioLighting" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="65%" stop-color="#FAF4EE" />
+      <stop offset="100%" stop-color="#EFE6DC" />
+    </radialGradient>
+    <linearGradient id="foilCurtainGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FCE4EC" />
+      <stop offset="25%" stop-color="#FFF8E1" />
+      <stop offset="50%" stop-color="#F3E5F5" />
+      <stop offset="75%" stop-color="#E0F2F1" />
+      <stop offset="100%" stop-color="#FCE4EC" />
     </linearGradient>
-    <!-- Foil Backdrop Gradient -->
-    <linearGradient id="foilGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#FFD1DF" />
-      <stop offset="25%" stop-color="#FFF0F5" />
-      <stop offset="50%" stop-color="#FFE082" />
-      <stop offset="75%" stop-color="#E1BEE7" />
-      <stop offset="100%" stop-color="#FFCDD2" />
-    </linearGradient>
-    <!-- Foil Balloon Gold Gradient -->
-    <radialGradient id="foilBalloonGrad" cx="35%" cy="35%" r="65%">
+    <radialGradient id="metallicGold" cx="35%" cy="35%" r="65%">
       <stop offset="0%" stop-color="#FFF9C4" />
-      <stop offset="40%" stop-color="#FFD54F" />
-      <stop offset="85%" stop-color="#FFA000" />
+      <stop offset="45%" stop-color="#FFD54F" />
+      <stop offset="80%" stop-color="#FFA000" />
       <stop offset="100%" stop-color="#E65100" />
     </radialGradient>
-    <linearGradient id="peachSig" x1="20%" y1="20%" x2="80%" y2="80%">
-      <stop offset="0%" stop-color="#FFD6BF" />
-      <stop offset="60%" stop-color="#FFBE98" />
-      <stop offset="100%" stop-color="#F29363" />
-    </linearGradient>
-    <linearGradient id="lilacSig" x1="20%" y1="20%" x2="80%" y2="80%">
-      <stop offset="0%" stop-color="#F0DCF7" />
-      <stop offset="60%" stop-color="#D8B4E2" />
-      <stop offset="100%" stop-color="#B281C4" />
-    </linearGradient>
-    <linearGradient id="creamSig" x1="20%" y1="20%" x2="80%" y2="80%">
-      <stop offset="0%" stop-color="#FFFFFF" />
-      <stop offset="60%" stop-color="#FFF4E0" />
-      <stop offset="100%" stop-color="#F7DFB3" />
-    </linearGradient>
-    <linearGradient id="boxSigGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#E91E63" />
-      <stop offset="100%" stop-color="#AD1457" />
-    </linearGradient>
-    <linearGradient id="pumpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="pumpGradRealistic" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#00A8A8" />
-      <stop offset="50%" stop-color="#26C6DA" />
-      <stop offset="100%" stop-color="#00796B" />
+      <stop offset="60%" stop-color="#008E8E" />
+      <stop offset="100%" stop-color="#006666" />
     </linearGradient>
-    <filter id="sigShadow" x="-10%" y="-10%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#2B2B3A" flood-opacity="0.14" />
+    <linearGradient id="peachRealisticSig" x1="15%" y1="15%" x2="85%" y2="85%">
+      <stop offset="0%" stop-color="#FFE0D0" />
+      <stop offset="35%" stop-color="#FFBE98" />
+      <stop offset="85%" stop-color="#F39C6B" />
+      <stop offset="100%" stop-color="#D97238" />
+    </linearGradient>
+    <linearGradient id="lilacRealisticSig" x1="15%" y1="15%" x2="85%" y2="85%">
+      <stop offset="0%" stop-color="#F5E6FA" />
+      <stop offset="35%" stop-color="#D8B4E2" />
+      <stop offset="85%" stop-color="#B885C6" />
+      <stop offset="100%" stop-color="#9356A5" />
+    </linearGradient>
+    <linearGradient id="creamRealisticSig" x1="15%" y1="15%" x2="85%" y2="85%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="40%" stop-color="#FFF5E5" />
+      <stop offset="85%" stop-color="#F2DEC0" />
+      <stop offset="100%" stop-color="#D9BC93" />
+    </linearGradient>
+
+    <!-- Natural Soft Studio Shadows -->
+    <filter id="softContactShadowSig" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#2B2B3A" flood-opacity="0.09" />
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2B2B3A" flood-opacity="0.06" />
+    </filter>
+    <filter id="itemShadowSig" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#2B2B3A" flood-opacity="0.1" />
     </filter>
   </defs>
 
-  <!-- Background Canvas -->
-  <rect width="800" height="600" rx="24" fill="url(#sigBgGrad)" />
+  <!-- Studio Surface -->
+  <rect width="800" height="600" fill="url(#sigStudioLighting)" />
 
-  <!-- Shimmer Foil Fringe Curtain in the backdrop (6-Foot Backdrop) -->
-  <g opacity="0.65">
-    <rect x="180" y="40" width="440" height="360" rx="4" fill="url(#foilGrad)" opacity="0.25" />
-    <!-- Vertical Foil Strands -->
-    <line x1="200" y1="40" x2="200" y2="390" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.7" />
-    <line x1="225" y1="40" x2="225" y2="400" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="250" y1="40" x2="250" y2="385" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
-    <line x1="275" y1="40" x2="275" y2="410" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="300" y1="40" x2="300" y2="395" stroke="#4DD0E1" stroke-width="4" stroke-linecap="round" opacity="0.7" />
-    <line x1="325" y1="40" x2="325" y2="400" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="350" y1="40" x2="350" y2="390" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
-    <line x1="375" y1="40" x2="375" y2="410" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="400" y1="40" x2="400" y2="395" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="425" y1="40" x2="425" y2="400" stroke="#4DD0E1" stroke-width="4" stroke-linecap="round" opacity="0.7" />
-    <line x1="450" y1="40" x2="450" y2="390" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
-    <line x1="475" y1="40" x2="475" y2="410" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="500" y1="40" x2="500" y2="395" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="525" y1="40" x2="525" y2="400" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
-    <line x1="550" y1="40" x2="550" y2="390" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="575" y1="40" x2="575" y2="405" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
-    <line x1="600" y1="40" x2="600" y2="390" stroke="#4DD0E1" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+  <!-- ITEM 1: 6-Foot Foil Shimmer Fringe Backdrop Curtain (Softly hanging in the background) -->
+  <g opacity="0.75">
+    <rect x="80" y="40" width="640" height="360" rx="8" fill="url(#foilCurtainGrad)" opacity="0.35" />
+    <!-- Metallic Fringe Strands -->
+    <line x1="110" y1="40" x2="110" y2="380" stroke="#FF80AB" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="135" y1="40" x2="135" y2="390" stroke="#FFD54F" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+    <line x1="160" y1="40" x2="160" y2="375" stroke="#BA68C8" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="185" y1="40" x2="185" y2="395" stroke="#4DD0E1" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="210" y1="40" x2="210" y2="380" stroke="#FF80AB" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="590" y1="40" x2="590" y2="380" stroke="#BA68C8" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="615" y1="40" x2="615" y2="395" stroke="#4DD0E1" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="640" y1="40" x2="640" y2="375" stroke="#FFD54F" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+    <line x1="665" y1="40" x2="665" y2="390" stroke="#FF80AB" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+    <line x1="690" y1="40" x2="690" y2="380" stroke="#BA68C8" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+
+    <!-- Backdrop Tag -->
+    <rect x="95" y="55" width="135" height="20" rx="10" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1" />
+    <text x="162" y="69" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#2B2B3A" text-anchor="middle">
+      6-FT SHIMMER BACKDROP
+    </text>
   </g>
 
-  <!-- Big Ground Shadow -->
-  <ellipse cx="400" cy="510" rx="280" ry="34" fill="#2B2B3A" opacity="0.09" />
-  <ellipse cx="400" cy="505" rx="210" ry="22" fill="#2B2B3A" opacity="0.14" />
-
-  <!-- 18-Inch Happy Birthday Foil Balloon (Center Statement Piece) -->
-  <g transform="translate(400, 165)" filter="url(#sigShadow)">
-    <circle cx="0" cy="0" r="76" fill="url(#foilBalloonGrad)" stroke="#FFE082" stroke-width="4" />
-    <circle cx="0" cy="0" r="70" fill="none" stroke="#FFA000" stroke-width="1.5" stroke-dasharray="3 3" />
-    <!-- Metallic reflection shine -->
-    <path d="M -40 -45 Q 0 -65 40 -45 Q 0 -55 -40 -45" fill="#FFFFFF" opacity="0.6" />
-    <text x="0" y="-12" font-family="'Outfit', sans-serif" font-size="16" font-weight="900" fill="#2B2B3A" text-anchor="middle" letter-spacing="1">HAPPY</text>
-    <text x="0" y="14" font-family="'Outfit', sans-serif" font-size="20" font-weight="900" fill="#E91E63" text-anchor="middle" letter-spacing="2">BIRTHDAY</text>
-    <text x="0" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#B27B00" text-anchor="middle">★ 18" METALLIC FOIL ★</text>
-    <!-- Little tail string -->
-    <path d="M 0 76 L -4 88 L 4 88 Z" fill="#FFA000" />
-    <path d="M 0 88 Q 15 150 0 220" stroke="#FFA000" stroke-width="2" fill="none" opacity="0.7" />
+  <!-- Bottom Label Pill -->
+  <g transform="translate(400, 555)">
+    <rect x="-175" y="-14" width="350" height="28" rx="14" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1" />
+    <circle cx="-155" cy="0" r="4" fill="#E91E63" />
+    <text x="-140" y="4" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="600" fill="#2B2B3A">
+      Signature Box Contents • Complete DIY Kit Preview
+    </text>
   </g>
 
-  <!-- Balloon Arch / Cluster surrounding the box -->
-  <g filter="url(#sigShadow)">
-    <circle cx="250" cy="180" r="50" fill="url(#lilacSig)" />
-    <circle cx="210" cy="240" r="48" fill="url(#peachSig)" />
-    <circle cx="270" cy="265" r="54" fill="url(#creamSig)" />
-    <circle cx="550" cy="180" r="50" fill="url(#peachSig)" />
-    <circle cx="590" cy="240" r="48" fill="url(#lilacSig)" />
-    <circle cx="530" cy="265" r="54" fill="url(#creamSig)" />
-    <!-- Front Arch Layer -->
-    <circle cx="310" cy="310" r="56" fill="url(#peachSig)" />
-    <ellipse cx="295" cy="290" rx="12" ry="20" fill="#FFFFFF" opacity="0.4" transform="rotate(-20 295 290)" />
-    <circle cx="490" cy="310" r="56" fill="url(#lilacSig)" />
-    <ellipse cx="475" cy="290" rx="12" ry="20" fill="#FFFFFF" opacity="0.4" transform="rotate(-20 475 290)" />
+  <!-- ITEM 2: 18-Inch Metallic Foil Balloon (Statement Centerpiece) -->
+  <g transform="translate(400, 165)" filter="url(#softContactShadowSig)">
+    <circle cx="0" cy="0" r="74" fill="url(#metallicGold)" stroke="#FFE082" stroke-width="3" />
+    <circle cx="0" cy="0" r="68" fill="none" stroke="#FF8F00" stroke-width="1.5" stroke-dasharray="3 3" />
+    <!-- Metallic Specular Reflection -->
+    <path d="M -38 -42 Q 0 -60 38 -42 Q 0 -50 -38 -42" fill="#FFFFFF" opacity="0.55" />
+    
+    <text x="0" y="-10" font-family="'Poppins', sans-serif" font-size="14" font-weight="800" fill="#2B2B3A" text-anchor="middle" letter-spacing="1">HAPPY</text>
+    <text x="0" y="14" font-family="'Poppins', sans-serif" font-size="18" font-weight="800" fill="#E91E63" text-anchor="middle" letter-spacing="1">BIRTHDAY</text>
+    <text x="0" y="30" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="800" fill="#B45309" text-anchor="middle">★ 18" METALLIC FOIL ★</text>
   </g>
 
-  <!-- Main Signature Box Body -->
-  <g filter="url(#sigShadow)">
-    <path d="M 230 380 L 570 380 L 540 500 L 260 500 Z" fill="url(#boxSigGrad)" />
-    <!-- Gold Ribbon Band -->
-    <path d="M 380 380 L 420 380 L 415 500 L 385 500 Z" fill="url(#foilBalloonGrad)" />
+  <!-- ITEM 3: 20 Latex Balloons Garland Cluster (Left and Right Arches) -->
+  <g filter="url(#itemShadowSig)">
+    <!-- Left Balloon Cluster -->
+    <ellipse cx="230" cy="180" rx="44" ry="56" fill="url(#lilacRealisticSig)" />
+    <ellipse cx="180" cy="235" rx="42" ry="54" fill="url(#peachRealisticSig)" />
+    <ellipse cx="235" cy="260" rx="46" ry="58" fill="url(#creamRealisticSig)" />
+    <ellipse cx="280" cy="210" rx="45" ry="56" fill="url(#peachRealisticSig)" />
 
-    <!-- Open Flaps -->
-    <polygon points="230,380 180,340 320,350 290,380" fill="#880E4F" />
-    <polygon points="570,380 620,340 480,350 510,380" fill="#880E4F" />
-
-    <!-- Front Badge -->
-    <rect x="310" y="420" width="180" height="48" rx="10" fill="#FFFFFF" />
-    <text x="400" y="442" font-family="'Outfit', sans-serif" font-size="14" font-weight="900" fill="#2B2B3A" text-anchor="middle">CELEBRATION BOX</text>
-    <text x="400" y="458" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" fill="#E91E63" text-anchor="middle">SIGNATURE EDITION • ₹499</text>
+    <!-- Right Balloon Cluster -->
+    <ellipse cx="570" cy="180" rx="44" ry="56" fill="url(#peachRealisticSig)" />
+    <ellipse cx="620" cy="235" rx="42" ry="54" fill="url(#lilacRealisticSig)" />
+    <ellipse cx="565" cy="260" rx="46" ry="58" fill="url(#creamRealisticSig)" />
+    <ellipse cx="520" cy="210" rx="45" ry="56" fill="url(#lilacRealisticSig)" />
   </g>
 
-  <!-- Manual Balloon Hand Pump (Prominent feature included in Signature) -->
-  <g transform="translate(140, 440) rotate(-24)" filter="url(#sigShadow)">
-    <!-- Pump body -->
-    <rect x="0" y="0" width="30" height="110" rx="6" fill="url(#pumpGrad)" stroke="#004D40" stroke-width="1.5" />
-    <!-- Pump handle -->
-    <rect x="-8" y="-18" width="46" height="14" rx="4" fill="#FFB400" stroke="#B27B00" stroke-width="1.5" />
-    <line x1="15" y1="-4" x2="15" y2="0" stroke="#78909C" stroke-width="6" />
-    <!-- Pump nozzle -->
-    <polygon points="8,110 22,110 18,128 12,128" fill="#FFB400" stroke="#B27B00" stroke-width="1" />
-    <!-- Label on pump -->
-    <text x="15" y="60" font-family="'Outfit', sans-serif" font-size="7" font-weight="900" fill="#FFFFFF" text-anchor="middle" transform="rotate(90 15 60)">BALLOON PUMP</text>
+  <!-- ITEM 4: Manual Balloon Hand Pump (Prominent feature included in Signature) -->
+  <g transform="translate(130, 360) rotate(-20)" filter="url(#itemShadowSig)">
+    <!-- Pump Cylinder -->
+    <rect x="0" y="0" width="28" height="115" rx="6" fill="url(#pumpGradRealistic)" stroke="#004D40" stroke-width="1.5" />
+    <!-- Pump Piston Handle -->
+    <rect x="-8" y="-18" width="44" height="14" rx="4" fill="#FFB400" stroke="#B45309" stroke-width="1.5" />
+    <line x1="14" y1="-4" x2="14" y2="0" stroke="#94A3B8" stroke-width="6" />
+    <!-- Nozzle -->
+    <polygon points="7,115 21,115 17,132 11,132" fill="#FFB400" stroke="#B45309" stroke-width="1" />
+    <!-- Label -->
+    <text x="14" y="65" font-family="'Poppins', sans-serif" font-size="7" font-weight="800" fill="#FFFFFF" text-anchor="middle" transform="rotate(90 14 65)">MANUAL PUMP INCLUDED</text>
   </g>
 
-  <!-- Photo Props Sticks (6 Included) -->
-  <!-- Prop 1: Mustache -->
-  <g transform="translate(560, 360) rotate(15)" filter="url(#sigShadow)">
-    <line x1="0" y1="0" x2="0" y2="90" stroke="#D7CCC8" stroke-width="3" stroke-linecap="round" />
-    <!-- Mustache shape -->
-    <path d="M 0 0 C -15 -15 -35 5 -15 15 C 0 10 0 5 0 0 C 0 5 0 10 15 15 C 35 5 15 -15 0 0 Z" fill="#2B2B3A" />
-  </g>
-  <!-- Prop 2: Party Glasses -->
-  <g transform="translate(615, 380) rotate(-10)" filter="url(#sigShadow)">
-    <line x1="0" y1="0" x2="0" y2="85" stroke="#D7CCC8" stroke-width="3" stroke-linecap="round" />
-    <circle cx="-16" cy="0" r="14" fill="#E91E63" stroke="#FFF" stroke-width="2" />
-    <circle cx="16" cy="0" r="14" fill="#E91E63" stroke="#FFF" stroke-width="2" />
-    <rect x="-4" y="-3" width="8" height="5" fill="#E91E63" />
-    <text x="0" y="24" font-family="'Outfit', sans-serif" font-size="7" font-weight="bold" fill="#2B2B3A" text-anchor="middle">PROPS (6)</text>
+  <!-- ITEM 5: 6 Photo Booth Props on Wooden Sticks (Right Side) -->
+  <g transform="translate(620, 350)" filter="url(#itemShadowSig)">
+    <!-- Sticks -->
+    <line x1="-20" y1="40" x2="-20" y2="120" stroke="#D7CCC8" stroke-width="3" stroke-linecap="round" />
+    <line x1="20" y1="40" x2="20" y2="120" stroke="#D7CCC8" stroke-width="3" stroke-linecap="round" />
+    
+    <!-- Prop 1: Mustache -->
+    <path d="M -20 35 C -35 20 -50 40 -35 48 C -20 44 -20 39 -20 35 C -20 39 -20 44 -5 48 C 10 40 -5 20 -20 35 Z" fill="#2B2B3A" />
+    
+    <!-- Prop 2: Party Glasses -->
+    <circle cx="10" cy="30" r="12" fill="#E91E63" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="30" cy="30" r="12" fill="#E91E63" stroke="#FFFFFF" stroke-width="2" />
+    <rect x="18" y="28" width="4" height="4" fill="#E91E63" />
+    
+    <!-- Props Label Tag -->
+    <rect x="-35" y="125" width="75" height="18" rx="9" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1" />
+    <text x="2" y="138" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#2B2B3A" text-anchor="middle">
+      6 PROPS INCLUDED
+    </text>
   </g>
 
-  <!-- Happy Birthday Bunting Banner -->
-  <path d="M 160 110 Q 400 150 640 110" stroke="#00A8A8" stroke-width="2" stroke-dasharray="3 2" fill="none" />
-  <polygon points="210,120 225,145 195,145" fill="#FFB400" />
-  <polygon points="245,124 260,150 230,150" fill="#E91E63" />
-  <polygon points="280,128 295,154 265,154" fill="#00A8A8" />
-  <polygon points="520,128 535,154 505,154" fill="#FFB400" />
-  <polygon points="555,124 570,150 540,150" fill="#E91E63" />
-  <polygon points="590,120 605,145 575,145" fill="#00A8A8" />
+  <!-- ITEM 6: Happy Birthday Banner Pennants (Center Arc) -->
+  <g filter="url(#itemShadowSig)">
+    <path d="M 270 290 Q 400 320 530 290" stroke="#CBD5E1" stroke-width="2" fill="none" />
+    <polygon points="310,298 325,322 295,322" fill="#E91E63" />
+    <polygon points="345,303 360,327 330,327" fill="#FFB400" />
+    <polygon points="380,306 395,330 365,330" fill="#00A8A8" />
+    <polygon points="415,306 430,330 400,330" fill="#E91E63" />
+    <polygon points="450,303 465,327 435,327" fill="#FFB400" />
+    <polygon points="485,298 500,322 470,322" fill="#00A8A8" />
+  </g>
 
-  <!-- Sparkling Stars & Confetti -->
-  <polygon points="160,80 166,95 181,100 166,105 160,120 154,105 139,100 154,95" fill="#FFB400" />
-  <polygon points="630,70 636,83 649,88 636,93 630,106 624,93 611,88 624,83" fill="#E91E63" />
-  <circle cx="120" cy="220" r="6" fill="#00A8A8" />
-  <circle cx="680" cy="220" r="5" fill="#FFB400" />
-  <circle cx="660" cy="460" r="4" fill="#FF80AB" />
+  <!-- ITEM 7 & 8: 6-Pack Candles & DIY Guide Card -->
+  <!-- Candles -->
+  <g transform="translate(250, 360)" filter="url(#itemShadowSig)">
+    <rect width="70" height="95" rx="6" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1.5" />
+    <rect x="6" y="6" width="58" height="18" rx="3" fill="#FDF2F8" />
+    <text x="35" y="18" font-family="'Poppins', sans-serif" font-size="8" font-weight="700" fill="#C2185B" text-anchor="middle">6 CANDLES</text>
+    <rect x="12" y="32" width="5" height="50" rx="1.5" fill="#E91E63" />
+    <rect x="20" y="32" width="5" height="50" rx="1.5" fill="#FFB400" />
+    <rect x="28" y="32" width="5" height="50" rx="1.5" fill="#00A8A8" />
+    <rect x="36" y="32" width="5" height="50" rx="1.5" fill="#E91E63" />
+    <rect x="44" y="32" width="5" height="50" rx="1.5" fill="#FFB400" />
+    <rect x="52" y="32" width="5" height="50" rx="1.5" fill="#00A8A8" />
+  </g>
+
+  <!-- DIY Guide (30-40 mins) -->
+  <g transform="translate(480, 360)" filter="url(#itemShadowSig)">
+    <rect width="75" height="95" rx="6" fill="#FFFFFF" stroke="#E2D9CF" stroke-width="1.5" />
+    <rect x="0" y="0" width="75" height="20" rx="6" fill="#00A8A8" />
+    <text x="37" y="14" font-family="'Poppins', sans-serif" font-size="8" font-weight="700" fill="#FFFFFF" text-anchor="middle">DIY GUIDE</text>
+    <line x1="10" y1="32" x2="65" y2="32" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" />
+    <line x1="10" y1="44" x2="55" y2="44" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" />
+    <line x1="10" y1="56" x2="60" y2="56" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" />
+    <rect x="8" y="68" width="59" height="18" rx="4" fill="#F0FDFA" stroke="#00A8A8" stroke-width="1" />
+    <text x="37" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="700" fill="#0F766E" text-anchor="middle">⏱ 30–40 Mins</text>
+  </g>
+
+  <!-- ITEM 9, 10, 11: 2M Arch Strip + 20 Glue Dots + 3M Ribbon -->
+  <g transform="translate(350, 420)" filter="url(#itemShadowSig)">
+    <circle cx="0" cy="0" r="22" fill="#FFFFFF" stroke="#FFB400" stroke-width="3" stroke-dasharray="6 3" />
+    <circle cx="0" cy="0" r="8" fill="#FFFBEB" />
+    <text x="0" y="3" font-family="'Plus Jakarta Sans', sans-serif" font-size="6" font-weight="800" fill="#B45309" text-anchor="middle">2M ARCH</text>
+  </g>
+
+  <g transform="translate(450, 420)" filter="url(#itemShadowSig)">
+    <circle cx="0" cy="0" r="22" fill="#FFFFFF" stroke="#E91E63" stroke-width="3" />
+    <circle cx="0" cy="0" r="8" fill="#FDF2F8" />
+    <text x="0" y="3" font-family="'Plus Jakarta Sans', sans-serif" font-size="6" font-weight="800" fill="#C2185B" text-anchor="middle">20 DOTS</text>
+  </g>
+
+  <g transform="translate(400, 435)" filter="url(#itemShadowSig)">
+    <rect x="-22" y="-10" width="44" height="20" rx="4" fill="#00A8A8" />
+    <text x="0" y="3" font-family="'Plus Jakarta Sans', sans-serif" font-size="6" font-weight="800" fill="#FFFFFF" text-anchor="middle">3M RIBBON</text>
+  </g>
+
+  <!-- Signature Edition Badge -->
+  <g transform="translate(400, 365)" filter="url(#itemShadowSig)">
+    <rect x="-65" y="-15" width="130" height="30" rx="15" fill="#E91E63" />
+    <text x="0" y="4" font-family="'Poppins', sans-serif" font-size="10" font-weight="800" fill="#FFFFFF" text-anchor="middle">SIGNATURE • ₹499</text>
+  </g>
 </svg>
-

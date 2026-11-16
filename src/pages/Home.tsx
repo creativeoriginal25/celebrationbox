@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
 import { ProductCard } from '../components/ProductCard';
@@ -30,6 +30,26 @@ export const Home: React.FC = () => {
   const [isAdminTemplatesOpen, setIsAdminTemplatesOpen] = useState<boolean>(false);
   const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
 
+  // Discreet founder access via URL param `?admin=templates` or keyboard shortcut `Alt + Shift + A`
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('admin') === 'templates') {
+        setIsAdminTemplatesOpen(true);
+      }
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.altKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+          e.preventDefault();
+          setIsAdminTemplatesOpen((prev) => !prev);
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, []);
+
   const handleOpenOrder = (productId?: 'mini-celebration-box' | 'signature-celebration-box') => {
     if (productId) {
       setOrderModalProductId(productId);
@@ -52,10 +72,7 @@ export const Home: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-brand-cream-50 text-brand-ink selection:bg-brand-pink-100 selection:text-brand-pink">
       {/* Header */}
-      <Header
-        onOpenOrder={handleOpenOrder}
-        onOpenAdminTemplates={() => setIsAdminTemplatesOpen(true)}
-      />
+      <Header onOpenOrder={handleOpenOrder} />
 
       {/* Main Content */}
       <main className="flex-1">
@@ -63,26 +80,26 @@ export const Home: React.FC = () => {
         <Hero onExplore={scrollToShop} onOpenOrder={handleOpenOrder} />
 
         {/* Product Catalogue Section */}
-        <section id="shop" className="py-16 md:py-24 relative">
+        <section id="shop" className="py-16 md:py-24 relative scroll-mt-28">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {/* Catalogue Header */}
-            <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-badge-pink text-xs font-bold uppercase tracking-wider">
+            <div className="text-center max-w-2xl mx-auto mb-12 md:mb-16 space-y-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full badge-pink text-xs font-bold uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Curated DIY Kits</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-ink">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-ink">
                 Choose Your Celebration Box
               </h2>
               <p className="text-sm sm:text-base text-brand-ink-light leading-relaxed">
-                Initially offering two curated options in our signature{' '}
-                <span className="font-bold text-brand-ink">Pastel Pop</span> theme (peach, lilac & cream).
-                Packed with 100% of the decor accessories you need.
+                Two complete options in our signature{' '}
+                <strong className="text-brand-ink">Pastel Pop</strong> palette (peach, lilac & cream).
+                Packed with 100% of the decor accessories you need to style your room.
               </p>
             </div>
 
-            {/* Product Cards Grid: Exactly Two Products */}
+            {/* Product Cards Grid: Exactly Two Approved Products */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {PRODUCTS.map((product) => (
                 <ProductCard
@@ -97,7 +114,7 @@ export const Home: React.FC = () => {
             {/* Bottom Quick Callout */}
             <div className="mt-12 text-center">
               <p className="text-xs text-brand-ink-muted">
-                Need help deciding? Compare full item specifications below or ask us directly on WhatsApp.
+                Need help deciding? Compare full item specifications below or message us directly on WhatsApp.
               </p>
             </div>
 
@@ -124,7 +141,6 @@ export const Home: React.FC = () => {
       <Footer
         onOpenOrder={handleOpenOrder}
         onOpenPolicy={(policy) => setActivePolicy(policy)}
-        onOpenAdminTemplates={() => setIsAdminTemplatesOpen(true)}
       />
 
       {/* Modals */}
@@ -153,7 +169,7 @@ export const Home: React.FC = () => {
         />
       )}
 
-      {/* 4. Business Owner WhatsApp Response Templates Modal */}
+      {/* 4. Internal Founder Response Templates Modal (accessible via Alt+Shift+A or ?admin=templates) */}
       {isAdminTemplatesOpen && (
         <AdminTemplatesModal onClose={() => setIsAdminTemplatesOpen(false)} />
       )}
@@ -165,11 +181,11 @@ export const Home: React.FC = () => {
       />
 
       {/* Floating Sticky Mobile WhatsApp CTA */}
-      <div className="fixed bottom-4 right-4 z-30 sm:hidden">
+      <div className="fixed bottom-4 right-4 z-30 lg:hidden">
         <button
           onClick={() => handleOpenOrder()}
-          className="flex items-center gap-2 px-4 py-3 rounded-full bg-brand-pink text-white font-bold text-xs shadow-float active:scale-95 transition-all"
-          aria-label="Order on WhatsApp"
+          className="flex items-center gap-2 px-4 py-3 rounded-full bg-brand-pink hover:bg-brand-pink-hover text-white font-bold text-xs shadow-card-hover active:scale-95 transition-all cursor-pointer"
+          aria-label="Order Celebration Box"
         >
           <MessageCircle className="w-4 h-4" />
           <span>Order Box</span>
@@ -178,4 +194,3 @@ export const Home: React.FC = () => {
     </div>
   );
 };
-

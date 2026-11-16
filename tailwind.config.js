@@ -21,21 +21,21 @@ export default {
           },
           marigold: {
             DEFAULT: '#FFB400',
-            hover: '#F5A600',
+            hover: '#E5A200',
             light: '#FFF8E1',
             50: '#FFFBEB',
             100: '#FEF3C7',
             500: '#FFB400',
-            600: '#F5A600',
+            600: '#E5A200',
           },
           teal: {
             DEFAULT: '#00A8A8',
-            hover: '#009494',
+            hover: '#008E8E',
             light: '#E0F2F1',
             50: '#F0FDFA',
             100: '#CCFBF1',
             500: '#00A8A8',
-            600: '#0D9488',
+            600: '#008E8E',
           },
           ink: {
             DEFAULT: '#2B2B3A',
@@ -46,27 +46,26 @@ export default {
           cream: {
             DEFAULT: '#FFF8F0',
             50: '#FFFAF5',
-            100: '#FFF3E6',
-            200: '#FFE7CC',
+            100: '#FFF4E8',
+            200: '#FFE8D0',
           }
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['Outfit', 'Plus Jakarta Sans', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        display: ['Poppins', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
-        'glass-hover': '0 14px 40px 0 rgba(233, 30, 99, 0.12)',
-        'glass-card': '0 10px 30px -5px rgba(43, 43, 58, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.6) inset',
-        'subtle': '0 4px 20px -2px rgba(43, 43, 58, 0.05)',
-        'float': '0 20px 40px -15px rgba(233, 30, 99, 0.25)',
+        'sm': '0 1px 2px 0 rgba(43, 43, 58, 0.05)',
+        'card': '0 4px 16px -2px rgba(43, 43, 58, 0.06), 0 2px 4px -2px rgba(43, 43, 58, 0.04)',
+        'card-hover': '0 12px 28px -4px rgba(43, 43, 58, 0.1), 0 4px 10px -2px rgba(233, 30, 99, 0.08)',
+        'modal': '0 24px 48px -12px rgba(43, 43, 58, 0.25)',
       },
-      backdropBlur: {
-        'xs': '2px',
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
       }
     },
   },
   plugins: [],
 }
-
