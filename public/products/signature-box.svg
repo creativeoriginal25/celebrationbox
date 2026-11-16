@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="sigBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF7" />
+      <stop offset="50%" stop-color="#FFF5EC" />
+      <stop offset="100%" stop-color="#FCE7F3" />
+    </linearGradient>
+    <!-- Foil Backdrop Gradient -->
+    <linearGradient id="foilGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFD1DF" />
+      <stop offset="25%" stop-color="#FFF0F5" />
+      <stop offset="50%" stop-color="#FFE082" />
+      <stop offset="75%" stop-color="#E1BEE7" />
+      <stop offset="100%" stop-color="#FFCDD2" />
+    </linearGradient>
+    <!-- Foil Balloon Gold Gradient -->
+    <radialGradient id="foilBalloonGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFF9C4" />
+      <stop offset="40%" stop-color="#FFD54F" />
+      <stop offset="85%" stop-color="#FFA000" />
+      <stop offset="100%" stop-color="#E65100" />
+    </radialGradient>
+    <linearGradient id="peachSig" x1="20%" y1="20%" x2="80%" y2="80%">
+      <stop offset="0%" stop-color="#FFD6BF" />
+      <stop offset="60%" stop-color="#FFBE98" />
+      <stop offset="100%" stop-color="#F29363" />
+    </linearGradient>
+    <linearGradient id="lilacSig" x1="20%" y1="20%" x2="80%" y2="80%">
+      <stop offset="0%" stop-color="#F0DCF7" />
+      <stop offset="60%" stop-color="#D8B4E2" />
+      <stop offset="100%" stop-color="#B281C4" />
+    </linearGradient>
+    <linearGradient id="creamSig" x1="20%" y1="20%" x2="80%" y2="80%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#FFF4E0" />
+      <stop offset="100%" stop-color="#F7DFB3" />
+    </linearGradient>
+    <linearGradient id="boxSigGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E91E63" />
+      <stop offset="100%" stop-color="#AD1457" />
+    </linearGradient>
+    <linearGradient id="pumpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00A8A8" />
+      <stop offset="50%" stop-color="#26C6DA" />
+      <stop offset="100%" stop-color="#00796B" />
+    </linearGradient>
+    <filter id="sigShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#2B2B3A" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="600" rx="24" fill="url(#sigBgGrad)" />
+
+  <!-- Shimmer Foil Fringe Curtain in the backdrop (6-Foot Backdrop) -->
+  <g opacity="0.65">
+    <rect x="180" y="40" width="440" height="360" rx="4" fill="url(#foilGrad)" opacity="0.25" />
+    <!-- Vertical Foil Strands -->
+    <line x1="200" y1="40" x2="200" y2="390" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="225" y1="40" x2="225" y2="400" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="250" y1="40" x2="250" y2="385" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="275" y1="40" x2="275" y2="410" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="300" y1="40" x2="300" y2="395" stroke="#4DD0E1" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="325" y1="40" x2="325" y2="400" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="350" y1="40" x2="350" y2="390" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="375" y1="40" x2="375" y2="410" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="400" y1="40" x2="400" y2="395" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="425" y1="40" x2="425" y2="400" stroke="#4DD0E1" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="450" y1="40" x2="450" y2="390" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="475" y1="40" x2="475" y2="410" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="500" y1="40" x2="500" y2="395" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="525" y1="40" x2="525" y2="400" stroke="#BA68C8" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="550" y1="40" x2="550" y2="390" stroke="#FF80AB" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="575" y1="40" x2="575" y2="405" stroke="#FFD54F" stroke-width="4" stroke-linecap="round" opacity="0.8" />
+    <line x1="600" y1="40" x2="600" y2="390" stroke="#4DD0E1" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+  </g>
+
+  <!-- Big Ground Shadow -->
+  <ellipse cx="400" cy="510" rx="280" ry="34" fill="#2B2B3A" opacity="0.09" />
+  <ellipse cx="400" cy="505" rx="210" ry="22" fill="#2B2B3A" opacity="0.14" />
+
+  <!-- 18-Inch Happy Birthday Foil Balloon (Center Statement Piece) -->
+  <g transform="translate(400, 165)" filter="url(#sigShadow)">
+    <circle cx="0" cy="0" r="76" fill="url(#foilBalloonGrad)" stroke="#FFE082" stroke-width="4" />
+    <circle cx="0" cy="0" r="70" fill="none" stroke="#FFA000" stroke-width="1.5" stroke-dasharray="3 3" />
+    <!-- Metallic reflection shine -->
+    <path d="M -40 -45 Q 0 -65 40 -45 Q 0 -55 -40 -45" fill="#FFFFFF" opacity="0.6" />
+    <text x="0" y="-12" font-family="'Outfit', sans-serif" font-size="16" font-weight="900" fill="#2B2B3A" text-anchor="middle" letter-spacing="1">HAPPY</text>
+    <text x="0" y="14" font-family="'Outfit', sans-serif" font-size="20" font-weight="900" fill="#E91E63" text-anchor="middle" letter-spacing="2">BIRTHDAY</text>
+    <text x="0" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#B27B00" text-anchor="middle">★ 18" METALLIC FOIL ★</text>
+    <!-- Little tail string -->
+    <path d="M 0 76 L -4 88 L 4 88 Z" fill="#FFA000" />
+    <path d="M 0 88 Q 15 150 0 220" stroke="#FFA000" stroke-width="2" fill="none" opacity="0.7" />
+  </g>
+
+  <!-- Balloon Arch / Cluster surrounding the box -->
+  <g filter="url(#sigShadow)">
+    <circle cx="250" cy="180" r="50" fill="url(#lilacSig)" />
+    <circle cx="210" cy="240" r="48" fill="url(#peachSig)" />
+    <circle cx="270" cy="265" r="54" fill="url(#creamSig)" />
+    <circle cx="550" cy="180" r="50" fill="url(#peachSig)" />
+    <circle cx="590" cy="240" r="48" fill="url(#lilacSig)" />
+    <circle cx="530" cy="265" r="54" fill="url(#creamSig)" />
+    <!-- Front Arch Layer -->
+    <circle cx="310" cy="310" r="56" fill="url(#peachSig)" />
+    <ellipse cx="295" cy="290" rx="12" ry="20" fill="#FFFFFF" opacity="0.4" transform="rotate(-20 295 290)" />
+    <circle cx="490" cy="310" r="56" fill="url(#lilacSig)" />
+    <ellipse cx="475" cy="290" rx="12" ry="20" fill="#FFFFFF" opacity="0.4" transform="rotate(-20 475 290)" />
+  </g>
+
+  <!-- Main Signature Box Body -->
+  <g filter="url(#sigShadow)">
+    <path d="M 230 380 L 570 380 L 540 500 L 260 500 Z" fill="url(#boxSigGrad)" />
+    <!-- Gold Ribbon Band -->
+    <path d="M 380 380 L 420 380 L 415 500 L 385 500 Z" fill="url(#foilBalloonGrad)" />
+
+    <!-- Open Flaps -->
+    <polygon points="230,380 180,340 320,350 290,380" fill="#880E4F" />
+    <polygon points="570,380 620,340 480,350 510,380" fill="#880E4F" />
+
+    <!-- Front Badge -->
+    <rect x="310" y="420" width="180" height="48" rx="10" fill="#FFFFFF" />
+    <text x="400" y="442" font-family="'Outfit', sans-serif" font-size="14" font-weight="900" fill="#2B2B3A" text-anchor="middle">CELEBRATION BOX</text>
+    <text x="400" y="458" font-family="'Outfit', sans-serif" font-size="11" font-weight="800" fill="#E91E63" text-anchor="middle">SIGNATURE EDITION • ₹499</text>
+  </g>
+
+  <!-- Manual Balloon Hand Pump (Prominent feature included in Signature) -->
+  <g transform="translate(140, 440) rotate(-24)" filter="url(#sigShadow)">
+    <!-- Pump body -->
+    <rect x="0" y="0" width="30" height="110" rx="6" fill="url(#pumpGrad)" stroke="#004D40" stroke-width="1.5" />
+    <!-- Pump handle -->
+    <rect x="-8" y="-18" width="46" height="14" rx="4" fill="#FFB400" stroke="#B27B00" stroke-width="1.5" />
+    <line x1="15" y1="-4" x2="15" y2="0" stroke="#78909C" stroke-width="6" />
+    <!-- Pump nozzle -->
+    <polygon points="8,110 22,110 18,128 12,128" fill="#FFB400" stroke="#B27B00" stroke-width="1" />
+    <!-- Label on pump -->
+    <text x="15" y="60" font-family="'Outfit', sans-serif" font-size="7" font-weight="900" fill="#FFFFFF" text-anchor="middle" transform="rotate(90 15 60)">BALLOON PUMP</text>
+  </g>
+
+  <!-- Photo Props Sticks (6 Included) -->
+  <!-- Prop 1: Mustache -->
+  <g transform="translate(560, 360) rotate(15)" filter="url(#sigShadow)">
+    <line x1="0" y1="0" x2="0" y2="90" stroke="#D7CCC8" stroke-width="3" stroke-linecap="round" />
+    <!-- Mustache shape -->
+    <path d="M 0 0 C -15 -15 -35 5 -15 15 C 0 10 0 5 0 0 C 0 5 0 10 15 15 C 35 5 15 -15 0 0 Z" fill="#2B2B3A" />
+  </g>
+  <!-- Prop 2: Party Glasses -->
+  <g transform="translate(615, 380) rotate(-10)" filter="url(#sigShadow)">
+    <line x1="0" y1="0" x2="0" y2="85" stroke="#D7CCC8" stroke-width="3" stroke-linecap="round" />
+    <circle cx="-16" cy="0" r="14" fill="#E91E63" stroke="#FFF" stroke-width="2" />
+    <circle cx="16" cy="0" r="14" fill="#E91E63" stroke="#FFF" stroke-width="2" />
+    <rect x="-4" y="-3" width="8" height="5" fill="#E91E63" />
+    <text x="0" y="24" font-family="'Outfit', sans-serif" font-size="7" font-weight="bold" fill="#2B2B3A" text-anchor="middle">PROPS (6)</text>
+  </g>
+
+  <!-- Happy Birthday Bunting Banner -->
+  <path d="M 160 110 Q 400 150 640 110" stroke="#00A8A8" stroke-width="2" stroke-dasharray="3 2" fill="none" />
+  <polygon points="210,120 225,145 195,145" fill="#FFB400" />
+  <polygon points="245,124 260,150 230,150" fill="#E91E63" />
+  <polygon points="280,128 295,154 265,154" fill="#00A8A8" />
+  <polygon points="520,128 535,154 505,154" fill="#FFB400" />
+  <polygon points="555,124 570,150 540,150" fill="#E91E63" />
+  <polygon points="590,120 605,145 575,145" fill="#00A8A8" />
+
+  <!-- Sparkling Stars & Confetti -->
+  <polygon points="160,80 166,95 181,100 166,105 160,120 154,105 139,100 154,95" fill="#FFB400" />
+  <polygon points="630,70 636,83 649,88 636,93 630,106 624,93 611,88 624,83" fill="#E91E63" />
+  <circle cx="120" cy="220" r="6" fill="#00A8A8" />
+  <circle cx="680" cy="220" r="5" fill="#FFB400" />
+  <circle cx="660" cy="460" r="4" fill="#FF80AB" />
+</svg>
+
