@@ -14,6 +14,7 @@ import { OrderCustomizerModal } from '../components/OrderCustomizerModal';
 import { WhatsAppFallbackModal } from '../components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from '../components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from '../components/PolicyModal';
+import { OpeningIntroAnimation } from '../components/OpeningIntroAnimation';
 import { ScrollReveal } from '../components/react-bits/ScrollReveal';
 import { PRODUCTS } from '../config/products';
 import { Product } from '../types';
@@ -22,6 +23,9 @@ import { ShoppingBag, CheckCircle2 } from 'lucide-react';
 
 export const HomeContent: React.FC = () => {
   const { toastMessage, totalCount, setIsCartOpen } = useCart();
+
+  // Opening animation state: Plays immediately when website opens
+  const [showOpeningIntro, setShowOpeningIntro] = useState<boolean>(true);
 
   // Modals & Drawers state
   const [selectedProductDetails, setSelectedProductDetails] = useState<Product | null>(null);
@@ -36,7 +40,7 @@ export const HomeContent: React.FC = () => {
   const [isAdminTemplatesOpen, setIsAdminTemplatesOpen] = useState<boolean>(false);
   const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
 
-  // Discreet founder access via URL param `?admin=templates` or keyboard shortcut `Alt + Shift + A`
+  // Founder access via URL param `?admin=templates` or keyboard shortcut `Alt + Shift + A`
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -91,6 +95,12 @@ export const HomeContent: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-brand-cream-50 text-brand-ink selection:bg-brand-pink-100 selection:text-brand-pink relative">
+      {/* 1. Opening Brand Intro Animation on page open */}
+      <OpeningIntroAnimation
+        isOpen={showOpeningIntro}
+        onComplete={() => setShowOpeningIntro(false)}
+      />
+
       {/* Toast Confirmation for Cart additions */}
       {toastMessage && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
@@ -98,7 +108,7 @@ export const HomeContent: React.FC = () => {
           <span>{toastMessage}</span>
           <button
             onClick={() => setIsCartOpen(true)}
-            className="ml-2 text-brand-pink font-bold underline hover:text-white"
+            className="ml-2 text-brand-pink font-bold underline hover:text-white cursor-pointer"
           >
             View Cart
           </button>
@@ -110,8 +120,11 @@ export const HomeContent: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1">
-        {/* Hero Section with 10s brand intro video */}
-        <Hero onExplore={scrollToShop} onOpenOrder={handleDirectWhatsAppOrder} />
+        {/* Hero Section with embedded video & replay option */}
+        <Hero
+          onExplore={scrollToShop}
+          onOpenOrder={handleDirectWhatsAppOrder}
+        />
 
         {/* Shop Kits Section */}
         <section id="shop" className="py-16 md:py-24 relative scroll-mt-28">
