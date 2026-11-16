@@ -38,68 +38,65 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
       className={`${className} select-none overflow-visible`}
       role="img"
       aria-label="Celebration Box Logo"
-      whileHover={interactive && !isAnimated ? 'hover' : undefined}
+      whileHover={interactive ? 'hover' : undefined}
+      initial="initial"
+      animate="animate"
     >
       {/* ========================================================
           1. REFINED FLAT-VECTOR GIFT BOX ICON
          ======================================================== */}
       <g id="gift-box-icon">
 
-        {/* --- Confetti & Streamer Burst Emerging from inside Box --- */}
-        <g id="celebration-burst">
+        {/* --- Confetti & Streamer Burst: Erupts when open, tucks away when closed --- */}
+        <motion.g
+          id="celebration-burst"
+          initial={isAnimated ? { scale: 0, opacity: 0 } : { scale: 0, opacity: 0 }}
+          animate={
+            isAnimated
+              ? {
+                  scale: [0, 1.15, 1, 1, 0],
+                  opacity: [0, 1, 1, 1, 0],
+                }
+              : { scale: 0, opacity: 0 }
+          }
+          transition={
+            isAnimated
+              ? {
+                  duration: 3.2,
+                  times: [0, 0.22, 0.35, 0.72, 0.95],
+                  ease: smoothEase,
+                }
+              : undefined
+          }
+          variants={{
+            hover: {
+              scale: 1,
+              opacity: 1,
+              transition: { duration: 0.4, ease: smoothEase },
+            },
+          }}
+          style={{ transformOrigin: '140px 170px' }}
+        >
           {/* Golden Sparkle Star */}
-          <motion.path
+          <path
             d="M 195 62 Q 195 78 211 78 Q 195 78 195 94 Q 195 78 179 78 Q 195 78 195 62 Z"
             fill={ribbonColor}
-            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
-            animate={{ scale: [0, 1.2, 1], opacity: 1 }}
-            transition={{ delay: 0.35, duration: 0.55, ease: smoothEase }}
-            variants={{
-              hover: { scale: [1, 1.3, 1], rotate: [0, 15, -15, 0], transition: { duration: 0.5 } }
-            }}
           />
 
           {/* Teal Playful Streamer */}
-          <motion.path
+          <path
             d="M 155 152 Q 175 125 195 135 T 225 108"
             fill="none"
             stroke={tealColor}
             strokeWidth="6.5"
             strokeLinecap="round"
-            initial={isAnimated ? { pathLength: 0, opacity: 0 } : false}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.65, ease: smoothEase }}
           />
 
           {/* Confetti Particles */}
-          <motion.circle
-            cx="182"
-            cy="122"
-            r="6"
-            fill={boxColor}
-            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.45, ease: smoothEase }}
-          />
-          <motion.circle
-            cx="142"
-            cy="138"
-            r="5"
-            fill={ribbonColor}
-            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.36, duration: 0.45, ease: smoothEase }}
-          />
-          <motion.circle
-            cx="162"
-            cy="116"
-            r="4.5"
-            fill={tealColor}
-            initial={isAnimated ? { scale: 0, opacity: 0 } : false}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.42, duration: 0.45, ease: smoothEase }}
-          />
-        </g>
+          <circle cx="182" cy="122" r="6" fill={boxColor} />
+          <circle cx="142" cy="138" r="5" fill={ribbonColor} />
+          <circle cx="162" cy="116" r="4.5" fill={tealColor} />
+        </motion.g>
 
         {/* --- Symmetrical, Balanced Rectangular Box Body --- */}
         <motion.g
@@ -117,7 +114,7 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
             fill={boxColor}
           />
 
-          {/* Box Interior Shadow Lip (reveals that box is open) */}
+          {/* Box Interior Shadow Lip (revealed when lid opens) */}
           <rect
             x="64"
             y="170"
@@ -137,30 +134,36 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
           />
         </motion.g>
 
-        {/* --- Clearly Recognizable Tilted Lid & Bow (Anchored Pivot) --- */}
-        <g transform="translate(56, 166)">
+        {/* --- Tilted Lid & Bow (Opens on celebration, closes back after animation, opens on hover) --- */}
+        <g transform="translate(58, 172)">
           <motion.g
-            initial={isAnimated ? { rotate: 0 } : { rotate: -24 }}
-            animate={{ rotate: -24 }}
+            initial={isAnimated ? { rotate: 0 } : { rotate: 0 }}
+            animate={
+              isAnimated
+                ? {
+                    rotate: [0, -26, -24, -24, 0],
+                  }
+                : { rotate: 0 }
+            }
             transition={
               isAnimated
                 ? {
-                    delay: 0.2,
-                    duration: 0.7,
+                    duration: 3.2,
+                    times: [0, 0.2, 0.3, 0.72, 1],
                     ease: smoothEase,
                   }
                 : undefined
             }
             variants={{
               hover: {
-                rotate: [-24, -30, -21, -24],
-                transition: { duration: 0.5, ease: 'easeInOut' }
-              }
+                rotate: -24,
+                transition: { duration: 0.45, ease: smoothEase },
+              },
             }}
             style={{ transformOrigin: '0px 0px' }}
           >
             {/* Elegant Two-Loop Gift Ribbon Bow on Top Edge of Lid */}
-            <g transform="translate(73, -30)">
+            <g transform="translate(72, -28)">
               {/* Left Bow Loop */}
               <path
                 d="M 0 0 C -22 -28 -48 -14 -30 4 C -18 10 -8 4 0 0 Z"
@@ -178,17 +181,17 @@ export const CelebrationBoxLogo: React.FC<CelebrationBoxLogoProps> = ({
             {/* Clearly Defined Rectangular Lid Bar with rounded corners */}
             <rect
               x="0"
-              y="-30"
-              width="146"
+              y="-28"
+              width="144"
               height="30"
               rx="8"
               fill={boxColor}
             />
 
-            {/* Matching Vertical Ribbon Band on Lid */}
+            {/* Matching Vertical Ribbon Band on Lid (aligns with box ribbon when closed) */}
             <rect
-              x="59"
-              y="-30"
+              x="58"
+              y="-28"
               width="28"
               height="30"
               fill={ribbonColor}
