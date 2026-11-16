@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 340" role="img" aria-label="Celebration Box Logo Monochrome">
+  <!-- 1. MONOCHROME GIFT BOX ICON -->
+  <g id="gift-box-icon" fill="#2B2B3A">
+    <!-- Confetti & Streamer Burst -->
+    <path d="M 195 62 Q 195 78 211 78 Q 195 78 195 94 Q 195 78 179 78 Q 195 78 195 62 Z" />
+    <path d="M 155 152 Q 175 125 195 135 T 225 108" fill="none" stroke="#2B2B3A" stroke-width="6.5" stroke-linecap="round" />
+    <circle cx="182" cy="122" r="6" />
+    <circle cx="142" cy="138" r="5" />
+    <circle cx="162" cy="116" r="4.5" />
+
+    <!-- Box Body -->
+    <rect x="64" y="170" width="132" height="105" rx="10" />
+    <!-- White Cutout Ribbon -->
+    <rect x="116" y="170" width="28" height="105" fill="#FFFFFF" />
+
+    <!-- Tilted Open Lid & Bow -->
+    <g transform="translate(56, 166) rotate(-24)">
+      <!-- Ribbon Bow -->
+      <g transform="translate(73, -30)" fill="#2B2B3A">
+        <path d="M 0 0 C -22 -28 -48 -14 -30 4 C -18 10 -8 4 0 0 Z" />
+        <path d="M 0 0 C 8 4 18 10 30 4 C 48 -14 22 -28 0 0 Z" />
+        <circle cx="0" cy="2" r="6.5" fill="#FFFFFF" />
+      </g>
+      <!-- Lid Bar -->
+      <rect x="0" y="-30" width="146" height="30" rx="8" />
+      <!-- White Cutout Ribbon Band on Lid -->
+      <rect x="59" y="-30" width="28" height="30" fill="#FFFFFF" />
+    </g>
+  </g>
+
+  <!-- 2. WORDMARK -->
+  <text x="268" y="232" font-family="'Poppins', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="122" font-weight="800" letter-spacing="-1.8" fill="#2B2B3A">
+    Celebration <tspan font-weight="900">Box</tspan>
+  </text>
+
+  <!-- 3. SWOOSH & SPARKLE -->
+  <path d="M 330 268 Q 540 232 730 250 Q 865 264 965 250" fill="none" stroke="#2B2B3A" stroke-width="9" stroke-linecap="round" />
+  <path d="M 988 232 Q 988 250 1006 250 Q 988 250 988 268 Q 988 250 970 250 Q 988 250 988 232 Z" fill="#2B2B3A" />
+</svg>

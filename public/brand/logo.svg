@@ -1,48 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 340" role="img" aria-label="Celebration Box Logo">
-  <defs>
-    <filter id="svgBoxShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#2B2B3A" flood-opacity="0.12" />
-    </filter>
-    <filter id="svgStarGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#FFB400" flood-opacity="0.6" />
-    </filter>
-  </defs>
-
-  <!-- FESTIVE GIFT BOX WITH OPENING LID & BURST -->
-  <g filter="url(#svgBoxShadow)">
-    <!-- Confetti & Streamers Erupting from Inside Box -->
+  <!-- 1. GIFT BOX ICON -->
+  <g id="gift-box-icon">
+    <!-- Confetti & Streamer Burst -->
     <g id="celebration-burst">
-      <path d="M 246 40 Q 246 62 268 62 Q 246 62 246 84 Q 246 62 224 62 Q 246 62 246 40 Z" fill="#FFB400" filter="url(#svgStarGlow)" />
-      <path d="M 195 150 C 215 120 240 140 258 112 C 268 96 280 102 276 88" fill="none" stroke="#00A8A8" stroke-width="8.5" stroke-linecap="round" />
-      <circle cx="242" cy="156" r="9.5" fill="#E91E63" />
-      <path d="M 148 174 C 140 156 156 140 166 148 C 172 154 162 172 148 174 Z" fill="#FFB400" />
-      <path d="M 178 176 C 174 156 198 142 205 156 C 209 166 193 178 178 176 Z" fill="#FFB400" />
-      <path d="M 194 180 C 200 166 222 158 228 170 C 230 176 212 184 194 180 Z" fill="#E91E63" />
+      <path d="M 195 62 Q 195 78 211 78 Q 195 78 195 94 Q 195 78 179 78 Q 195 78 195 62 Z" fill="#FFB400" />
+      <path d="M 155 152 Q 175 125 195 135 T 225 108" fill="none" stroke="#00A8A8" stroke-width="6.5" stroke-linecap="round" />
+      <circle cx="182" cy="122" r="6" fill="#E91E63" />
+      <circle cx="142" cy="138" r="5" fill="#FFB400" />
+      <circle cx="162" cy="116" r="4.5" fill="#00A8A8" />
     </g>
 
-    <!-- Box Base with 3D Curved Top Rim -->
-    <path d="M 72 175 C 112 182 174 192 234 184 C 240 183 244 188 242 195 L 228 268 C 226 276 218 282 209 282 L 97 282 C 88 282 80 276 78 268 L 66 186 C 64 179 67 174 72 175 Z" fill="#E91E63" />
-    <path d="M 138 187 C 150 189 162 189 170 187 L 168 282 L 140 282 Z" fill="#FFB400" />
+    <!-- Box Body with flat straight bottom & rounded corners -->
+    <rect x="64" y="170" width="132" height="105" rx="10" fill="#E91E63" />
+    <!-- Box Interior Opening Lip -->
+    <rect x="64" y="170" width="132" height="12" rx="4" fill="#C2185B" />
+    <!-- Vertical Yellow Ribbon -->
+    <rect x="116" y="170" width="28" height="105" fill="#FFB400" />
 
-    <!-- Gift Box Lid & Bow (Tilted at -28deg from top-left rim) -->
-    <g transform="translate(68, 178) rotate(-28)">
-      <!-- Ribbon Bow on Top Edge of Lid -->
-      <g transform="translate(80, -34)">
-        <path d="M -6 0 C -26 -32 -52 -16 -34 4 C -22 10 -12 6 -6 0 Z" fill="#FFB400" />
-        <path d="M 6 0 C 12 6 22 10 34 4 C 52 -16 26 -32 6 0 Z" fill="#FFB400" />
-        <circle cx="0" cy="2" r="8" fill="#FFA000" />
+    <!-- Tilted Open Lid & Ribbon Bow (Tilted -24deg) -->
+    <g transform="translate(56, 166) rotate(-24)">
+      <!-- Yellow Ribbon Bow on Top Edge -->
+      <g transform="translate(73, -30)">
+        <path d="M 0 0 C -22 -28 -48 -14 -30 4 C -18 10 -8 4 0 0 Z" fill="#FFB400" />
+        <path d="M 0 0 C 8 4 18 10 30 4 C 48 -14 22 -28 0 0 Z" fill="#FFB400" />
+        <circle cx="0" cy="2" r="6.5" fill="#FFA000" />
       </g>
-      <rect x="0" y="-34" width="172" height="34" rx="11" fill="#E91E63" stroke="#D81B60" stroke-width="1.5" />
+      <!-- Lid Bar -->
+      <rect x="0" y="-30" width="146" height="30" rx="8" fill="#E91E63" />
+      <!-- Lid Ribbon Band -->
+      <rect x="59" y="-30" width="28" height="30" fill="#FFB400" />
     </g>
   </g>
 
-  <!-- UNIFIED TYPOGRAPHY (No Overlap) -->
-  <text x="276" y="232" font-family="'Poppins', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="122" font-weight="800" letter-spacing="-1.8">
+  <!-- 2. WORDMARK: "Celebration Box" -->
+  <text x="268" y="232" font-family="'Poppins', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="122" font-weight="800" letter-spacing="-1.8">
     <tspan fill="#2B2B3A">Celebration </tspan>
     <tspan fill="#E91E63" font-weight="900">Box</tspan>
   </text>
 
-  <!-- DYNAMIC GOLDEN SWOOSH & SPARKLE -->
-  <path d="M 340 268 Q 545 230 735 248 Q 870 262 970 248" fill="none" stroke="#FFB400" stroke-width="9" stroke-linecap="round" />
-  <path d="M 992 230 Q 992 248 1010 248 Q 992 248 992 266 Q 992 248 974 248 Q 992 248 992 230 Z" fill="#FFB400" filter="url(#svgStarGlow)" />
+  <!-- 3. GOLDEN SWOOSH & SPARKLE -->
+  <path d="M 330 268 Q 540 232 730 250 Q 865 264 965 250" fill="none" stroke="#FFB400" stroke-width="9" stroke-linecap="round" />
+  <path d="M 988 232 Q 988 250 1006 250 Q 988 250 988 268 Q 988 250 970 250 Q 988 250 988 232 Z" fill="#FFB400" />
 </svg>
