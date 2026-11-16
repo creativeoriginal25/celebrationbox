@@ -91,10 +91,13 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
             title="Click to celebrate!"
             className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-center mb-5 sm:mb-9 select-none cursor-pointer px-2"
           >
-            <CelebrationBoxLogo
-              className="h-16 xs:h-20 sm:h-32 md:h-40 lg:h-48 w-auto max-w-full mx-auto"
-              animated={true}
-            />
+            {/* Mobile-only optical center offset (-18px on mobile, reset to 0 on sm+ desktop) */}
+            <div className="relative -translate-x-[18px] sm:translate-x-0 flex items-center justify-center w-full transition-transform">
+              <CelebrationBoxLogo
+                className="h-16 xs:h-20 sm:h-32 md:h-40 lg:h-48 w-auto max-w-full mx-auto"
+                animated={true}
+              />
+            </div>
           </div>
 
           {/* ELEMENT 3: MAIN HEADLINE */}
