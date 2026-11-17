@@ -59,31 +59,13 @@ export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
       colors = ['#5227FF', '#FF9FFC', '#B19EEF', '#E91E63', '#FFB400', '#00A8A8'],
       shapes = ['rect', 'strip', 'circle'],
       size = 14,
-      sizeVariance = 0.4,
-      aspect = 0.55,
-      density = 0, // 0 turns off pointer trail waterfall!
-      spread = 1,
-      inherit = 0.25,
       gravity = 1,
-      drag = 1,
-      flutter = 1,
-      spin = 1,
       wind = 0,
-      turbulence = 0.5,
-      life = 6,
-      fade = 0.25,
-      shading = 0.5,
-      sheen = 0.35,
-      opacity = 1,
-      settle = false,
+      life = 5,
       burst: enableBurst = true,
       burstCount = 120,
       burstPower = 1,
       burstSpread = 70,
-      maxPieces = 1800,
-      autoplay = false,
-      autoplaySpeed = 1,
-      idleDelay = 1.5,
       intro = true,
       interactive = true,
       disabled = false,
@@ -94,7 +76,26 @@ export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
     ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const confettiInstanceRef = useRef<confetti.CreateTypes | null>(null);
     const hasFiredIntroRef = useRef(false);
+
+    // Initialize scoped canvas confetti instance so particles stay strictly behind interactive elements
+    useEffect(() => {
+      if (canvasRef.current) {
+        confettiInstanceRef.current = confetti.create(canvasRef.current, {
+          resize: true,
+          useWorker: true,
+        });
+      }
+      return () => {
+        try {
+          confettiInstanceRef.current?.reset();
+        } catch {
+          // ignore
+        }
+      };
+    }, []);
 
     // Map React Bits shapes to confetti shapes
     const mappedShapes: ('square' | 'circle')[] = shapes.some((s) => s === 'circle')
@@ -107,64 +108,85 @@ export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
       if (typeof window === 'undefined') return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      const originX = clientX !== undefined ? clientX / window.innerWidth : 0.5;
-      const originY = clientY !== undefined ? clientY / window.innerHeight : 0.35;
+      const fire = confettiInstanceRef.current || confetti;
 
-      confetti({
+      // Position burst around the upper hero logo / center
+      const rect = containerRef.current?.getBoundingClientRect();
+      let originX = 0.5;
+      let originY = 0.32; // upper area of hero
+
+      if (clientX !== undefined && rect && rect.width > 0) {
+        originX = Math.max(0.1, Math.min(0.9, (clientX - rect.left) / rect.width));
+      }
+      if (clientY !== undefined && rect && rect.height > 0) {
+        originY = Math.max(0.1, Math.min(0.5, (clientY - rect.top) / rect.height));
+      }
+
+      fire({
         particleCount: burstCount,
         angle: angleDeg,
         spread: burstSpread,
-        startVelocity: 38 * burstPower,
+        startVelocity: 34 * burstPower,
         origin: { x: originX, y: originY },
         colors,
         shapes: mappedShapes,
-        scalar: (size / 14) * 1.2,
-        gravity: gravity * 0.85,
-        ticks: Math.floor(life * 50),
+        scalar: (size / 14) * 1.15,
+        gravity: gravity * 1.15,
+        ticks: Math.floor(life * 30), // Dissipates cleanly before reaching lower button zone
         drift: wind * 0.5,
         disableForReducedMotion: true,
       });
     };
 
-    // Public API: Fire two celebratory corner cannons
+    // Public API: Fire two celebratory cannons restricted to the upper hero/logo area
     const fireCannons = () => {
       if (disabled) return;
       if (typeof window === 'undefined') return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      // Left bottom cannon aimed inward & upward (60 degrees)
-      confetti({
-        particleCount: Math.floor(burstCount * 0.75),
+      const fire = confettiInstanceRef.current || confetti;
+
+      // Left cannon aimed inward & upward in the upper hero area
+      fire({
+        particleCount: Math.floor(burstCount * 0.7),
         angle: 60,
         spread: burstSpread,
-        startVelocity: 45 * burstPower,
-        origin: { x: 0.1, y: 0.85 },
+        startVelocity: 36 * burstPower,
+        origin: { x: 0.15, y: 0.36 },
         colors,
         shapes: mappedShapes,
-        scalar: (size / 14) * 1.25,
-        gravity: gravity * 0.85,
-        ticks: Math.floor(life * 55),
+        scalar: (size / 14) * 1.15,
+        gravity: gravity * 1.1,
+        ticks: Math.floor(life * 32),
         disableForReducedMotion: true,
       });
 
-      // Right bottom cannon aimed inward & upward (120 degrees)
-      confetti({
-        particleCount: Math.floor(burstCount * 0.75),
+      // Right cannon aimed inward & upward in the upper hero area
+      fire({
+        particleCount: Math.floor(burstCount * 0.7),
         angle: 120,
         spread: burstSpread,
-        startVelocity: 45 * burstPower,
-        origin: { x: 0.9, y: 0.85 },
+        startVelocity: 36 * burstPower,
+        origin: { x: 0.85, y: 0.36 },
         colors,
         shapes: mappedShapes,
-        scalar: (size / 14) * 1.25,
-        gravity: gravity * 0.85,
-        ticks: Math.floor(life * 55),
+        scalar: (size / 14) * 1.15,
+        gravity: gravity * 1.1,
+        ticks: Math.floor(life * 32),
         disableForReducedMotion: true,
       });
     };
 
     const clearAll = () => {
-      confetti.reset();
+      try {
+        if (confettiInstanceRef.current) {
+          confettiInstanceRef.current.reset();
+        } else {
+          confetti.reset();
+        }
+      } catch {
+        // ignore
+      }
     };
 
     useImperativeHandle(ref, () => ({
@@ -209,10 +231,16 @@ export const Confetti = forwardRef<ConfettiRef, ConfettiProps>(
       <div
         ref={containerRef}
         onClick={handleContainerClick}
-        className={`relative w-full h-full min-h-[240px] ${className}`}
+        className={`relative w-full h-full min-h-[240px] overflow-hidden ${className}`}
         style={style}
       >
-        <div className="relative z-10 w-full h-full">{children}</div>
+        {/* Dedicated background canvas: strictly pointer-events: none and z-0 behind interactive elements */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-none z-0"
+          style={{ pointerEvents: 'none' }}
+        />
+        <div className="relative z-10 w-full h-full pointer-events-auto">{children}</div>
       </div>
     );
   }
