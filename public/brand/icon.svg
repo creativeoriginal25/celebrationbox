@@ -1,20 +1,94 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Celebration Box Icon">
-  <!-- Box Body with flat straight bottom & rounded corners -->
-  <rect x="84" y="145" width="132" height="105" rx="10" fill="#E91E63" />
-  <!-- Vertical Yellow Ribbon -->
-  <rect x="136" y="145" width="28" height="105" fill="#FFB400" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 320" width="100%" height="100%">
+  <!-- 1. Confetti Background Accents -->
+  <g id="confetti">
+    <!-- 4-point yellow sparkle -->
+    <path d="M 252 64 Q 252 76 264 76 Q 252 76 252 88 Q 252 76 240 76 Q 252 76 252 64 Z" fill="#FFB400" />
+    <!-- Two short golden burst lines -->
+    <line x1="222" y1="102" x2="236" y2="88" stroke="#FFB400" stroke-width="3" stroke-linecap="round" />
+    <line x1="236" y1="116" x2="252" y2="110" stroke="#FFB400" stroke-width="3" stroke-linecap="round" />
+    <!-- Teal curved squiggle -->
+    <path d="M 224 130 Q 236 114 248 130 T 272 118" fill="none" stroke="#00A8A8" stroke-width="3.5" stroke-linecap="round" />
+    <!-- Small teal triangle -->
+    <polygon points="118,92 130,105 108,105" fill="#00A8A8" />
+    <!-- Two small confetti circles -->
+    <circle cx="266" cy="142" r="4.5" fill="#00A8A8" />
+    <circle cx="106" cy="72" r="4" fill="#E91E63" />
+  </g>
 
-  <!-- Closed Lid & Ribbon Bow -->
-  <g transform="translate(78, 147)">
-    <!-- Yellow Ribbon Bow on Top Edge -->
-    <g transform="translate(72, -28)">
-      <path d="M 0 0 C -22 -28 -48 -14 -30 4 C -18 10 -8 4 0 0 Z" fill="#FFB400" />
-      <path d="M 0 0 C 8 4 18 10 30 4 C 48 -14 22 -28 0 0 Z" fill="#FFB400" />
-      <circle cx="0" cy="2" r="6.5" fill="#FFA000" />
+  <!-- 2. Box Opening: Rear Rim & Inner Cavity -->
+  <g id="box-opening">
+    <!-- Inner cavity opening (darker pink) -->
+    <polygon
+      points="105,172 122,148 238,148 255,172"
+      fill="#C2185B"
+    />
+    <!-- Rear inner box rim stroke -->
+    <line
+      x1="122"
+      y1="148"
+      x2="238"
+      y2="148"
+      stroke="#AD1457"
+      stroke-width="2.5"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <!-- 3. Main Gift-Box Body (Balanced rectangular proportions, straight stable bottom, rounded bottom corners) -->
+  <g id="box-body">
+    <path
+      d="M 105 172
+         L 255 172
+         L 255 264
+         Q 255 275 244 275
+         L 116 275
+         Q 105 275 105 264
+         Z"
+      fill="#E91E63"
+    />
+  </g>
+
+  <!-- 4. Vertical Body Ribbon (Straight, centered, strictly within box) -->
+  <g id="body-ribbon">
+    <rect
+      x="165"
+      y="172"
+      width="30"
+      height="103"
+      fill="#FFB400"
+    />
+  </g>
+
+  <!-- 5. Floating Tilted Lid (Tilted ~18°, floating above opening with 3D thickness face) -->
+  <g id="floating-lid" transform="translate(155, 106) rotate(-18)">
+    <!-- Lid Thickness Bottom Face (Darker Pink #C2185B) -->
+    <rect x="-81" y="6" width="162" height="14" rx="4" fill="#C2185B" />
+    <!-- Lid Top Main Rectangular Face (#E91E63) -->
+    <rect x="-81" y="-8" width="162" height="14" rx="4" fill="#E91E63" />
+    <!-- Ribbon Band Around Lid (#FFB400) -->
+    <rect x="-15" y="-8" width="30" height="28" fill="#FFB400" />
+
+    <!-- 6. Gift Bow ON TOP OF THE LID (Proportional: ~28% of lid width, attached to lid) -->
+    <g id="gift-bow" transform="translate(0, -8)">
+      <!-- Left Loop -->
+      <path
+        d="M 0 -2
+           C -12 -20, -28 -16, -23 -2
+           C -19 8, -6 4, 0 -2 Z"
+        fill="#FFB400"
+      />
+      <!-- Right Loop -->
+      <path
+        d="M 0 -2
+           C 12 -20, 28 -16, 23 -2
+           C 19 8, 6 4, 0 -2 Z"
+        fill="#FFB400"
+      />
+      <!-- Short ribbon tails -->
+      <path d="M -4 2 Q -10 9 -14 6" fill="none" stroke="#FFB400" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 4 2 Q 10 9 14 6" fill="none" stroke="#FFB400" stroke-width="2.5" stroke-linecap="round" />
+      <!-- Center Bow Knot -->
+      <ellipse cx="0" cy="-2" rx="6" ry="5" fill="#FFA000" />
     </g>
-    <!-- Lid Bar -->
-    <rect x="0" y="-28" width="144" height="30" rx="8" fill="#E91E63" />
-    <!-- Lid Ribbon Band (aligned continuously with box ribbon) -->
-    <rect x="58" y="-28" width="28" height="30" fill="#FFB400" />
   </g>
 </svg>

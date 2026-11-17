@@ -8,7 +8,6 @@ import { OrderCustomizerModal } from './components/OrderCustomizerModal';
 import { WhatsAppFallbackModal } from './components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from './components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from './components/PolicyModal';
-import { IntroCodedAnimation } from './components/IntroCodedAnimation';
 import { Product } from './types';
 import { CheckCircle2, ShoppingBag } from 'lucide-react';
 
@@ -49,8 +48,6 @@ const AppRouter: React.FC = () => {
   const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
   const [isAdminTemplatesOpen, setIsAdminTemplatesOpen] = useState<boolean>(false);
   const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
-  const [showWebsite, setShowWebsite] = useState<boolean>(false);
-  const [introDismissed, setIntroDismissed] = useState<boolean>(false);
 
   // Handle hash changes & browser back/forward
   useEffect(() => {
@@ -137,30 +134,19 @@ const AppRouter: React.FC = () => {
 
   return (
     <div className="relative min-h-screen">
-      {/* Fullscreen Unskippable Vector-Sharp Intro Animation */}
-      {!introDismissed && (
-        <IntroCodedAnimation
-          onStartReveal={() => setShowWebsite(true)}
-          onComplete={() => setIntroDismissed(true)}
-        />
+      {/* Toast Notification for Add-to-Cart Confirmation */}
+      {toastMessage && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>{toastMessage}</span>
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="ml-2 text-brand-pink font-bold underline hover:text-white cursor-pointer"
+          >
+            View Cart
+          </button>
+        </div>
       )}
-
-      {/* Main Website Content (Mounted & Revealed Exactly As Intro Video Completes) */}
-      {showWebsite && (
-        <>
-          {/* Toast Notification for Add-to-Cart Confirmation */}
-          {toastMessage && (
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>{toastMessage}</span>
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="ml-2 text-brand-pink font-bold underline hover:text-white cursor-pointer"
-              >
-                View Cart
-              </button>
-            </div>
-          )}
 
           {/* Route Views */}
           {route.type === 'product' ? (
@@ -238,8 +224,6 @@ const AppRouter: React.FC = () => {
               </button>
             </div>
           )}
-        </>
-      )}
     </div>
   );
 };

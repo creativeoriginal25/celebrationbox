@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Celebration Box - Animated Gift Box Icon</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFDF9;
+      padding: 24px;
+    }
+
+    .preview-card {
+      background: #FFFFFF;
+      border: 1px solid #F0ECE1;
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 16px 40px -8px rgba(43, 43, 58, 0.06);
+      max-width: 460px;
+      width: 100%;
+    }
+
+    .gift-box-svg {
+      width: 100%;
+      height: auto;
+      max-width: 380px;
+      display: block;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    /* ------------------------------------------------------------
+       WHY THIS VERSION IS MORE RELIABLE
+       Every animated part uses transform-origin: 0 0 in the SVG's
+       own coordinate space. The hinge / pivot points are written
+       into the transform itself as translate(pivot) rotate()
+       translate(-pivot). This does not depend on how a browser or
+       preview pane calculates "fill-box" or percentage origins,
+       which is what threw the lid off.
+       Colours: rani pink #E91E63, marigold #FFB400,
+                teal #00A8A8, purple #7B2D8E. No gradients/shadows.
+       ------------------------------------------------------------ */
+    #gift-box-bob-assembly,
+    #box-body-squash,
+    #lid,
+    .confetti-piece {
+      transform-box: view-box;
+      transform-origin: 0px 0px;
+    }
+
+    /* 1. Idle bob (4px) with a small anticipation dip at the start */
+    #gift-box-bob-assembly { animation: boxBob 3.2s ease-in-out infinite; }
+
+    @keyframes boxBob {
+      0%     { transform: translate(0px, 0px); }
+      4.5%   { transform: translate(0px, 2px); }
+      12.5%  { transform: translate(0px, -2px); }
+      18%    { transform: translate(0px, 0px); }
+      43.75% { transform: translate(0px, 0px); }
+      54%    { transform: translate(0px, -4px); }
+      65%    { transform: translate(0px, 0px); }
+      76%    { transform: translate(0px, -4px); }
+      87.5%  { transform: translate(0px, 0px); }
+      100%   { transform: translate(0px, 0px); }
+    }
+
+    /* 2. Box squash, scaled about the bottom centre (200, 328) */
+    #box-body-squash { animation: boxSquash 3.2s ease-in-out infinite; }
+
+    @keyframes boxSquash {
+      0%    { transform: translate(200px, 328px) scale(1, 1)       translate(-200px, -328px); }
+      4.5%  { transform: translate(200px, 328px) scale(1.04, 0.94) translate(-200px, -328px); }
+      9%    { transform: translate(200px, 328px) scale(0.985, 1.02) translate(-200px, -328px); }
+      12.5% { transform: translate(200px, 328px) scale(1, 1)       translate(-200px, -328px); }
+      100%  { transform: translate(200px, 328px) scale(1, 1)       translate(-200px, -328px); }
+    }
+
+    /* 3. Lid: hinge at its left bottom corner (112, 220).
+          Every keyframe uses the same 4 functions so it interpolates cleanly. */
+    #lid { animation: lidMotion 3.2s infinite; }
+
+    @keyframes lidMotion {
+      0% {
+        transform: translate(0px, 0px) translate(112px, 220px) rotate(0deg) translate(-112px, -220px);
+        animation-timing-function: ease-in;
+      }
+      4.5% {
+        transform: translate(0px, 2px) translate(112px, 220px) rotate(0deg) translate(-112px, -220px);
+        animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      12.5% {
+        transform: translate(0px, -4px) translate(112px, 220px) rotate(-22deg) translate(-112px, -220px);
+        animation-timing-function: ease-in-out;
+      }
+      43.75% {
+        transform: translate(0px, -4px) translate(112px, 220px) rotate(-22deg) translate(-112px, -220px);
+      }
+      87.5% {
+        transform: translate(0px, -4px) translate(112px, 220px) rotate(-22deg) translate(-112px, -220px);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      98% {
+        transform: translate(0px, 0px) translate(112px, 220px) rotate(0deg) translate(-112px, -220px);
+      }
+      100% {
+        transform: translate(0px, 0px) translate(112px, 220px) rotate(0deg) translate(-112px, -220px);
+      }
+    }
+
+    /* 4. Confetti: one shared keyframe, per-piece numbers in variables.
+          Burst origin is the opening of the box, (210, 214).
+          x1/y1 = peak, x2/y2 = drifting down, x3/y3 = fade-out. */
+    .confetti-piece {
+      opacity: 0;
+      transform: translate(210px, 214px) translate(0px, 0px) scale(0) rotate(0deg);
+      animation: burst 3.2s cubic-bezier(0.15, 0.85, 0.35, 1) infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes burst {
+      0%, 9.4% {
+        transform: translate(210px, 214px) translate(0px, 0px) scale(0) rotate(0deg);
+        opacity: 0;
+      }
+      11% { opacity: 1; }
+      25% {
+        transform: translate(210px, 214px) translate(var(--x1), var(--y1)) scale(1.2) rotate(var(--r1));
+        opacity: 1;
+      }
+      36% {
+        transform: translate(210px, 214px) translate(var(--x2), var(--y2)) scale(1) rotate(var(--r2));
+        opacity: 0.8;
+      }
+      43.75%, 100% {
+        transform: translate(210px, 214px) translate(var(--x3), var(--y3)) scale(0.55) rotate(var(--r3));
+        opacity: 0;
+      }
+    }
+
+    #confetti-star        { --x1: 95px;  --y1: -150px; --r1: 160deg;  --x2: 106px; --y2: -132px; --r2: 220deg;  --x3: 112px; --y3: -104px; --r3: 260deg; }
+    #confetti-squiggle    { --x1: 45px;  --y1: -152px; --r1: 35deg;   --x2: 50px;  --y2: -132px; --r2: 50deg;   --x3: 54px;  --y3: -104px; --r3: 60deg;  --delay: 0.04s; }
+    #confetti-loop        { --x1: 80px;  --y1: -168px; --r1: 65deg;   --x2: 86px;  --y2: -142px; --r2: 85deg;   --x3: 90px;  --y3: -112px; --r3: 95deg;  --delay: 0.06s; }
+    #confetti-tri-purple  { --x1: 90px;  --y1: -92px;  --r1: 190deg;  --x2: 98px;  --y2: -70px;  --r2: 240deg;  --x3: 104px; --y3: -46px;  --r3: 270deg; --delay: 0.08s; }
+    #confetti-spark-1     { --x1: 105px; --y1: -135px; --r1: 0deg;    --x2: 116px; --y2: -122px; --r2: 0deg;    --x3: 122px; --y3: -108px; --r3: 0deg; }
+    #confetti-spark-2     { --x1: 120px; --y1: -86px;  --r1: 0deg;    --x2: 132px; --y2: -75px;  --r2: 0deg;    --x3: 138px; --y3: -66px;  --r3: 0deg;   --delay: 0.02s; }
+    #confetti-dot-pink-1  { --x1: 8px;   --y1: -170px; --r1: 0deg;    --x2: 6px;   --y2: -146px; --r2: 0deg;    --x3: 4px;   --y3: -118px; --r3: 0deg; }
+    #confetti-dot-teal    { --x1: -2px;  --y1: -122px; --r1: 0deg;    --x2: -4px;  --y2: -100px; --r2: 0deg;    --x3: -6px;  --y3: -76px;  --r3: 0deg;   --delay: 0.1s; }
+    #confetti-dot-gold    { --x1: 32px;  --y1: -160px; --r1: 0deg;    --x2: 34px;  --y2: -136px; --r2: 0deg;    --x3: 36px;  --y3: -108px; --r3: 0deg;   --delay: 0.03s; }
+    #confetti-dot-purple  { --x1: 110px; --y1: -130px; --r1: 0deg;    --x2: 118px; --y2: -108px; --r2: 0deg;    --x3: 124px; --y3: -84px;  --r3: 0deg;   --delay: 0.08s; }
+    #confetti-tri-teal    { --x1: 18px;  --y1: -140px; --r1: -140deg; --x2: 20px;  --y2: -120px; --r2: -180deg; --x3: 22px;  --y3: -96px;  --r3: -210deg; --delay: 0.06s; }
+    #confetti-dot-pink-2  { --x1: 70px;  --y1: -75px;  --r1: 0deg;    --x2: 76px;  --y2: -56px;  --r2: 0deg;    --x3: 80px;  --y3: -38px;  --r3: 0deg;   --delay: 0.12s; }
+
+    /* 5. Reduced motion: static open box with confetti mid-burst */
+    @media (prefers-reduced-motion: reduce) {
+      #gift-box-bob-assembly,
+      #box-body-squash,
+      #lid,
+      .confetti-piece {
+        animation: none !important;
+      }
+      #lid {
+        transform: translate(0px, -4px) translate(112px, 220px) rotate(-22deg) translate(-112px, -220px) !important;
+      }
+      .confetti-piece {
+        opacity: 1 !important;
+        transform: translate(210px, 214px) translate(var(--x1), var(--y1)) scale(1.15) rotate(var(--r1)) !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="preview-card">
+    <svg
+      class="gift-box-svg"
+      viewBox="0 0 400 400"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Looping animated Celebration Box gift icon"
+    >
+
+      <!-- ===== BOX ASSEMBLY (bobs as one piece) ===== -->
+      <g id="gift-box-bob-assembly">
+
+        <!-- Inner cavity, revealed when the lid opens -->
+        <g id="inner-cavity">
+          <polygon points="120,218 136,204 264,204 280,218" fill="#7B2D8E"/>
+        </g>
+
+        <!-- Box body + ribbon band (squashes before the pop) -->
+        <g id="box-body-squash">
+          <g id="box-body">
+            <path d="M 120 216 Q 200 220 280 216 L 272 316 Q 272 328 260 328 L 140 328 Q 128 328 128 316 Z"
+                  fill="#E91E63"/>
+          </g>
+          <g id="ribbon-band">
+            <path d="M 185 219 L 215 219 L 215 328 L 185 328 Z" fill="#FFB400"/>
+          </g>
+        </g>
+
+        <!-- Lid: flat slab with the bow attached to it. Hinge = (112, 220) -->
+        <g id="lid">
+          <rect id="lid-rectangle" x="112" y="196" width="176" height="24" rx="4" fill="#E91E63"/>
+          <rect id="lid-ribbon" x="185" y="196" width="30" height="24" fill="#FFB400"/>
+
+          <!-- Bow sits on the lid, scaled up so it reads clearly -->
+          <g id="lid-bow" transform="translate(200, 196) scale(1.45)">
+            <path d="M 0 0 C -16 -24, -36 -18, -30 -2 C -25 9, -8 4, 0 0 Z" fill="#FFB400"/>
+            <path d="M 0 0 C 16 -24, 36 -18, 30 -2 C 25 9, 8 4, 0 0 Z" fill="#FFB400"/>
+            <path d="M -4 3 Q -14 12 -18 9" fill="none" stroke="#FFB400" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 4 3 Q 14 12 18 9" fill="none" stroke="#FFB400" stroke-width="3" stroke-linecap="round"/>
+            <ellipse cx="0" cy="0" rx="7.5" ry="6.5" fill="#FFB400"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- ===== CONFETTI (drawn on top so nothing hides behind the lid) =====
+           Each piece is drawn around its own (0,0); the CSS moves it
+           to the box opening and then bursts it outward. -->
+      <g id="confetti-group">
+
+        <path id="confetti-star" class="confetti-piece"
+              d="M 0 -14 Q 0 0 14 0 Q 0 0 0 14 Q 0 0 -14 0 Q 0 0 0 -14 Z" fill="#FFB400"/>
+
+        <path id="confetti-squiggle" class="confetti-piece"
+              d="M -13 0 Q -6 -14 0 0 T 14 0"
+              fill="none" stroke="#00A8A8" stroke-width="3.5" stroke-linecap="round"/>
+
+        <path id="confetti-loop" class="confetti-piece"
+              d="M -10 6 C -17 -15 4 -22 9 -9 C 12 1 -2 10 11 16"
+              fill="none" stroke="#00A8A8" stroke-width="3.5" stroke-linecap="round"/>
+
+        <polygon id="confetti-tri-purple" class="confetti-piece"
+                 points="0,-10 10,7 -10,7"
+                 fill="none" stroke="#7B2D8E" stroke-width="3" stroke-linejoin="round"/>
+
+        <line id="confetti-spark-1" class="confetti-piece"
+              x1="-8" y1="5" x2="8" y2="-5"
+              stroke="#FFB400" stroke-width="3.5" stroke-linecap="round"/>
+
+        <line id="confetti-spark-2" class="confetti-piece"
+              x1="-9" y1="2" x2="9" y2="-2"
+              stroke="#FFB400" stroke-width="3.5" stroke-linecap="round"/>
+
+        <circle id="confetti-dot-pink-1" class="confetti-piece" cx="0" cy="0" r="5.5" fill="#E91E63"/>
+        <circle id="confetti-dot-teal"   class="confetti-piece" cx="0" cy="0" r="6"   fill="#00A8A8"/>
+        <circle id="confetti-dot-gold"   class="confetti-piece" cx="0" cy="0" r="5"   fill="#FFB400"/>
+        <circle id="confetti-dot-purple" class="confetti-piece" cx="0" cy="0" r="4.5" fill="#7B2D8E"/>
+
+        <polygon id="confetti-tri-teal" class="confetti-piece"
+                 points="0,-9 9,6 -9,6"
+                 fill="none" stroke="#00A8A8" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <circle id="confetti-dot-pink-2" class="confetti-piece" cx="0" cy="0" r="4" fill="#E91E63"/>
+      </g>
+
+    </svg>
+  </main>
+
+</body>
+</html>

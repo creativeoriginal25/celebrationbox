@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 import { Confetti, ConfettiRef } from './react-bits/Confetti';
@@ -11,6 +11,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
   const confettiRef = useRef<ConfettiRef>(null);
+  const [logoKey, setLogoKey] = useState<number>(0);
 
   useEffect(() => {
     // Fire festive celebration cannons when the gift box lid pops open
@@ -22,7 +23,8 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
   }, []);
 
   const handleBoxClick = () => {
-    // Click on the gift box fires an upward celebration burst
+    // Click on the gift box fires an upward celebration burst and replays the celebratory pop
+    setLogoKey((prev) => prev + 1);
     confettiRef.current?.burst();
   };
 
@@ -107,6 +109,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
                 aria-hidden="true"
               />
               <CelebrationBoxLogo
+                key={logoKey}
                 className="h-20 xs:h-24 sm:h-34 md:h-44 lg:h-52 w-auto max-w-full mx-auto relative z-10 filter drop-shadow-xs"
                 animated={true}
               />
