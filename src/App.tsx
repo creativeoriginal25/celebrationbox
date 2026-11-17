@@ -8,7 +8,7 @@ import { OrderCustomizerModal } from './components/OrderCustomizerModal';
 import { WhatsAppFallbackModal } from './components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from './components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from './components/PolicyModal';
-import { IntroVideo } from './components/IntroVideo';
+import { IntroCodedAnimation } from './components/IntroCodedAnimation';
 import { Product } from './types';
 import { CheckCircle2, ShoppingBag } from 'lucide-react';
 
@@ -137,9 +137,9 @@ const AppRouter: React.FC = () => {
 
   return (
     <div className="relative min-h-screen">
-      {/* Fullscreen Unskippable Intro Video */}
+      {/* Fullscreen Unskippable Vector-Sharp Intro Animation */}
       {!introDismissed && (
-        <IntroVideo
+        <IntroCodedAnimation
           onStartReveal={() => setShowWebsite(true)}
           onComplete={() => setIntroDismissed(true)}
         />
