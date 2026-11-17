@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Volume2, VolumeX } from 'lucide-react';
 
 interface IntroCodedAnimationProps {
@@ -194,316 +194,321 @@ export const IntroCodedAnimation: React.FC<IntroCodedAnimationProps> = ({
         }}
       >
         <svg viewBox="0 0 100 100" className="w-24 h-24 sm:w-36 sm:h-36 drop-shadow-sm">
-          {/* Main 4-point golden star */}
           <path
             d="M 50 10 Q 50 50 90 50 Q 50 50 50 90 Q 50 50 10 50 Q 50 50 50 10 Z"
-            fill="#FFB400"
+            fill="#FFB300"
           />
-          {/* Mini accent sparkles */}
-          <circle cx="28" cy="24" r="3" fill="#FFB400" opacity="0.8" />
-          <circle cx="76" cy="28" r="2.5" fill="#FFB400" opacity="0.8" />
-          <circle cx="22" cy="72" r="2" fill="#FFB400" opacity="0.8" />
-          <circle cx="74" cy="76" r="3" fill="#FFB400" opacity="0.8" />
+          <circle cx="28" cy="24" r="3" fill="#FFB300" opacity="0.8" />
+          <circle cx="76" cy="28" r="2.5" fill="#FFB300" opacity="0.8" />
+          <circle cx="22" cy="72" r="2" fill="#FFB300" opacity="0.8" />
+          <circle cx="74" cy="76" r="3" fill="#FFB300" opacity="0.8" />
         </svg>
       </motion.div>
 
       {/* =========================================================================
-          MAIN ANIMATED VECTOR STAGE: GIFT BOX + CONFETTI + CELEBRATION BOX LOGO
+          MAIN ANIMATED VECTOR STAGE: EXACT MATCH TO USER'S 3RD REFERENCE IMAGE
          ========================================================================= */}
       <div className="relative z-20 w-full max-w-4xl px-4 sm:px-8 flex items-center justify-center">
         <svg
-          viewBox="0 0 1100 360"
+          viewBox="0 0 1100 370"
           className="w-full h-auto overflow-visible select-none filter drop-shadow-sm"
           role="img"
           aria-label="Celebration Box Intro Animation"
         >
           <defs>
-            {/* Box highlight glow */}
-            <filter id="intro-box-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <linearGradient id="introBoxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#F42B75" />
+              <stop offset="100%" stopColor="#D81B60" />
+            </linearGradient>
+            <linearGradient id="introLidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FF337E" />
+              <stop offset="100%" stopColor="#E91E63" />
+            </linearGradient>
+            <linearGradient id="introRibbonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#FFB300" />
+              <stop offset="50%" stopColor="#FFC107" />
+              <stop offset="100%" stopColor="#FFA000" />
+            </linearGradient>
+            <filter id="introBoxGlow" x="-20%" y="-20%" width="140%" height="140%">
               <feDropShadow dx="0" dy="6" stdDeviation="10" floodColor="#E91E63" floodOpacity="0.28" />
             </filter>
-            {/* Soft ground shadow blur */}
-            <filter id="ground-shadow-blur" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="8" />
+            <filter id="introGroundShadow" x="-25%" y="-25%" width="150%" height="150%">
+              <feGaussianBlur stdDeviation="7" />
             </filter>
           </defs>
 
-          {/* -------------------------------------------------------------------
-              1. GIFT BOX GROUP (Lands, opens lid, bursts confetti)
-             ------------------------------------------------------------------- */}
-          <g id="animated-gift-box-group">
-            {/* Ground shadow beneath the box (expands as box lands) */}
-            <motion.ellipse
-              cx="131"
-              cy="312"
-              rx="72"
-              ry="16"
-              fill="#2B2B3A"
-              filter="url(#ground-shadow-blur)"
-              initial={{ scale: 0.2, opacity: 0 }}
-              animate={{
-                scale: [0.2, 1.15, 1, 1],
-                opacity: [0, 0.25, 0.18, 0.18],
-              }}
-              transition={{
-                delay: 0.8,
-                duration: 0.9,
-                times: [0, 0.6, 0.85, 1],
-                ease: smoothEase,
-              }}
+          {/* Perspective Floor Shadow */}
+          <motion.ellipse
+            cx="140"
+            cy="312"
+            rx="78"
+            ry="15"
+            fill="#2B2B3A"
+            opacity="0.16"
+            filter="url(#introGroundShadow)"
+            initial={{ scale: 0.2, opacity: 0 }}
+            animate={{
+              scale: [0.2, 1.15, 1, 1],
+              opacity: [0, 0.25, 0.16, 0.16],
+            }}
+            transition={{
+              delay: 0.8,
+              duration: 0.9,
+              times: [0, 0.6, 0.85, 1],
+              ease: smoothEase,
+            }}
+          />
+
+          {/* ========================================================
+              CELEBRATION ERUPTION (Exact Match to Image 3)
+             ======================================================== */}
+          <motion.g
+            id="intro-eruption"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale: [0, 1.2, 1],
+              opacity: [0, 1, 1],
+            }}
+            transition={{
+              delay: 2.1,
+              duration: 0.75,
+              ease: smoothEase,
+            }}
+            style={{ transformOrigin: '140px 190px' }}
+          >
+            {/* Golden Fan Burst Rays */}
+            <path d="M 205 160 L 265 95 L 252 88 Z" fill="#FFB300" />
+            <path d="M 215 175 L 285 130 L 278 120 Z" fill="#FFB300" />
+            <path d="M 218 190 L 280 170 L 278 160 Z" fill="#FFB300" />
+
+            {/* 2 Yellow Splash Streaks */}
+            <path
+              d="M 125 155 Q 135 125 145 145 T 160 135"
+              fill="none"
+              stroke="#FFB300"
+              strokeWidth="7"
+              strokeLinecap="round"
+            />
+            <path
+              d="M 95 160 Q 80 135 70 145"
+              fill="none"
+              stroke="#FFB300"
+              strokeWidth="6"
+              strokeLinecap="round"
             />
 
-            {/* Complete Gift Box Structure */}
-            <motion.g
-              initial={{ y: -120, scale: 0.5, opacity: 0 }}
-              animate={{
-                y: [-120, 8, 0, 0],
-                scale: [0.5, 1.06, 1, 1],
-                opacity: [0, 1, 1, 1],
-              }}
-              transition={{
-                delay: 0.8,
-                duration: 0.95,
-                times: [0, 0.65, 0.85, 1],
-                ease: smoothEase,
-              }}
-              filter="url(#intro-box-glow)"
-            >
-              {/* Confetti & Streamer Eruption from inside the box */}
-              <motion.g
-                id="confetti-eruption"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{
-                  scale: [0, 1.25, 1],
-                  opacity: [0, 1, 1],
-                }}
-                transition={{
-                  delay: 2.1,
-                  duration: 0.8,
-                  ease: smoothEase,
-                }}
-                style={{ transformOrigin: '131px 180px' }}
-              >
-                {/* Golden burst explosion rays radiating behind */}
-                <motion.g
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: [0, 1.2, 1], opacity: [0, 1, 0.85] }}
-                  transition={{ delay: 2.15, duration: 0.6 }}
-                >
-                  <path d="M 130 110 L 126 80 L 134 80 Z" fill="#FFB400" />
-                  <path d="M 160 120 L 185 95 L 180 90 Z" fill="#FFB400" />
-                  <path d="M 100 120 L 75 95 L 80 90 Z" fill="#FFB400" />
-                  <path d="M 175 145 L 205 140 L 205 148 Z" fill="#FFB400" />
-                  <path d="M 85 145 L 55 140 L 55 148 Z" fill="#FFB400" />
-                </motion.g>
+            {/* Teal Curly Loop-de-Loop Streamer */}
+            <path
+              d="M 165 175 C 175 125, 215 95, 230 115 C 242 132, 218 152, 205 138 C 190 120, 210 65, 245 50"
+              fill="none"
+              stroke="#00A8A8"
+              strokeWidth="8.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
 
-                {/* Big Golden Sparkling 4-point Star shooting up */}
-                <motion.path
-                  d="M 188 48 Q 188 66 206 66 Q 188 66 188 84 Q 188 66 170 66 Q 188 66 188 48 Z"
-                  fill="#FFB400"
-                  initial={{ scale: 0, rotate: -45 }}
-                  animate={{ scale: [0, 1.3, 1], rotate: [-45, 0] }}
-                  transition={{ delay: 2.2, duration: 0.7, type: 'spring' }}
-                />
+            {/* Teal Sinusoidal Zigzag Ribbon */}
+            <path
+              d="M 175 195 Q 190 180 205 195 T 235 185 T 255 195"
+              fill="none"
+              stroke="#00A8A8"
+              strokeWidth="7.5"
+              strokeLinecap="round"
+            />
 
-                {/* Teal Spiraling Ribbon Streamer */}
-                <motion.path
-                  d="M 140 170 Q 165 125 190 140 T 225 105 T 215 70"
-                  fill="none"
-                  stroke="#00A8A8"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ delay: 2.15, duration: 0.75, ease: smoothEase }}
-                />
+            {/* Big 4-Point Golden Star */}
+            <path
+              d="M 295 85 Q 295 106 316 106 Q 295 106 295 127 Q 295 106 274 106 Q 295 106 295 85 Z"
+              fill="#FFB300"
+            />
 
-                {/* Secondary Playful Gold Ribbon */}
-                <motion.path
-                  d="M 120 170 Q 95 130 80 145 T 60 115"
-                  fill="none"
-                  stroke="#FFB400"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ delay: 2.2, duration: 0.7, ease: smoothEase }}
-                />
+            {/* Purple Hollow Triangle */}
+            <polygon
+              points="242,165 258,188 226,188"
+              fill="none"
+              stroke="#7B1FA2"
+              strokeWidth="4.5"
+              strokeLinejoin="round"
+            />
 
-                {/* Festive Colorful Confetti Pieces */}
-                {/* Rani Pink rect */}
-                <motion.rect
-                  x="176"
-                  y="112"
-                  width="12"
-                  height="7"
-                  rx="2"
-                  fill="#E91E63"
-                  initial={{ scale: 0, rotate: 0 }}
-                  animate={{ scale: 1, rotate: 35 }}
-                  transition={{ delay: 2.22, duration: 0.4 }}
-                />
-                {/* Teal triangle */}
-                <motion.polygon
-                  points="148,82 158,100 138,100"
-                  fill="#00A8A8"
-                  initial={{ scale: 0, rotate: 0 }}
-                  animate={{ scale: 1, rotate: -20 }}
-                  transition={{ delay: 2.25, duration: 0.4 }}
-                />
-                {/* Marigold dot */}
-                <circle cx="165" cy="138" r="6" fill="#FFB400" />
-                {/* Purple dot */}
-                <circle cx="105" cy="118" r="5.5" fill="#8E24AA" />
-                {/* Teal small dot */}
-                <circle cx="125" cy="95" r="4.5" fill="#00A8A8" />
-                {/* Pink small dot */}
-                <circle cx="210" cy="125" r="5" fill="#E91E63" />
-                {/* Gold diamond */}
-                <motion.rect
-                  x="78"
-                  y="92"
-                  width="9"
-                  height="9"
-                  fill="#FFB400"
-                  initial={{ scale: 0, rotate: 45 }}
-                  animate={{ scale: 1, rotate: 45 }}
-                  transition={{ delay: 2.28, duration: 0.4 }}
-                />
-              </motion.g>
+            {/* Solid Teal Small Triangle */}
+            <polygon
+              points="155,105 167,122 143,122"
+              fill="#00A8A8"
+            />
 
-              {/* Main Gift Box Body */}
-              <g id="box-body">
-                <rect
-                  x="64"
-                  y="170"
-                  width="134"
-                  height="105"
-                  rx="12"
-                  fill="#E91E63"
-                />
-                {/* Top highlight gloss */}
-                <path
-                  d="M 68 172 Q 66 172 66 176 L 66 210 Q 72 174 105 172 Z"
-                  fill="#FFFFFF"
-                  opacity="0.24"
-                />
-                {/* Interior Dark Lip (visible when lid pops open) */}
-                <rect
-                  x="64"
-                  y="170"
-                  width="134"
-                  height="16"
-                  rx="4"
-                  fill="#C2185B"
-                />
-                {/* Warm golden light beam coming from inside */}
-                <motion.polygon
-                  points="68,172 194,172 230,120 40,120"
-                  fill="url(#inner-box-light)"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.45, 0.25] }}
-                  transition={{ delay: 2.0, duration: 0.6 }}
-                />
-                {/* Vertical Center Ribbon */}
-                <rect
-                  x="116"
-                  y="170"
-                  width="30"
-                  height="105"
-                  fill="#FFB400"
-                />
-                {/* Ribbon sheen line */}
-                <line
-                  x1="122"
-                  y1="170"
-                  x2="122"
-                  y2="275"
-                  stroke="#FFFFFF"
-                  strokeWidth="2.5"
-                  opacity="0.38"
-                />
-              </g>
+            {/* Confetti Circles & Dots */}
+            <circle cx="202" cy="188" r="9" fill="#E91E63" />
+            <circle cx="168" cy="122" r="8" fill="#5E17EB" />
+            <circle cx="272" cy="148" r="6.5" fill="#FFB300" />
+            <circle cx="248" cy="72" r="6" fill="#00A8A8" />
+            <circle cx="188" cy="68" r="8" fill="#FFB300" />
+            <circle cx="282" cy="182" r="5" fill="#7B1FA2" />
+            <circle cx="198" cy="98" r="4.5" fill="#00A8A8" />
+          </motion.g>
 
-              {/* Box Lid & Bow: Opens at 1.9s with spring rotation */}
-              <g transform="translate(56, 172)">
-                <motion.g
-                  initial={{ rotate: 0 }}
-                  animate={{
-                    rotate: [0, -32, -26],
-                    y: [0, -6, -4],
-                  }}
-                  transition={{
-                    delay: 1.9,
-                    duration: 0.7,
-                    times: [0, 0.65, 1],
-                    ease: smoothEase,
-                  }}
-                  style={{ transformOrigin: '0px 0px' }}
-                >
-                  {/* Two-Loop Bow on Top of Lid */}
-                  <g transform="translate(75, -28)">
-                    {/* Left Bow Loop */}
-                    <path
-                      d="M 0 0 C -24 -30 -52 -16 -32 4 C -20 11 -9 4 0 0 Z"
-                      fill="#FFB400"
-                    />
-                    <path
-                      d="M -4 -4 C -20 -24 -40 -14 -24 2 Z"
-                      fill="#FFFFFF"
-                      opacity="0.32"
-                    />
-                    {/* Right Bow Loop */}
-                    <path
-                      d="M 0 0 C 9 4 20 11 32 4 C 52 -16 24 -30 0 0 Z"
-                      fill="#FFB400"
-                    />
-                    <path
-                      d="M 4 -4 C 20 -24 40 -14 24 2 Z"
-                      fill="#FFFFFF"
-                      opacity="0.32"
-                    />
-                    {/* Center Bow Knot */}
-                    <circle cx="0" cy="2" r="7.5" fill="#FFA000" />
-                  </g>
-
-                  {/* Rectangular Lid Bar */}
-                  <rect
-                    x="0"
-                    y="-28"
-                    width="150"
-                    height="30"
-                    rx="8"
-                    fill="#E91E63"
-                  />
-                  {/* Top lid highlight line */}
-                  <rect
-                    x="6"
-                    y="-26"
-                    width="138"
-                    height="3.5"
-                    rx="1.5"
-                    fill="#FFFFFF"
-                    opacity="0.3"
-                  />
-                  {/* Ribbon band on lid */}
-                  <rect
-                    x="60"
-                    y="-28"
-                    width="30"
-                    height="30"
-                    fill="#FFB400"
-                  />
-                </motion.g>
-              </g>
-            </motion.g>
-          </g>
-
-          {/* -------------------------------------------------------------------
-              2. WORDMARK: "Celebration Box" (Reveals from 3.2s to 4.8s)
-             ------------------------------------------------------------------- */}
+          {/* ========================================================
+              SCULPTED 3D ANGLED BOX BODY
+             ======================================================== */}
           <motion.g
-            id="brand-wordmark"
+            id="intro-box-body"
+            filter="url(#introBoxGlow)"
+            initial={{ y: -120, scale: 0.5, opacity: 0 }}
+            animate={{
+              y: [-120, 8, 0, 0],
+              scale: [0.5, 1.06, 1, 1],
+              opacity: [0, 1, 1, 1],
+            }}
+            transition={{
+              delay: 0.8,
+              duration: 0.95,
+              times: [0, 0.65, 0.85, 1],
+              ease: smoothEase,
+            }}
+          >
+            {/* Dark Interior Cavity */}
+            <path
+              d="M 58 190 Q 132 176 216 190 Q 132 208 58 190 Z"
+              fill="#880E3D"
+            />
+
+            {/* Warm Inner Glow */}
+            <ellipse cx="137" cy="192" rx="45" ry="7" fill="#FFB300" opacity="0.65" />
+
+            {/* Main Sculpted Front Body */}
+            <path
+              d="M 58 190
+                 C 56 220, 60 270, 65 288
+                 C 70 300, 85 304, 137 304
+                 C 189 304, 204 300, 209 288
+                 C 214 270, 218 220, 216 190
+                 Q 137 206 58 190 Z"
+              fill="url(#introBoxGrad)"
+            />
+
+            {/* Left Sheen Line */}
+            <path
+              d="M 64 195 Q 67 250 72 285 Q 67 245 65 195 Z"
+              fill="#FFFFFF"
+              opacity="0.25"
+            />
+
+            {/* Vertical Center Ribbon */}
+            <path
+              d="M 122 203
+                 Q 137 206 152 203
+                 L 150 304
+                 Q 137 305 124 304 Z"
+              fill="url(#introRibbonGrad)"
+            />
+
+            {/* Ribbon Sheen */}
+            <path
+              d="M 129 204 L 129 304"
+              stroke="#FFFFFF"
+              strokeWidth="2.5"
+              opacity="0.38"
+            />
+          </motion.g>
+
+          {/* ========================================================
+              3D POPPED LID & PLUMP BOW
+             ======================================================== */}
+          <motion.g
+            id="intro-popped-lid"
+            initial={{ rotate: 0, x: 20, y: 10, opacity: 0 }}
+            animate={{
+              rotate: [0, -32, -28],
+              x: [20, -5, 0],
+              y: [10, -8, 0],
+              opacity: [0, 1, 1],
+            }}
+            transition={{
+              delay: 1.85,
+              duration: 0.8,
+              times: [0, 0.65, 1],
+              ease: smoothEase,
+            }}
+            style={{ transformOrigin: '58px 190px' }}
+          >
+            <g transform="translate(42, 222) rotate(-28)">
+              {/* Lid Slab 3D Thickness Bottom Lip */}
+              <rect
+                x="0"
+                y="0"
+                width="170"
+                height="38"
+                rx="10"
+                fill="#AD1457"
+              />
+
+              {/* Lid Slab Main Front Face */}
+              <rect
+                x="0"
+                y="-8"
+                width="170"
+                height="38"
+                rx="10"
+                fill="url(#introLidGrad)"
+              />
+
+              {/* Lid Top Edge Highlight */}
+              <rect
+                x="6"
+                y="-6"
+                width="158"
+                height="4"
+                rx="2"
+                fill="#FFFFFF"
+                opacity="0.32"
+              />
+
+              {/* Yellow Ribbon Band across the Lid */}
+              <rect
+                x="70"
+                y="-8"
+                width="32"
+                height="46"
+                fill="url(#introRibbonGrad)"
+              />
+
+              {/* Plump Double-Loop Ribbon Bow on Top of Lid */}
+              <g id="intro-plump-bow" transform="translate(86, -8)">
+                <path
+                  d="M 0 -4
+                     C -25 -38, -65 -32, -58 -6
+                     C -52 14, -22 10, 0 0 Z"
+                  fill="url(#introRibbonGrad)"
+                />
+                <path
+                  d="M -4 -8 C -22 -28, -50 -24, -44 -6 C -38 8, -16 6, -4 -8 Z"
+                  fill="#FFFFFF"
+                  opacity="0.28"
+                />
+
+                <path
+                  d="M 0 -4
+                     C 25 -38, 65 -32, 58 -6
+                     C 52 14, 22 10, 0 0 Z"
+                  fill="url(#introRibbonGrad)"
+                />
+                <path
+                  d="M 4 -8 C 22 -28, 50 -24, 44 -6 C 38 8, 16 6, 4 -8 Z"
+                  fill="#FFFFFF"
+                  opacity="0.28"
+                />
+
+                <ellipse cx="0" cy="-2" rx="10" ry="8" fill="#FFA000" />
+                <ellipse cx="-2" cy="-4" rx="5" ry="3" fill="#FFE082" opacity="0.5" />
+              </g>
+            </g>
+          </motion.g>
+
+          {/* ========================================================
+              WORDMARK: "Celebration Box"
+             ======================================================== */}
+          <motion.g
+            id="intro-brand-wordmark"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -513,10 +518,10 @@ export const IntroCodedAnimation: React.FC<IntroCodedAnimationProps> = ({
             }}
           >
             <text
-              x="254"
-              y="234"
+              x="330"
+              y="255"
               fontFamily="'Poppins', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
-              fontSize="130"
+              fontSize="132"
               fontWeight="800"
               letterSpacing="-1.8"
             >
@@ -527,15 +532,14 @@ export const IntroCodedAnimation: React.FC<IntroCodedAnimationProps> = ({
             </text>
           </motion.g>
 
-          {/* -------------------------------------------------------------------
-              3. GOLDEN SWOOSH UNDERLINE + SPARKLE (Draws at 4.5s)
-             ------------------------------------------------------------------- */}
-          {/* Animated Curved Underline Swoosh */}
+          {/* ========================================================
+              GOLDEN SWOOSH UNDERLINE & SPARKLE
+             ======================================================== */}
           <motion.path
-            d="M 315 272 Q 535 234 735 252 Q 875 266 980 252"
+            d="M 375 296 Q 595 258 795 276 Q 935 290 1020 276"
             fill="none"
-            stroke="#FFB400"
-            strokeWidth="10.5"
+            stroke="#FFB300"
+            strokeWidth="11"
             strokeLinecap="round"
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ pathLength: 1, opacity: 1 }}
@@ -546,10 +550,9 @@ export const IntroCodedAnimation: React.FC<IntroCodedAnimationProps> = ({
             }}
           />
 
-          {/* 4-Pointed Sparkle Star at the End of Swoosh */}
           <motion.path
-            d="M 1002 232 Q 1002 252 1022 252 Q 1002 252 1002 272 Q 1002 252 982 252 Q 1002 252 1002 232 Z"
-            fill="#FFB400"
+            d="M 1042 254 Q 1042 274 1062 274 Q 1042 274 1042 294 Q 1042 274 1022 274 Q 1042 274 1042 254 Z"
+            fill="#FFB300"
             initial={{ scale: 0, rotate: -45, opacity: 0 }}
             animate={{ scale: [0, 1.4, 1], rotate: [-45, 0, 10, 0], opacity: 1 }}
             transition={{
@@ -559,24 +562,10 @@ export const IntroCodedAnimation: React.FC<IntroCodedAnimationProps> = ({
               bounce: 0.45,
             }}
           />
-
-          {/* Gentle Floating Sparkles around the finished mark (6.0s+) */}
-          <motion.g
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 1, 0.7, 1] }}
-            transition={{ delay: 5.8, duration: 2.0 }}
-          >
-            <circle cx="280" cy="140" r="2.5" fill="#FFB400" />
-            <circle cx="890" cy="160" r="3" fill="#E91E63" />
-            <circle cx="950" cy="190" r="2" fill="#00A8A8" />
-            <circle cx="620" cy="130" r="2.5" fill="#FFB400" />
-          </motion.g>
         </svg>
       </div>
 
-      {/* =========================================================================
-          BOTTOM CELEBRATION PROGRESS BAR (Thin, elegant brand gradient)
-         ========================================================================= */}
+      {/* Thin brand gradient progress bar */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-ink/5 z-20">
         <div
           className="h-full bg-gradient-to-r from-brand-pink via-brand-marigold to-brand-teal transition-all duration-100 ease-linear"

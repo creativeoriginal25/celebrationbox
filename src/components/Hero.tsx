@@ -99,8 +99,8 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
             title="Click to celebrate!"
             className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto flex items-center justify-center mb-6 sm:mb-9 select-none cursor-pointer px-2"
           >
-            {/* Mobile-only optical center offset (-34px on mobile to perfectly equalize margins, reset to 0 on sm+ desktop) */}
-            <div className="relative -translate-x-[34px] sm:translate-x-0 flex items-center justify-center w-full transition-transform">
+            {/* Mobile optical centering offset for balanced visual centering above the headline */}
+            <div className="relative -translate-x-[24px] sm:translate-x-0 flex items-center justify-center w-full transition-transform">
               {/* Soft celebratory ambient highlight glow behind the logo */}
               <div
                 className="absolute w-72 sm:w-96 md:w-[32rem] h-20 sm:h-32 bg-gradient-to-r from-brand-pink/15 via-brand-marigold/15 to-brand-teal/15 rounded-full blur-2xl opacity-60 pointer-events-none"
