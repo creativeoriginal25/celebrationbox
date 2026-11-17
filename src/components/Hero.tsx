@@ -75,13 +75,14 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
             </GradientText>
           </div>
 
-          {/* ELEMENT 2: CELEBRATION BOX MAIN HERO LOGO (Responsive: ~300-310px on 360px viewport, perfectly centered) */}
+          {/* ELEMENT 2: CELEBRATION BOX MAIN HERO LOGO (Responsive: ~290-300px, optically centered with headline) */}
           <div
             onClick={handleBoxClick}
             title="Click to celebrate!"
             className="w-full flex items-center justify-center mb-5 sm:mb-7 select-none cursor-pointer px-2"
           >
-            <div className="relative flex items-center justify-center w-full">
+            {/* Optical left offset on mobile to balance gift icon + wordmark center of mass with headline */}
+            <div className="relative -translate-x-[18px] sm:translate-x-0 flex items-center justify-center w-full transition-transform">
               {/* Soft celebratory ambient highlight glow behind the logo */}
               <div
                 className="absolute w-72 sm:w-96 md:w-[32rem] h-20 sm:h-32 bg-gradient-to-r from-brand-pink/15 via-brand-marigold/15 to-brand-teal/15 rounded-full blur-2xl opacity-60 pointer-events-none"
@@ -89,7 +90,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
               />
               <CelebrationBoxLogo
                 key={logoKey}
-                className="w-[min(90vw,310px)] h-auto sm:w-auto sm:h-32 md:h-40 lg:h-48 max-w-full mx-auto relative z-10 filter drop-shadow-xs transition-transform"
+                className="w-[min(88vw,295px)] h-auto sm:w-auto sm:h-32 md:h-40 lg:h-48 max-w-full mx-auto relative z-10 filter drop-shadow-xs transition-transform"
                 animated={true}
               />
             </div>
@@ -98,7 +99,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
           {/* ELEMENT 3: MAIN HEADLINE (Mobile: 28px, 800 weight, 1.12 line height, wraps into 2 balanced lines) */}
           <h1 className="font-display font-extrabold text-[28px] leading-[1.12] sm:text-5xl lg:text-6xl text-brand-ink tracking-tight mb-3 sm:mb-4 max-w-3xl mx-auto px-3 text-center">
             <span className="block sm:inline">Make Every Celebration</span>{' '}
-            <span className="relative inline-block text-brand-pink underline decoration-brand-marigold decoration-wavy decoration-3 underline-offset-8">
+            <span className="relative inline-block text-brand-pink underline decoration-brand-marigold decoration-wavy decoration-3 underline-offset-4">
               Special.
             </span>
           </h1>
@@ -108,9 +109,13 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
             Beautiful DIY birthday decorations, thoughtfully curated and packed into one celebration box.
           </p>
 
-          {/* ELEMENT 5: BRAND SUPPORTING LINE (Mobile: 12.5px, balanced line wrap) */}
+          {/* ELEMENT 5: BRAND SUPPORTING LINE (Mobile: 12.5px, balanced line wrap, no orphan word) */}
           <p className="text-[12.5px] leading-snug sm:text-xs md:text-sm font-medium text-brand-ink-muted mb-6 sm:mb-8 px-4 max-w-sm sm:max-w-none mx-auto text-center">
-            DIY Celebration Kits • Easy to Set Up • Made for Your Moments
+            <span className="inline-block">DIY Celebration Kits</span>
+            <span className="inline-block mx-1.5">•</span>
+            <span className="inline-block">Easy to Set Up</span>
+            <span className="inline-block mx-1.5">•</span>
+            <span className="inline-block">Made for Your Moments</span>
           </p>
 
           {/* ELEMENT 6: ACTION BUTTONS (48px height, isolated above confetti, full-width responsive within screen margins) */}
