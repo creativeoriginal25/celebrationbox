@@ -2,10 +2,11 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
 interface IntroVideoProps {
+  onStartReveal?: () => void;
   onComplete: () => void;
 }
 
-export const IntroVideo: React.FC<IntroVideoProps> = ({ onComplete }) => {
+export const IntroVideo: React.FC<IntroVideoProps> = ({ onStartReveal, onComplete }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -15,10 +16,13 @@ export const IntroVideo: React.FC<IntroVideoProps> = ({ onComplete }) => {
 
   const handleFinish = useCallback(() => {
     setIsFadingOut(true);
+    if (onStartReveal) {
+      onStartReveal();
+    }
     setTimeout(() => {
       onComplete();
     }, 600); // Smooth 600ms fade transition into the website
-  }, [onComplete]);
+  }, [onStartReveal, onComplete]);
 
   useEffect(() => {
     const video = videoRef.current;

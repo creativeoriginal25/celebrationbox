@@ -49,7 +49,8 @@ const AppRouter: React.FC = () => {
   const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
   const [isAdminTemplatesOpen, setIsAdminTemplatesOpen] = useState<boolean>(false);
   const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
-  const [hasWatchedIntro, setHasWatchedIntro] = useState<boolean>(false);
+  const [showWebsite, setShowWebsite] = useState<boolean>(false);
+  const [introDismissed, setIntroDismissed] = useState<boolean>(false);
 
   // Handle hash changes & browser back/forward
   useEffect(() => {
@@ -137,99 +138,107 @@ const AppRouter: React.FC = () => {
   return (
     <div className="relative min-h-screen">
       {/* Fullscreen Unskippable Intro Video */}
-      {!hasWatchedIntro && (
-        <IntroVideo onComplete={() => setHasWatchedIntro(true)} />
-      )}
-
-      {/* Toast Notification for Add-to-Cart Confirmation */}
-      {toastMessage && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{toastMessage}</span>
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="ml-2 text-brand-pink font-bold underline hover:text-white cursor-pointer"
-          >
-            View Cart
-          </button>
-        </div>
-      )}
-
-      {/* Route Views */}
-      {route.type === 'product' ? (
-        <ProductDetails
-          productId={route.id}
-          onNavigateHome={navigateToHome}
-          onSelectProduct={(prod) => navigateToProduct(prod.id)}
-          onBuyNow={handleBuyNow}
-          onOpenOrderModal={handleDirectWhatsAppOrder}
-          onOpenPolicy={(policy) => setActivePolicy(policy)}
-        />
-      ) : route.type === 'category' ? (
-        <CategoryProducts
-          categorySlug={route.slug}
-          onNavigateHome={navigateToHome}
-          onSelectProduct={(prod) => navigateToProduct(prod.id)}
-          onBuyNow={handleBuyNow}
-          onOpenOrderModal={handleDirectWhatsAppOrder}
-          onOpenPolicy={(policy) => setActivePolicy(policy)}
-        />
-      ) : (
-        <Home
-          onNavigateToProduct={navigateToProduct}
-          onNavigateToCategory={navigateToCategory}
+      {!introDismissed && (
+        <IntroVideo
+          onStartReveal={() => setShowWebsite(true)}
+          onComplete={() => setIntroDismissed(true)}
         />
       )}
 
-      {/* Global Modals & Drawers */}
-      {/* 1. Shopping Cart Drawer */}
-      <CartDrawer
-        onCheckout={handleCartCheckout}
-        onExplore={handleExploreShop}
-      />
+      {/* Main Website Content (Mounted & Revealed Exactly As Intro Video Completes) */}
+      {showWebsite && (
+        <>
+          {/* Toast Notification for Add-to-Cart Confirmation */}
+          {toastMessage && (
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>{toastMessage}</span>
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="ml-2 text-brand-pink font-bold underline hover:text-white cursor-pointer"
+              >
+                View Cart
+              </button>
+            </div>
+          )}
 
-      {/* 2. Order Customizer & WhatsApp Checkout Modal */}
-      {isOrderModalOpen && (
-        <OrderCustomizerModal
-          initialProductId={orderModalProductId}
-          mode={orderModalMode}
-          onClose={() => setIsOrderModalOpen(false)}
-          onOpenFallback={handleOpenFallback}
-        />
-      )}
+          {/* Route Views */}
+          {route.type === 'product' ? (
+            <ProductDetails
+              productId={route.id}
+              onNavigateHome={navigateToHome}
+              onSelectProduct={(prod) => navigateToProduct(prod.id)}
+              onBuyNow={handleBuyNow}
+              onOpenOrderModal={handleDirectWhatsAppOrder}
+              onOpenPolicy={(policy) => setActivePolicy(policy)}
+            />
+          ) : route.type === 'category' ? (
+            <CategoryProducts
+              categorySlug={route.slug}
+              onNavigateHome={navigateToHome}
+              onSelectProduct={(prod) => navigateToProduct(prod.id)}
+              onBuyNow={handleBuyNow}
+              onOpenOrderModal={handleDirectWhatsAppOrder}
+              onOpenPolicy={(policy) => setActivePolicy(policy)}
+            />
+          ) : (
+            <Home
+              onNavigateToProduct={navigateToProduct}
+              onNavigateToCategory={navigateToCategory}
+            />
+          )}
 
-      {/* 3. WhatsApp Fallback Modal */}
-      {fallbackMessage && (
-        <WhatsAppFallbackModal
-          message={fallbackMessage}
-          isConfigured={isFallbackConfigured}
-          onClose={() => setFallbackMessage(null)}
-        />
-      )}
+          {/* Global Modals & Drawers */}
+          {/* 1. Shopping Cart Drawer */}
+          <CartDrawer
+            onCheckout={handleCartCheckout}
+            onExplore={handleExploreShop}
+          />
 
-      {/* 4. Founder Message Templates Modal */}
-      {isAdminTemplatesOpen && (
-        <AdminTemplatesModal onClose={() => setIsAdminTemplatesOpen(false)} />
-      )}
+          {/* 2. Order Customizer & WhatsApp Checkout Modal */}
+          {isOrderModalOpen && (
+            <OrderCustomizerModal
+              initialProductId={orderModalProductId}
+              mode={orderModalMode}
+              onClose={() => setIsOrderModalOpen(false)}
+              onOpenFallback={handleOpenFallback}
+            />
+          )}
 
-      {/* 5. Policies Modal */}
-      <PolicyModal
-        policyType={activePolicy}
-        onClose={() => setActivePolicy(null)}
-      />
+          {/* 3. WhatsApp Fallback Modal */}
+          {fallbackMessage && (
+            <WhatsAppFallbackModal
+              message={fallbackMessage}
+              isConfigured={isFallbackConfigured}
+              onClose={() => setFallbackMessage(null)}
+            />
+          )}
 
-      {/* Sticky Mobile Cart Floating Pill on all views */}
-      {totalCount > 0 && (
-        <div className="fixed bottom-5 right-4 z-40 lg:hidden animate-fadeIn pb-[env(safe-area-inset-bottom)]">
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="flex items-center gap-2.5 px-5 py-3.5 min-h-[48px] rounded-full bg-brand-pink text-white font-extrabold text-xs shadow-modal active:scale-95 transition-all cursor-pointer border-2 border-white/40"
-            aria-label="View Cart"
-          >
-            <ShoppingBag className="w-4 h-4" />
-            <span>View Cart ({totalCount})</span>
-          </button>
-        </div>
+          {/* 4. Founder Message Templates Modal */}
+          {isAdminTemplatesOpen && (
+            <AdminTemplatesModal onClose={() => setIsAdminTemplatesOpen(false)} />
+          )}
+
+          {/* 5. Policies Modal */}
+          <PolicyModal
+            policyType={activePolicy}
+            onClose={() => setActivePolicy(null)}
+          />
+
+          {/* Sticky Mobile Cart Floating Pill on all views */}
+          {totalCount > 0 && (
+            <div className="fixed bottom-5 right-4 z-40 lg:hidden animate-fadeIn pb-[env(safe-area-inset-bottom)]">
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="flex items-center gap-2.5 px-5 py-3.5 min-h-[48px] rounded-full bg-brand-pink text-white font-extrabold text-xs shadow-modal active:scale-95 transition-all cursor-pointer border-2 border-white/40"
+                aria-label="View Cart"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span>View Cart ({totalCount})</span>
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
