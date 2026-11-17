@@ -8,6 +8,7 @@ import { OrderCustomizerModal } from './components/OrderCustomizerModal';
 import { WhatsAppFallbackModal } from './components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from './components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from './components/PolicyModal';
+import { IntroVideo } from './components/IntroVideo';
 import { Product } from './types';
 import { CheckCircle2, ShoppingBag } from 'lucide-react';
 
@@ -48,6 +49,7 @@ const AppRouter: React.FC = () => {
   const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
   const [isAdminTemplatesOpen, setIsAdminTemplatesOpen] = useState<boolean>(false);
   const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
+  const [hasWatchedIntro, setHasWatchedIntro] = useState<boolean>(false);
 
   // Handle hash changes & browser back/forward
   useEffect(() => {
@@ -134,6 +136,11 @@ const AppRouter: React.FC = () => {
 
   return (
     <div className="relative min-h-screen">
+      {/* Fullscreen Unskippable Intro Video */}
+      {!hasWatchedIntro && (
+        <IntroVideo onComplete={() => setHasWatchedIntro(true)} />
+      )}
+
       {/* Toast Notification for Add-to-Cart Confirmation */}
       {toastMessage && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
