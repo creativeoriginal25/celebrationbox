@@ -127,11 +127,10 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
       {/* Sticky Floating Header Container */}
       <header className="sticky top-3.5 sm:top-4 z-40 w-full px-3 sm:px-6 pointer-events-none transition-all duration-300">
         <div
-          className={`max-w-[1240px] mx-auto pointer-events-auto rounded-[20px] transition-all duration-300 ${
-            isScrolled
+          className={`max-w-[1240px] mx-auto pointer-events-auto rounded-[20px] transition-all duration-300 ${isScrolled
               ? 'bg-white/[0.88] shadow-[0_12px_36px_0_rgba(43,43,58,0.08)] border-white/85'
               : 'bg-white/[0.78] shadow-[0_8px_30px_0_rgba(43,43,58,0.04)] border-white/65'
-          } border backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]`}
+            } border backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]`}
           style={{
             // Inline fallbacks ensuring exact glassmorphism rendering across all browsers
             backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.88)' : 'rgba(255, 255, 255, 0.78)',
@@ -140,7 +139,7 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
           }}
         >
           <div className="flex items-center justify-between h-[68px] sm:h-[72px] px-4 sm:px-6 lg:px-8">
-            
+
             {/* ========================================================
                 1. LEFT: OFFICIAL LOGO (COMPACT, NO RECTANGULAR BOX)
                ======================================================== */}
@@ -175,11 +174,10 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
                   <button
                     key={item.id}
                     onClick={() => handleLinkClick(item.href)}
-                    className={`relative px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/50 ${
-                      isActive
+                    className={`relative px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/50 ${isActive
                         ? 'text-brand-pink font-semibold'
                         : 'text-brand-ink/80 hover:text-brand-pink hover:bg-brand-cream-50/60'
-                    }`}
+                      }`}
                   >
                     <span>{item.label}</span>
 
@@ -285,11 +283,10 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
                     <button
                       key={item.id}
                       onClick={() => handleLinkClick(item.href)}
-                      className={`flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-medium transition-all text-left cursor-pointer ${
-                        isActive
+                      className={`flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-medium transition-all text-left cursor-pointer ${isActive
                           ? 'bg-brand-pink/10 text-brand-pink font-semibold'
                           : 'text-brand-ink hover:text-brand-pink hover:bg-brand-cream-50/80'
-                      }`}
+                        }`}
                     >
                       <span>{item.label}</span>
                       <ArrowRight className={`w-4 h-4 transition-transform ${isActive ? 'text-brand-pink' : 'text-brand-ink/30'}`} />
