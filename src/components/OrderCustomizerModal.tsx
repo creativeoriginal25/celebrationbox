@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { OrderDetails, CartOrderDetails, DeliveryMethod } from '../types';
+import { OrderDetails, CartOrderDetails, DeliveryMethod, Product } from '../types';
 import { PRODUCTS, AVAILABLE_THEMES } from '../config/products';
 import { BUSINESS_CONFIG, isWhatsAppConfigured } from '../config/business';
 import { formatPrice, calculateSubtotal } from '../utils/currency';
@@ -31,10 +31,11 @@ import {
   triggerWhatsAppChat,
 } from '../services/whatsappService';
 import { saveOrderToLocalHistory, getOrderSummary } from '../services/orderService';
+import { getProductByIdOrSlug } from '../services/catalogService';
 import { useCart } from '../context/CartContext';
 
 interface OrderCustomizerModalProps {
-  initialProductId?: 'mini-celebration-box' | 'signature-celebration-box';
+  initialProductId?: string;
   mode?: 'buy-now' | 'cart';
   onClose: () => void;
   onOpenFallback: (message: string, isConfigured: boolean) => void;
@@ -57,7 +58,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
   const isCartMode = mode === 'cart' && cartItems.length > 0;
 
   // Single-product Buy Now state
-  const [selectedProductId, setSelectedProductId] = useState<'mini-celebration-box' | 'signature-celebration-box'>(
+  const [selectedProductId, setSelectedProductId] = useState<string>(
     initialProductId
   );
   const [quantity, setQuantity] = useState<number>(1);
@@ -81,7 +82,23 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
   const [submittedUrl, setSubmittedUrl] = useState<string | null>(null);
   const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
 
-  const activeProduct = PRODUCTS.find((p) => p.id === selectedProductId) || PRODUCTS[1];
+  // Live verified product data
+  const [activeProduct, setActiveProduct] = useState<Product>(() => {
+    return PRODUCTS.find((p) => p.id === selectedProductId || p.slug === selectedProductId) || PRODUCTS[1] || PRODUCTS[0];
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    getProductByIdOrSlug(selectedProductId).then((p) => {
+      if (isMounted && p) {
+        setActiveProduct(p);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedProductId]);
+
   const activeTheme = AVAILABLE_THEMES.find((t) => t.name === selectedTheme) || AVAILABLE_THEMES[0];
 
   const subtotal = isCartMode

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronRight, Check, ShoppingBag, ArrowRight } from 'lucide-react';
 import { OccasionCategory, Product } from '../types';
 import { OCCASION_CATEGORIES } from '../config/categories';
 import { PRODUCTS } from '../config/products';
+import { getProductsForCategory } from '../services/catalogService';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { AnimatedContent } from '../components/react-bits/AnimatedContent';
@@ -15,7 +16,7 @@ interface CategoryProductsProps {
   onNavigateHome: () => void;
   onSelectProduct: (product: Product) => void;
   onBuyNow: (product: Product) => void;
-  onOpenOrderModal: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
+  onOpenOrderModal: (productId?: string) => void;
   onOpenPolicy: (policy: any) => void;
 }
 
@@ -60,12 +61,28 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
     OCCASION_CATEGORIES.find((c) => c.slug === categorySlug || c.id === categorySlug) ||
     OCCASION_CATEGORIES[0];
 
+  const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(() =>
+    PRODUCTS.filter((p) => p.active)
+  );
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    let isMounted = true;
+    const fetchCategoryProducts = async () => {
+      try {
+        const fetched = await getProductsForCategory(categorySlug);
+        if (isMounted && fetched && fetched.length > 0) {
+          setProductsToDisplay(fetched);
+        }
+      } catch (err) {
+        console.warn('Failed to load category products dynamically:', err);
+      }
+    };
+    fetchCategoryProducts();
+    return () => {
+      isMounted = false;
+    };
   }, [categorySlug]);
-
-  // Matching products (Mini and Signature boxes)
-  const productsToDisplay: Product[] = PRODUCTS.filter((p) => p.active);
 
   const handleWhatsAppNotify = () => {
     const text = `Hi Celebration Box team! 👋 I'm interested in the upcoming *${category.name}* collection. Please notify me when it launches!`;
@@ -118,7 +135,7 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
           {category.isAvailable ? (
             /* Desktop: Two columns if multiple, centered if single product */
             <div className={`grid grid-cols-1 ${productsToDisplay.length > 1 ? 'md:grid-cols-2' : 'max-w-xl mx-auto'} gap-6 lg:gap-8 items-stretch`}>
-              {productsToDisplay.map((product, index) => {
+              {productsToDisplay.map((product: Product, index: number) => {
                 const inclusions = PRODUCT_INCLUSIONS[product.id] || product.inclusions;
                 const exclusions = PRODUCT_EXCLUSIONS[product.id] || product.exclusions?.join('. ');
 

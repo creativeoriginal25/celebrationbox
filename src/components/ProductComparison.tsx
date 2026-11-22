@@ -4,7 +4,7 @@ import { PRODUCTS } from '../config/products';
 import { formatPrice } from '../utils/currency';
 
 interface ProductComparisonProps {
-  onOrderNow: (productId: 'mini-celebration-box' | 'signature-celebration-box') => void;
+  onOrderNow: (productId: string) => void;
 }
 
 export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow }) => {

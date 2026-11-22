@@ -60,8 +60,13 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
         <span className="text-3xl sm:text-4xl font-black text-brand-pink tracking-tight">
           {formatPrice(product.price)}
         </span>
+        {product.compare_at_price && product.compare_at_price > product.price && (
+          <span className="text-lg sm:text-xl text-brand-ink-muted line-through font-semibold">
+            {formatPrice(product.compare_at_price)}
+          </span>
+        )}
         <span className="text-xs sm:text-sm text-brand-ink-muted">
-          All-inclusive price • 60 pieces total
+          All-inclusive price • {product.totalPieces || 60} pieces total
         </span>
       </div>
 

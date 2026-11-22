@@ -7,17 +7,17 @@ console.log('--- Starting Celebration Box Automated Verification ---');
 const calculateSubtotal = (price, quantity) => price * Math.max(1, quantity);
 assert.strictEqual(calculateSubtotal(249, 1), 249, 'Mini box single subtotal should be 249');
 assert.strictEqual(calculateSubtotal(249, 2), 498, 'Mini box double subtotal should be 498');
-assert.strictEqual(calculateSubtotal(399, 1), 399, 'Signature box single subtotal should be 399');
-assert.strictEqual(calculateSubtotal(399, 3), 1197, 'Signature box triple subtotal should be 1197');
+assert.strictEqual(calculateSubtotal(299, 1), 299, 'Pastel Rose Celebration Box single subtotal should be 299');
+assert.strictEqual(calculateSubtotal(299, 3), 897, 'Pastel Rose Celebration Box triple subtotal should be 897');
 
-// Multi-item cart calculation (2 Mini + 1 Signature)
+// Multi-item cart calculation (2 Mini @ 249 + 1 Pastel Rose @ 299)
 const cartItems = [
   { id: 'mini-celebration-box', name: 'Mini Celebration Box', price: 249, quantity: 2 },
-  { id: 'signature-celebration-box', name: 'Signature Celebration Box', price: 399, quantity: 1 },
+  { id: 'signature-celebration-box', name: 'Pastel Rose Celebration Box', price: 299, quantity: 1 },
 ];
 const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-assert.strictEqual(cartTotal, 897, 'Cart total for 2 Mini (498) + 1 Signature (399) must be 897');
-console.log('✅ Single & multi-item cart calculations verified');
+assert.strictEqual(cartTotal, 797, 'Cart total for 2 Mini (498) + 1 Pastel Rose (299) must be 797');
+console.log('✅ Single & multi-item cart calculations verified (including ₹299 Pastel Rose Box)');
 
 // 2. Validation Test
 const validateOrder = (order) => {
@@ -134,8 +134,8 @@ const sampleCartOrder = {
 
 const cartMsg = generateCartWhatsAppOrderMessage(sampleCartOrder);
 assert.ok(cartMsg.includes('Mini Celebration Box'), 'Cart message must include Mini Box');
-assert.ok(cartMsg.includes('Signature Celebration Box'), 'Cart message must include Signature Box');
-assert.ok(cartMsg.includes('TOTAL PRODUCT VALUE: ₹897'), 'Cart message must show ₹897 total');
+assert.ok(cartMsg.includes('Pastel Rose Celebration Box'), 'Cart message must include Pastel Rose Box');
+assert.ok(cartMsg.includes('TOTAL PRODUCT VALUE: ₹797'), 'Cart message must show ₹797 total');
 assert.ok(cartMsg.includes('College Pickup (Bhimavaram)'), 'Cart message must show college pickup');
 console.log('✅ Consolidated multi-product cart message verified');
 

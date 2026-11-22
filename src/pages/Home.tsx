@@ -17,6 +17,7 @@ import { PolicyModal, PolicyType } from '../components/PolicyModal';
 import { ScrollReveal } from '../components/react-bits/ScrollReveal';
 import { OccasionCategoryGrid } from '../components/OccasionCategoryGrid';
 import { PRODUCTS } from '../config/products';
+import { getPublishedProducts } from '../services/catalogService';
 import { BUSINESS_CONFIG } from '../config/business';
 import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
 import { Product, OccasionCategory } from '../types';
@@ -36,11 +37,31 @@ export const HomeContent: React.FC<HomeProps> = ({
 
   // Modals & Drawers state
   const [selectedProductDetails, setSelectedProductDetails] = useState<Product | null>(null);
+  const [liveProducts, setLiveProducts] = useState<Product[]>(() =>
+    PRODUCTS.filter((p) => p.active !== false)
+  );
+
+  // Fetch live published products from database
+  useEffect(() => {
+    let isMounted = true;
+    const loadProducts = async () => {
+      try {
+        const fetched = await getPublishedProducts();
+        if (isMounted && fetched && fetched.length > 0) {
+          setLiveProducts(fetched);
+        }
+      } catch (e) {
+        console.warn('Could not load dynamic products, using fallback:', e);
+      }
+    };
+    loadProducts();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
   const [orderModalMode, setOrderModalMode] = useState<'buy-now' | 'cart'>('buy-now');
-  const [orderModalProductId, setOrderModalProductId] = useState<
-    'mini-celebration-box' | 'signature-celebration-box'
-  >('signature-celebration-box');
+  const [orderModalProductId, setOrderModalProductId] = useState<string>('signature-celebration-box');
 
   const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
   const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
@@ -79,7 +100,7 @@ export const HomeContent: React.FC<HomeProps> = ({
   };
 
   const handleDirectWhatsAppOrder = (
-    productId?: 'mini-celebration-box' | 'signature-celebration-box'
+    productId?: string
   ) => {
     if (productId) {
       setOrderModalProductId(productId);
@@ -168,8 +189,8 @@ export const HomeContent: React.FC<HomeProps> = ({
             </ScrollReveal>
 
             {/* Product Cards Grid: Active Products */}
-            <div className={`grid grid-cols-1 ${PRODUCTS.filter((p) => p.active !== false).length > 1 ? 'md:grid-cols-2 max-w-5xl' : 'max-w-xl'} gap-8 mx-auto`}>
-              {PRODUCTS.filter((p) => p.active !== false).map((product, idx) => (
+            <div className={`grid grid-cols-1 ${liveProducts.length > 1 ? 'md:grid-cols-2 max-w-5xl' : 'max-w-xl'} gap-8 mx-auto`}>
+              {liveProducts.map((product, idx) => (
                 <ScrollReveal key={product.id} delay={idx * 0.1} yOffset={24}>
                   <ProductCard
                     product={product}
@@ -181,7 +202,7 @@ export const HomeContent: React.FC<HomeProps> = ({
             </div>
 
             {/* Bottom Inclusions Note */}
-            {PRODUCTS.filter((p) => p.active !== false).length > 1 && (
+            {liveProducts.length > 1 && (
               <div className="mt-12 text-center">
                 <p className="text-xs text-brand-ink-muted">
                   Need to compare full kit items side-by-side? See the complete comparison table below.
@@ -193,7 +214,7 @@ export const HomeContent: React.FC<HomeProps> = ({
         </section>
 
         {/* Product Comparison Section with ScrollReveal */}
-        {PRODUCTS.filter((p) => p.active !== false).length > 1 && (
+        {liveProducts.length > 1 && (
           <ScrollReveal yOffset={24}>
             <ProductComparison onOrderNow={handleDirectWhatsAppOrder} />
           </ScrollReveal>

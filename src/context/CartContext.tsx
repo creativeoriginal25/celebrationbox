@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CartItem, Product } from '../types';
+import { verifyProductPrice } from '../services/catalogService';
 
 interface CartContextType {
   items: CartItem[];
@@ -38,6 +39,33 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Re-verify cart item prices against live database/catalog on load
+  useEffect(() => {
+    let isMounted = true;
+    const verifyPrices = async () => {
+      let changed = false;
+      const updated = await Promise.all(
+        items.map(async (item) => {
+          const verification = await verifyProductPrice(item.id);
+          if (verification && verification.isAvailable && verification.price !== item.price) {
+            changed = true;
+            return { ...item, price: verification.price };
+          }
+          return item;
+        })
+      );
+      if (isMounted && changed) {
+        setItems(updated);
+      }
+    };
+    if (items.length > 0) {
+      verifyPrices();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Sync to localStorage
   useEffect(() => {

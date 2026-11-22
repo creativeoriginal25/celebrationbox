@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Home, ChevronRight, ShieldCheck, HeartHandshake, Sparkles } from 'lucide-react';
-import { Product } from '../types';
+import { Product, ProductGalleryImage } from '../types';
 import { PRODUCTS } from '../config/products';
 import { getProductImages } from '../config/productImages';
+import { getProductByIdOrSlug } from '../services/catalogService';
 import { ProductImageGallery } from '../components/ProductImageGallery';
 import { ProductInformation } from '../components/ProductInformation';
 import { RelatedProducts } from '../components/RelatedProducts';
@@ -14,7 +15,7 @@ interface ProductDetailsProps {
   onNavigateHome: () => void;
   onSelectProduct: (product: Product) => void;
   onBuyNow: (product: Product) => void;
-  onOpenOrderModal: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
+  onOpenOrderModal: (productId?: string) => void;
   onOpenPolicy: (policy: any) => void;
 }
 
@@ -26,9 +27,35 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   onOpenOrderModal,
   onOpenPolicy,
 }) => {
-  // Find product from single source of truth
-  const product = PRODUCTS.find((p) => p.id === productId) || PRODUCTS[0];
-  const galleryImages = getProductImages(product.id, product.image, product.name);
+  // Find initial product from static config, then hydrate from live Supabase/admin catalog
+  const [product, setProduct] = useState<Product>(() => {
+    return PRODUCTS.find((p) => p.id === productId || p.slug === productId) || PRODUCTS[0];
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    getProductByIdOrSlug(productId).then((liveProd) => {
+      if (isMounted && liveProd) {
+        setProduct(liveProd);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [productId]);
+
+  // Gallery images: prefer live product images if present, fallback to curated images
+  const galleryImages: ProductGalleryImage[] = (product.images && product.images.length > 0)
+    ? product.images.map((img: any, idx: number) => ({
+        id: img.id || `img-${idx}`,
+        url: img.storage_path || img.url,
+        alt: img.alt_text || img.alt || product.name,
+        badge: idx === 0 ? 'Main View' : idx === 1 ? "What's Inside" : undefined,
+        title: img.title || (idx === 0 ? 'Decoration Setup' : "What's Inside the Box"),
+        caption: img.caption || '',
+        type: (idx === 0 ? 'main' : idx === 1 ? 'details' : 'flatlay') as any,
+      }))
+    : getProductImages(product.id, product.image, product.name);
 
   // Scroll to top when product changes
   useEffect(() => {

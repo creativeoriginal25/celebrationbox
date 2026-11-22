@@ -99,9 +99,7 @@ const AppRouter: React.FC = () => {
   // Modals state (accessible across all pages)
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
   const [orderModalMode, setOrderModalMode] = useState<'buy-now' | 'cart'>('buy-now');
-  const [orderModalProductId, setOrderModalProductId] = useState<
-    'mini-celebration-box' | 'signature-celebration-box'
-  >('signature-celebration-box');
+  const [orderModalProductId, setOrderModalProductId] = useState<string>('signature-celebration-box');
 
   const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
   const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
@@ -189,7 +187,7 @@ const AppRouter: React.FC = () => {
   };
 
   const handleDirectWhatsAppOrder = (
-    productId?: 'mini-celebration-box' | 'signature-celebration-box'
+    productId?: string
   ) => {
     if (productId) {
       setOrderModalProductId(productId);

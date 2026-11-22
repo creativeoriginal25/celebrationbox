@@ -26,15 +26,19 @@ export interface OccasionCategory {
   isAvailable: boolean;
   badge?: string;
   availableNotice?: string;
-  relatedProductIds?: ('mini-celebration-box' | 'signature-celebration-box')[];
+  relatedProductIds?: string[];
 }
 
 export interface Product {
-  id: 'mini-celebration-box' | 'signature-celebration-box';
+  id: string;
+  slug?: string;
+  sku?: string;
   name: string;
   tagline: string;
   price: number;
+  compare_at_price?: number;
   description: string;
+  short_description?: string;
   idealFor: string;
   inclusions: string[];
   exclusions: string[];
@@ -42,17 +46,34 @@ export interface Product {
   badge?: string;
   popular?: boolean;
   active: boolean;
+  status?: 'draft' | 'published' | 'archived';
+  stock_quantity?: number;
   availableThemes: string[];
+  theme_id?: string;
+  categories?: string[];
   dimensionsOrSpecs?: string[];
   totalPieces?: number;
   packItems?: ProductPackItem[];
   inventoryStatus?: 'in_stock' | 'low_stock' | 'out_of_stock';
+  images?: {
+    id?: string;
+    url: string;
+    alt?: string;
+    title?: string;
+    caption?: string;
+    is_primary?: boolean;
+    sort_order?: number;
+  }[];
 }
 
 export interface ThemeOption {
   id: string;
   name: string;
   colors: {
+    name: string;
+    hex: string;
+  }[];
+  colour_palette?: {
     name: string;
     hex: string;
   }[];
@@ -63,16 +84,17 @@ export interface ThemeOption {
 export type DeliveryMethod = 'pickup' | 'delivery';
 
 export interface CartItem {
-  id: 'mini-celebration-box' | 'signature-celebration-box';
+  id: string;
   name: string;
   price: number;
   quantity: number;
   image: string;
   theme: string;
+  isUnavailable?: boolean;
 }
 
 export interface OrderDetails {
-  productId: 'mini-celebration-box' | 'signature-celebration-box';
+  productId: string;
   productName: string;
   productPrice: number;
   quantity: number;
@@ -153,7 +175,7 @@ export interface AdminProduct {
   }[];
   exclusions: string[];
   stock_quantity: number;
-  status: 'active' | 'draft' | 'out_of_stock' | 'archived';
+  status: 'active' | 'published' | 'draft' | 'out_of_stock' | 'archived';
   total_pieces: number;
   badge?: string;
   created_at?: string;

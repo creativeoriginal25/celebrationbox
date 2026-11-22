@@ -9,32 +9,32 @@ import {
 } from '../types';
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase';
 import { OCCASION_CATEGORIES } from '../config/categories';
-import { AVAILABLE_THEMES, PRODUCTS } from '../config/products';
+import { AVAILABLE_THEMES } from '../config/products';
 import { BUSINESS_CONFIG } from '../config/business';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'cb_admin_products_v1',
-  ORDERS: 'cb_admin_orders_v1',
-  CATEGORIES: 'cb_admin_categories_v1',
-  THEMES: 'cb_admin_themes_v1',
-  INVENTORY: 'cb_admin_inventory_v1',
-  MOVEMENTS: 'cb_admin_movements_v1',
-  SETTINGS: 'cb_admin_settings_v1',
+  PRODUCTS: 'cb_admin_products_v2',
+  ORDERS: 'cb_admin_orders_v2',
+  CATEGORIES: 'cb_admin_categories_v2',
+  THEMES: 'cb_admin_themes_v2',
+  INVENTORY: 'cb_admin_inventory_v2',
+  MOVEMENTS: 'cb_admin_movements_v2',
+  SETTINGS: 'cb_admin_settings_v2',
 };
 
-// Initial Seed Data for Demo/Local mode
+// Initial Verified Seed Product: Pastel Rose Celebration Box (₹299, 60 pieces)
 const INITIAL_PRODUCTS: AdminProduct[] = [
   {
-    id: 'signature-celebration-box',
+    id: '00000000-0000-0000-0000-000000000001',
     slug: 'pastel-rose-celebration-box',
     name: 'Pastel Rose Celebration Box',
     tagline: 'Big Moments. One Little Box.',
     description: 'Everything you need to turn an ordinary space into a beautiful birthday moment.',
     ideal_for: 'Bedroom, living room, and hostel birthday celebrations',
-    selling_price: 399.00,
-    material_cost: 145.00,
-    packaging_cost: 35.00,
-    other_variable_cost: 15.00,
+    selling_price: 299.00,
+    material_cost: 110.00,
+    packaging_cost: 30.00,
+    other_variable_cost: 10.00,
     category_id: 'kids-birthday',
     theme_id: 'pastel-rose',
     images: [
@@ -60,8 +60,8 @@ const INITIAL_PRODUCTS: AdminProduct[] = [
       { name: 'Glue Dot Roll', quantity: '1 roll', pieceCount: 1, specification: '100 removable wall-safe dots' },
     ],
     exclusions: ['Cake, backdrop curtain, metal arch stand, and balloon pump are not included.'],
-    stock_quantity: 45,
-    status: 'active',
+    stock_quantity: 50,
+    status: 'published' as any,
     total_pieces: 60,
     badge: 'Best Seller',
     created_at: new Date().toISOString(),
@@ -119,15 +119,64 @@ const setLocalData = <T>(key: string, value: T): void => {
 
 export const getProducts = async (): Promise<AdminProduct[]> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (!error && data) {
-      return data as AdminProduct[];
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          product_images (*),
+          product_contents (*),
+          product_categories (*)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        return data.map((d: any) => {
+          const images = (d.product_images || []).map((img: any) => ({
+            url: img.storage_path,
+            alt: img.alt_text,
+            title: img.is_primary ? 'Main Image' : 'Gallery Image',
+            caption: img.alt_text,
+          }));
+
+          const contents = (d.product_contents || []).map((c: any) => ({
+            name: c.item_name,
+            quantity: `${c.quantity} ${c.unit || ''}`.trim(),
+            pieceCount: parseInt(c.quantity, 10) || 1,
+            specification: c.specification,
+          }));
+
+          const primaryCategory = d.product_categories?.[0]?.category_id || 'kids-birthday';
+
+          return {
+            id: d.id,
+            slug: d.slug,
+            name: d.name,
+            tagline: d.short_description || 'Big Moments. One Little Box.',
+            description: d.description || '',
+            selling_price: Number(d.price),
+            compare_at_price: d.compare_at_price ? Number(d.compare_at_price) : undefined,
+            material_cost: 110,
+            packaging_cost: 30,
+            other_variable_cost: 10,
+            category_id: primaryCategory,
+            theme_id: d.theme_id || 'pastel-rose',
+            images: images.length > 0 ? images : [{ url: '/products/pastel-rose-setup.jpg' }],
+            contents: contents.length > 0 ? contents : [],
+            exclusions: ['Cake, backdrop curtain, metal arch stand, and balloon pump are not included.'],
+            stock_quantity: d.stock_quantity ?? 50,
+            status: d.status,
+            total_pieces: contents.reduce((s: number, c: any) => s + (c.pieceCount || 1), 0) || 60,
+            badge: d.compare_at_price ? 'Special Offer' : undefined,
+            created_at: d.created_at,
+            updated_at: d.updated_at,
+          } as AdminProduct;
+        });
+      }
+    } catch (err) {
+      console.warn('Supabase getProducts fallback to local store:', err);
     }
-    console.warn('Supabase getProducts fallback to local store:', error?.message);
   }
   return getLocalData<AdminProduct[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
 };
@@ -138,26 +187,86 @@ export const getProductById = async (id: string): Promise<AdminProduct | null> =
 };
 
 export const createProduct = async (
-  product: Omit<AdminProduct, 'created_at' | 'updated_at'>
+  product: Omit<AdminProduct, 'created_at' | 'updated_at'> & {
+    compare_at_price?: number;
+    categories?: string[];
+  }
 ): Promise<AdminProduct> => {
   const now = new Date().toISOString();
   const newProduct: AdminProduct = {
     ...product,
+    status: (product.status as any) === 'active' ? 'published' : product.status,
     created_at: now,
     updated_at: now,
   };
 
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('products')
-      .insert([newProduct])
-      .select()
-      .single();
-    if (!error && data) {
-      return data as AdminProduct;
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      // 1. Insert main product row
+      const { data: insertedProduct, error: prodErr } = await supabase
+        .from('products')
+        .insert([
+          {
+            name: newProduct.name,
+            slug: newProduct.slug,
+            sku: product.slug ? `CB-${product.slug.toUpperCase().slice(0, 8)}` : `CB-${Date.now().toString().slice(-6)}`,
+            short_description: newProduct.tagline,
+            description: newProduct.description,
+            price: newProduct.selling_price,
+            compare_at_price: product.compare_at_price || null,
+            theme_id: newProduct.theme_id || 'pastel-rose',
+            status: (newProduct.status as any) === 'active' ? 'published' : newProduct.status,
+            stock_quantity: newProduct.stock_quantity,
+          },
+        ])
+        .select()
+        .single();
+
+      if (prodErr || !insertedProduct) {
+        throw new Error(prodErr?.message || 'Failed to insert product in Supabase');
+      }
+
+      const assignedId = insertedProduct.id;
+      newProduct.id = assignedId;
+
+      // 2. Insert product images
+      if (newProduct.images && newProduct.images.length > 0) {
+        const imageRows = newProduct.images.map((img, idx) => ({
+          product_id: assignedId,
+          storage_path: typeof img === 'string' ? img : img.url,
+          alt_text: typeof img === 'string' ? newProduct.name : img.alt || newProduct.name,
+          sort_order: idx + 1,
+          is_primary: idx === 0,
+        }));
+        await supabase.from('product_images').insert(imageRows);
+      }
+
+      // 3. Insert product contents
+      if (newProduct.contents && newProduct.contents.length > 0) {
+        const contentRows = newProduct.contents.map((c, idx) => ({
+          product_id: assignedId,
+          item_name: c.name,
+          quantity: c.quantity.replace(/[^\d]/g, '') || '1',
+          unit: c.quantity.replace(/[\d\s]/g, '') || 'pcs',
+          specification: c.specification || '',
+          sort_order: idx + 1,
+        }));
+        await supabase.from('product_contents').insert(contentRows);
+      }
+
+      // 4. Insert categories
+      const targetCategories = product.categories || [newProduct.category_id || 'kids-birthday'];
+      const catRows = targetCategories.map((catId) => ({
+        product_id: assignedId,
+        category_id: catId,
+      }));
+      await supabase.from('product_categories').insert(catRows);
+
+      return newProduct;
+    } catch (err: any) {
+      console.warn('Supabase createProduct fallback to local store:', err?.message);
     }
-    console.warn('Supabase createProduct fallback to local store:', error?.message);
   }
 
   const current = getLocalData<AdminProduct[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
@@ -168,28 +277,100 @@ export const createProduct = async (
 
 export const updateProduct = async (
   id: string,
-  updates: Partial<AdminProduct>
+  updates: Partial<AdminProduct> & {
+    compare_at_price?: number;
+    categories?: string[];
+  }
 ): Promise<AdminProduct> => {
   const now = new Date().toISOString();
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('products')
-      .update({ ...updates, updated_at: now })
-      .eq('id', id)
-      .select()
-      .single();
-    if (!error && data) {
-      return data as AdminProduct;
+
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const dbUpdates: any = { updated_at: now };
+      if (updates.name !== undefined) dbUpdates.name = updates.name;
+      if (updates.slug !== undefined) dbUpdates.slug = updates.slug;
+      if (updates.tagline !== undefined) dbUpdates.short_description = updates.tagline;
+      if (updates.description !== undefined) dbUpdates.description = updates.description;
+      if (updates.selling_price !== undefined) dbUpdates.price = updates.selling_price;
+      if (updates.compare_at_price !== undefined) dbUpdates.compare_at_price = updates.compare_at_price;
+      if (updates.theme_id !== undefined) dbUpdates.theme_id = updates.theme_id;
+      if (updates.stock_quantity !== undefined) dbUpdates.stock_quantity = updates.stock_quantity;
+      if (updates.status !== undefined) {
+        dbUpdates.status = (updates.status as any) === 'active' ? 'published' : updates.status;
+      }
+
+      await supabase.from('products').update(dbUpdates).eq('id', id);
+
+      // Refresh images if provided
+      if (updates.images && updates.images.length > 0) {
+        await supabase.from('product_images').delete().eq('product_id', id);
+        const imageRows = updates.images.map((img, idx) => ({
+          product_id: id,
+          storage_path: typeof img === 'string' ? img : img.url,
+          alt_text: typeof img === 'string' ? updates.name || '' : img.alt || updates.name || '',
+          sort_order: idx + 1,
+          is_primary: idx === 0,
+        }));
+        await supabase.from('product_images').insert(imageRows);
+      }
+
+      // Refresh contents if provided
+      if (updates.contents && updates.contents.length > 0) {
+        await supabase.from('product_contents').delete().eq('product_id', id);
+        const contentRows = updates.contents.map((c, idx) => ({
+          product_id: id,
+          item_name: c.name,
+          quantity: c.quantity.replace(/[^\d]/g, '') || '1',
+          unit: c.quantity.replace(/[\d\s]/g, '') || 'pcs',
+          specification: c.specification || '',
+          sort_order: idx + 1,
+        }));
+        await supabase.from('product_contents').insert(contentRows);
+      }
+
+      // Refresh categories if provided
+      if (updates.categories && updates.categories.length > 0) {
+        await supabase.from('product_categories').delete().eq('product_id', id);
+        const catRows = updates.categories.map((catId) => ({
+          product_id: id,
+          category_id: catId,
+        }));
+        await supabase.from('product_categories').insert(catRows);
+      }
+    } catch (err) {
+      console.warn('Supabase updateProduct fallback to local store:', err);
     }
-    console.warn('Supabase updateProduct fallback to local store:', error?.message);
   }
 
   const current = getLocalData<AdminProduct[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
   const index = current.findIndex((p) => p.id === id);
   if (index === -1) {
-    throw new Error('Product not found');
+    const updatedFallback: AdminProduct = {
+      id,
+      slug: updates.slug || 'pastel-rose-celebration-box',
+      name: updates.name || 'Pastel Rose Celebration Box',
+      tagline: updates.tagline || 'Big Moments. One Little Box.',
+      description: updates.description || '',
+      selling_price: updates.selling_price ?? 299,
+      material_cost: 110,
+      packaging_cost: 30,
+      other_variable_cost: 10,
+      category_id: updates.category_id || 'kids-birthday',
+      theme_id: updates.theme_id || 'pastel-rose',
+      images: updates.images || [],
+      contents: updates.contents || [],
+      exclusions: updates.exclusions || [],
+      stock_quantity: updates.stock_quantity ?? 50,
+      status: updates.status || 'published',
+      total_pieces: 60,
+      created_at: now,
+      updated_at: now,
+    };
+    setLocalData(STORAGE_KEYS.PRODUCTS, [updatedFallback, ...current]);
+    return updatedFallback;
   }
+
   const updatedProduct = {
     ...current[index],
     ...updates,
@@ -202,10 +383,13 @@ export const updateProduct = async (
 
 export const deleteProduct = async (id: string): Promise<boolean> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { error } = await supabase.from('products').delete().eq('id', id);
-    if (!error) return true;
-    console.warn('Supabase deleteProduct fallback to local store:', error?.message);
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { error } = await supabase.from('products').delete().eq('id', id);
+      if (!error) return true;
+    } catch (err) {
+      console.warn('Supabase deleteProduct fallback to local store:', err);
+    }
   }
 
   const current = getLocalData<AdminProduct[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
@@ -215,21 +399,29 @@ export const deleteProduct = async (id: string): Promise<boolean> => {
 };
 
 export const uploadProductImage = async (file: File): Promise<string> => {
+  // Validate file type & size (max 5MB)
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Please select an image file (JPEG, PNG, WebP).');
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error('Image size must be less than 5MB.');
+  }
+
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const fileExt = file.name.split('.').pop();
+  if (supabase && isSupabaseConfigured()) {
+    const fileExt = file.name.split('.').pop() || 'jpg';
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-    const filePath = `products/${fileName}`;
+    const filePath = `${fileName}`;
 
     const { error } = await supabase.storage
       .from('product-images')
-      .upload(filePath, file, { cacheControl: '3600', upsert: true });
+      .upload(filePath, file, { cacheControl: '3600', upsert: false });
 
     if (!error) {
       const { data } = supabase.storage.from('product-images').getPublicUrl(filePath);
       return data.publicUrl;
     }
-    console.warn('Supabase image upload failed, falling back to base64 preview:', error?.message);
+    console.warn('Supabase storage upload error, falling back to data URL:', error?.message);
   }
 
   // Fallback to Data URL for instant local previews without cloud storage
@@ -247,13 +439,17 @@ export const uploadProductImage = async (file: File): Promise<string> => {
 
 export const getOrders = async (): Promise<AdminOrder[]> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (!error && data) {
-      return data as AdminOrder[];
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        return data as AdminOrder[];
+      }
+    } catch (err) {
+      console.warn('Supabase getOrders error:', err);
     }
   }
   return getLocalData<AdminOrder[]>(STORAGE_KEYS.ORDERS, []);
@@ -270,14 +466,18 @@ export const createOrder = async (
   };
 
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('orders')
-      .insert([newOrder])
-      .select()
-      .single();
-    if (!error && data) {
-      return data as AdminOrder;
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .insert([newOrder])
+        .select()
+        .single();
+      if (!error && data) {
+        return data as AdminOrder;
+      }
+    } catch (err) {
+      console.warn('Supabase createOrder error:', err);
     }
   }
 
@@ -293,15 +493,19 @@ export const updateOrder = async (
 ): Promise<AdminOrder> => {
   const now = new Date().toISOString();
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('orders')
-      .update({ ...updates, updated_at: now })
-      .eq('id', id)
-      .select()
-      .single();
-    if (!error && data) {
-      return data as AdminOrder;
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .update({ ...updates, updated_at: now })
+        .eq('id', id)
+        .select()
+        .single();
+      if (!error && data) {
+        return data as AdminOrder;
+      }
+    } catch (err) {
+      console.warn('Supabase updateOrder error:', err);
     }
   }
 
@@ -316,9 +520,13 @@ export const updateOrder = async (
 
 export const deleteOrder = async (id: string): Promise<boolean> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { error } = await supabase.from('orders').delete().eq('id', id);
-    if (!error) return true;
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { error } = await supabase.from('orders').delete().eq('id', id);
+      if (!error) return true;
+    } catch (err) {
+      console.warn('Supabase deleteOrder error:', err);
+    }
   }
   const current = getLocalData<AdminOrder[]>(STORAGE_KEYS.ORDERS, []);
   setLocalData(
@@ -333,30 +541,10 @@ export const deleteOrder = async (id: string): Promise<boolean> => {
 // ============================================================================
 
 export const getInventoryItems = async (): Promise<InventoryItem[]> => {
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('inventory_items')
-      .select('*')
-      .order('name', { ascending: true });
-    if (!error && data) {
-      return data as InventoryItem[];
-    }
-  }
   return getLocalData<InventoryItem[]>(STORAGE_KEYS.INVENTORY, INITIAL_INVENTORY);
 };
 
 export const getInventoryMovements = async (): Promise<InventoryMovement[]> => {
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('inventory_movements')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (!error && data) {
-      return data as InventoryMovement[];
-    }
-  }
   return getLocalData<InventoryMovement[]>(STORAGE_KEYS.MOVEMENTS, []);
 };
 
@@ -369,17 +557,6 @@ export const addInventoryItem = async (
     id: `inv-${Date.now()}`,
     last_updated: now,
   };
-
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('inventory_items')
-      .insert([newItem])
-      .select()
-      .single();
-    if (!error && data) return data as InventoryItem;
-  }
-
   const current = getLocalData<InventoryItem[]>(STORAGE_KEYS.INVENTORY, INITIAL_INVENTORY);
   const updated = [...current, newItem];
   setLocalData(STORAGE_KEYS.INVENTORY, updated);
@@ -391,17 +568,6 @@ export const updateInventoryItem = async (
   updates: Partial<InventoryItem>
 ): Promise<InventoryItem> => {
   const now = new Date().toISOString();
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('inventory_items')
-      .update({ ...updates, last_updated: now })
-      .eq('id', id)
-      .select()
-      .single();
-    if (!error && data) return data as InventoryItem;
-  }
-
   const current = getLocalData<InventoryItem[]>(STORAGE_KEYS.INVENTORY, INITIAL_INVENTORY);
   const idx = current.findIndex((i) => i.id === id);
   if (idx === -1) throw new Error('Item not found');
@@ -425,17 +591,6 @@ export const recordInventoryMovement = async (movement: {
     created_at: now,
   };
 
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data } = await supabase
-      .from('inventory_movements')
-      .insert([newMovement])
-      .select()
-      .single();
-    if (data) return data as InventoryMovement;
-  }
-
-  // Local movement update: record log + adjust quantity
   const movements = getLocalData<InventoryMovement[]>(STORAGE_KEYS.MOVEMENTS, []);
   setLocalData(STORAGE_KEYS.MOVEMENTS, [newMovement, ...movements]);
 
@@ -459,24 +614,28 @@ export const recordInventoryMovement = async (movement: {
 
 export const getCategories = async (): Promise<OccasionCategory[]> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .order('display_order', { ascending: true });
-    if (!error && data) {
-      return data.map((d: any) => ({
-        id: d.id,
-        slug: d.slug,
-        name: d.name,
-        tagline: d.tagline || '',
-        description: d.description || '',
-        image: d.image || '',
-        bgColor: d.bg_color || '#FFF8F0',
-        isAvailable: Boolean(d.is_available),
-        badge: d.badge,
-        display_order: d.display_order,
-      })) as OccasionCategory[];
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (!error && data && data.length > 0) {
+        return data.map((d: any) => ({
+          id: d.id,
+          slug: d.slug,
+          name: d.name,
+          tagline: d.tagline || '',
+          description: d.description || '',
+          image: d.image || '',
+          bgColor: d.bg_color || '#FFF8F0',
+          isAvailable: Boolean(d.is_active),
+          badge: d.badge,
+          display_order: d.display_order,
+        })) as OccasionCategory[];
+      }
+    } catch (err) {
+      console.warn('Supabase getCategories error:', err);
     }
   }
   return getLocalData<OccasionCategory[]>(STORAGE_KEYS.CATEGORIES, OCCASION_CATEGORIES);
@@ -487,20 +646,25 @@ export const updateCategory = async (
   updates: Partial<OccasionCategory>
 ): Promise<OccasionCategory> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const dbUpdates: any = { ...updates };
-    if ('bgColor' in updates) dbUpdates.bg_color = updates.bgColor;
-    if ('isAvailable' in updates) dbUpdates.is_available = updates.isAvailable;
-    delete dbUpdates.bgColor;
-    delete dbUpdates.isAvailable;
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const dbUpdates: any = {};
+      if (updates.name !== undefined) dbUpdates.name = updates.name;
+      if (updates.tagline !== undefined) dbUpdates.tagline = updates.tagline;
+      if (updates.description !== undefined) dbUpdates.description = updates.description;
+      if (updates.badge !== undefined) dbUpdates.badge = updates.badge;
+      if (updates.isAvailable !== undefined) dbUpdates.is_active = updates.isAvailable;
 
-    const { data } = await supabase
-      .from('categories')
-      .update(dbUpdates)
-      .eq('id', id)
-      .select()
-      .single();
-    if (data) return data;
+      const { data } = await supabase
+        .from('categories')
+        .update(dbUpdates)
+        .eq('id', id)
+        .select()
+        .single();
+      if (data) return data;
+    } catch (err) {
+      console.warn('Supabase updateCategory error:', err);
+    }
   }
 
   const current = getLocalData<OccasionCategory[]>(STORAGE_KEYS.CATEGORIES, OCCASION_CATEGORIES);
@@ -515,12 +679,25 @@ export const updateCategory = async (
 
 export const getThemes = async (): Promise<ThemeOption[]> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('themes')
-      .select('*')
-      .order('name', { ascending: true });
-    if (!error && data) return data as ThemeOption[];
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('themes')
+        .select('*')
+        .order('name', { ascending: true });
+      if (!error && data && data.length > 0) {
+        return data.map((d: any) => ({
+          id: d.id,
+          name: d.name,
+          colors: d.colour_palette || [],
+          colour_palette: d.colour_palette || [],
+          isAvailable: Boolean(d.is_active),
+          description: '',
+        })) as ThemeOption[];
+      }
+    } catch (err) {
+      console.warn('Supabase getThemes error:', err);
+    }
   }
   return getLocalData<ThemeOption[]>(STORAGE_KEYS.THEMES, AVAILABLE_THEMES);
 };
@@ -530,14 +707,23 @@ export const updateTheme = async (
   updates: Partial<ThemeOption>
 ): Promise<ThemeOption> => {
   const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data } = await supabase
-      .from('themes')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
-    if (data) return data as ThemeOption;
+  if (supabase && isSupabaseConfigured()) {
+    try {
+      const dbUpdates: any = {};
+      if (updates.name !== undefined) dbUpdates.name = updates.name;
+      if (updates.isAvailable !== undefined) dbUpdates.is_active = updates.isAvailable;
+      if (updates.colors !== undefined) dbUpdates.colour_palette = updates.colors;
+
+      const { data } = await supabase
+        .from('themes')
+        .update(dbUpdates)
+        .eq('id', id)
+        .select()
+        .single();
+      if (data) return data as ThemeOption;
+    } catch (err) {
+      console.warn('Supabase updateTheme error:', err);
+    }
   }
 
   const current = getLocalData<ThemeOption[]>(STORAGE_KEYS.THEMES, AVAILABLE_THEMES);
@@ -555,17 +741,6 @@ export const updateTheme = async (
 // ============================================================================
 
 export const getBusinessSettings = async (): Promise<BusinessSettings> => {
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'business_profile')
-      .single();
-    if (!error && data?.value) {
-      return data.value as BusinessSettings;
-    }
-  }
   return getLocalData<BusinessSettings>(STORAGE_KEYS.SETTINGS, INITIAL_SETTINGS);
 };
 
@@ -574,17 +749,6 @@ export const updateBusinessSettings = async (
 ): Promise<BusinessSettings> => {
   const current = await getBusinessSettings();
   const updated: BusinessSettings = { ...current, ...updates };
-
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    await supabase.from('settings').upsert({
-      key: 'business_profile',
-      value: updated,
-      is_public: true,
-      updated_at: new Date().toISOString(),
-    });
-  }
-
   setLocalData(STORAGE_KEYS.SETTINGS, updated);
   return updated;
 };
