@@ -106,7 +106,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
   return (
     <section id="compare" className="py-16 md:py-24 relative scroll-mt-28">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full badge-teal text-xs font-bold uppercase tracking-wider">
@@ -126,21 +126,19 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
           <div className="grid grid-cols-2 p-1 bg-white border border-brand-ink/10 rounded-xl shadow-xs">
             <button
               onClick={() => setMobileTab('mini')}
-              className={`py-2.5 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
-                mobileTab === 'mini'
+              className={`py-2.5 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${mobileTab === 'mini'
                   ? 'bg-brand-ink text-white shadow-xs'
                   : 'text-brand-ink hover:text-brand-pink'
-              }`}
+                }`}
             >
               Mini Box ({formatPrice(PRODUCTS[0].price)})
             </button>
             <button
               onClick={() => setMobileTab('signature')}
-              className={`py-2.5 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
-                mobileTab === 'signature'
+              className={`py-2.5 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${mobileTab === 'signature'
                   ? 'bg-brand-pink text-white shadow-xs'
                   : 'text-brand-ink hover:text-brand-pink'
-              }`}
+                }`}
             >
               Signature Box ({formatPrice(PRODUCTS[1].price)})
             </button>
@@ -226,9 +224,8 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
               {comparisonRows.map((row, index) => (
                 <tr
                   key={index}
-                  className={`hover:bg-brand-cream-50/50 transition-colors ${
-                    row.isHighlight ? 'bg-amber-50/40' : ''
-                  }`}
+                  className={`hover:bg-brand-cream-50/50 transition-colors ${row.isHighlight ? 'bg-amber-50/40' : ''
+                    }`}
                 >
                   <td className="py-3.5 px-6 text-brand-ink font-medium">
                     {row.feature}
