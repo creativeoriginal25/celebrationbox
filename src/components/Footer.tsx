@@ -3,10 +3,9 @@ import { MessageCircle, Mail, MapPin } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/business';
 import { PolicyType } from './PolicyModal';
 import { CelebrationBoxLogo } from './CelebrationBoxLogo';
-import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
 
 interface FooterProps {
-  onOpenOrder?: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
+  onOpenOrder: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
   onOpenPolicy: (type: PolicyType) => void;
 }
 
@@ -27,65 +26,23 @@ const InstagramIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4'
   </svg>
 );
 
-export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => {
   const currentYear = new Date().getFullYear();
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    e.preventDefault();
-    if (typeof window === 'undefined') return;
-
-    if (window.location.hash.startsWith('#/product') || window.location.hash.startsWith('#/category')) {
-      window.location.hash = '';
-      setTimeout(() => {
-        const element = document.getElementById(targetId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 80);
-      return;
-    }
-
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleWhatsAppClick = (e: React.MouseEvent) => {
-    const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-      navigator.userAgent || ''
-    );
-    const message =
-      'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration.';
-    const url = buildWhatsAppLink(BUSINESS_CONFIG.whatsappNumber, message);
-
-    if (isMobile) {
-      e.preventDefault();
-      window.location.href = url;
-    } else {
-      triggerWhatsAppChat(url);
-    }
-  };
-
-  const directWhatsAppUrl = buildWhatsAppLink(
-    BUSINESS_CONFIG.whatsappNumber,
-    'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration.'
-  );
 
   return (
     <footer className="relative bg-[#252533] text-white pt-14 pb-10 border-t border-white/5 select-none">
-      {/* Top Brand Gradient Accent Stripe */}
+      {/* Top Brand Gradient Stripe */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-pink via-brand-marigold to-brand-teal" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Four-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-12 border-b border-white/10">
-          
+
           {/* ========================================================
               COLUMN 1 – BRAND
              ======================================================== */}
           <div className="space-y-4">
-            {/* Transparent Brand Logo */}
+            {/* Transparent Brand Logo (No white placeholder box) */}
             <div className="flex items-center">
               <CelebrationBoxLogo
                 className="h-8 sm:h-9 w-auto"
@@ -101,89 +58,80 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
                 <span className="text-gray-400 font-normal">— Make Every Moment Special.</span>
               </p>
               <p className="text-xs sm:text-sm text-gray-300/90 leading-relaxed max-w-sm">
-                Beautiful DIY celebration kits, thoughtfully curated for life&apos;s special moments.
+                Thoughtfully curated DIY birthday decoration kits, designed to make every celebration special.
               </p>
             </div>
 
-            {/* Configured Social Media & Contact Links */}
+            {/* Social Media Links */}
             <div className="flex items-center gap-2.5 pt-1">
-              {BUSINESS_CONFIG.instagramUrl && (
-                <a
-                  href={BUSINESS_CONFIG.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-xl bg-white/10 hover:bg-brand-pink flex items-center justify-center transition-all duration-200 text-white shadow-xs hover:scale-105 active:scale-95"
-                  aria-label="Follow us on Instagram"
-                >
-                  <InstagramIcon className="w-4 h-4" />
-                </a>
-              )}
-
-              {BUSINESS_CONFIG.email && (
-                <a
-                  href={`mailto:${BUSINESS_CONFIG.email}`}
-                  className="w-9 h-9 rounded-xl bg-white/10 hover:bg-brand-teal flex items-center justify-center transition-all duration-200 text-white shadow-xs hover:scale-105 active:scale-95"
-                  aria-label="Email Celebration Box"
-                >
-                  <Mail className="w-4 h-4" />
-                </a>
-              )}
-
               <a
-                href={directWhatsAppUrl}
+                href={BUSINESS_CONFIG.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={handleWhatsAppClick}
+                className="w-9 h-9 rounded-xl bg-white/10 hover:bg-brand-pink flex items-center justify-center transition-all duration-200 text-white shadow-xs hover:scale-105 active:scale-95"
+                aria-label="Follow us on Instagram"
+              >
+                <InstagramIcon className="w-4 h-4" />
+              </a>
+
+              <a
+                href={`mailto:${BUSINESS_CONFIG.email}`}
+                className="w-9 h-9 rounded-xl bg-white/10 hover:bg-brand-teal flex items-center justify-center transition-all duration-200 text-white shadow-xs hover:scale-105 active:scale-95"
+                aria-label="Email Celebration Box"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+
+              <button
+                onClick={() => onOpenOrder()}
                 className="w-9 h-9 rounded-xl bg-white/10 hover:bg-emerald-600 flex items-center justify-center transition-all duration-200 text-white shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
                 aria-label="Chat on WhatsApp"
               >
                 <MessageCircle className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
 
           {/* ========================================================
-              COLUMN 2 – EXPLORE
+              COLUMN 2 – CELEBRATION KITS
              ======================================================== */}
           <div className="space-y-3.5">
             <h4 className="text-xs font-bold uppercase tracking-wider text-brand-marigold">
-              Explore
+              Celebration Kits
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-gray-300">
               <li>
-                <a
-                  href="#shop"
-                  onClick={(e) => handleNavClick(e, 'shop')}
-                  className="hover:text-brand-pink transition-colors block text-left"
+                <button
+                  onClick={() => onOpenOrder('mini-celebration-box')}
+                  className="hover:text-brand-pink transition-colors text-left cursor-pointer flex items-center gap-1.5"
                 >
-                  Birthday Kits
-                </a>
+                  <span>Mini Celebration Box</span>
+                  <span className="text-brand-pink font-semibold text-xs">— ₹249</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onOpenOrder('signature-celebration-box')}
+                  className="hover:text-brand-pink transition-colors text-left cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>Pastel Rose Celebration Box</span>
+                  <span className="text-brand-pink font-semibold text-xs">— ₹399</span>
+                </button>
               </li>
               <li>
                 <a
-                  href="#categories"
-                  onClick={(e) => handleNavClick(e, 'categories')}
-                  className="hover:text-brand-pink transition-colors block text-left"
+                  href="#compare"
+                  className="hover:text-brand-pink transition-colors block"
                 >
-                  Shop by Occasion
+                  Compare Our Boxes
                 </a>
               </li>
               <li>
                 <a
                   href="#how-it-works"
-                  onClick={(e) => handleNavClick(e, 'how-it-works')}
-                  className="hover:text-brand-pink transition-colors block text-left"
+                  className="hover:text-brand-pink transition-colors block"
                 >
                   How It Works
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#about"
-                  onClick={(e) => handleNavClick(e, 'about')}
-                  className="hover:text-brand-pink transition-colors block text-left"
-                >
-                  About Us
                 </a>
               </li>
             </ul>
@@ -201,30 +149,26 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
                 <MapPin className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
                 <span>Bhimavaram, Andhra Pradesh, India</span>
               </li>
-              {BUSINESS_CONFIG.email && (
-                <li className="flex items-center gap-2.5">
-                  <Mail className="w-4 h-4 text-brand-teal shrink-0" />
-                  <a
-                    href={`mailto:${BUSINESS_CONFIG.email}`}
-                    className="hover:text-white hover:underline transition-colors truncate"
-                  >
-                    {BUSINESS_CONFIG.email}
-                  </a>
-                </li>
-              )}
-              {BUSINESS_CONFIG.instagramUrl && (
-                <li className="flex items-center gap-2.5">
-                  <InstagramIcon className="w-4 h-4 text-brand-teal shrink-0" />
-                  <a
-                    href={BUSINESS_CONFIG.instagramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-white hover:underline transition-colors truncate"
-                  >
-                    @celebrationbox.in
-                  </a>
-                </li>
-              )}
+              <li className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-brand-teal shrink-0" />
+                <a
+                  href={`mailto:${BUSINESS_CONFIG.email}`}
+                  className="hover:text-white hover:underline transition-colors truncate"
+                >
+                  {BUSINESS_CONFIG.email}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <InstagramIcon className="w-4 h-4 text-brand-teal shrink-0" />
+                <a
+                  href={BUSINESS_CONFIG.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white hover:underline transition-colors truncate"
+                >
+                  @celebrationbox.in
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -234,17 +178,28 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
           <div className="p-5 rounded-2xl bg-white/[0.04] border border-white/10 shadow-sm flex flex-col justify-between space-y-3.5">
             <div className="space-y-1.5">
               <span className="text-[10px] font-bold uppercase tracking-wider text-brand-pink block">
-                Let&apos;s Celebrate
+                Got a celebration?
               </span>
               <h5 className="text-sm font-bold text-white leading-tight">
-                Planning something special? Find the right celebration kit for your moment.
+                Find the perfect box for your next special moment.
               </h5>
             </div>
             <a
-              href={directWhatsAppUrl}
+              href={`https://wa.me/919100280705?text=${encodeURIComponent(
+                'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration.'
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handleWhatsAppClick}
+              onClick={(e) => {
+                const userAgent = navigator.userAgent || '';
+                const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                if (isMobile) {
+                  e.preventDefault();
+                  window.location.href = `https://wa.me/919100280705?text=${encodeURIComponent(
+                    'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration.'
+                  )}`;
+                }
+              }}
               className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-[0_4px_14px_0_rgba(233,30,99,0.30)] hover:shadow-[0_6px_20px_0_rgba(233,30,99,0.40)] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <MessageCircle className="w-4 h-4" />
