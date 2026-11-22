@@ -9,6 +9,8 @@ import { OrderCustomizerModal } from './components/OrderCustomizerModal';
 import { WhatsAppFallbackModal } from './components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from './components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from './components/PolicyModal';
+import { BrandSplashScreen, SPLASH_STORAGE_KEY } from './components/splash/BrandSplashScreen';
+import { SplashToHomeTransition } from './components/splash/SplashToHomeTransition';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { Product } from './types';
@@ -100,6 +102,18 @@ const AppRouter: React.FC = () => {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
   const [orderModalMode, setOrderModalMode] = useState<'buy-now' | 'cart'>('buy-now');
   const [orderModalProductId, setOrderModalProductId] = useState<string>('signature-celebration-box');
+
+  // Smart branded splash screen state: show once per tab session on initial homepage visit
+  const [showSplash, setShowSplash] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const initialRoute = parseRoute();
+    if (initialRoute.type !== 'home') return false;
+    try {
+      return !sessionStorage.getItem(SPLASH_STORAGE_KEY);
+    } catch {
+      return false;
+    }
+  });
 
   const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
   const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
@@ -260,10 +274,17 @@ const AppRouter: React.FC = () => {
           onOpenPolicy={(policy) => setActivePolicy(policy)}
         />
       ) : (
-        <Home
-          onNavigateToProduct={navigateToProduct}
-          onNavigateToCategory={navigateToCategory}
-        />
+        <SplashToHomeTransition isSplashActive={showSplash}>
+          <Home
+            onNavigateToProduct={navigateToProduct}
+            onNavigateToCategory={navigateToCategory}
+          />
+        </SplashToHomeTransition>
+      )}
+
+      {/* Branded Opening Splash Screen (Shown once per tab session on initial homepage visit) */}
+      {showSplash && (
+        <BrandSplashScreen onComplete={() => setShowSplash(false)} />
       )}
 
       {/* Global Modals & Drawers (Only for public store views) */}
