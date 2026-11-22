@@ -10,6 +10,8 @@ import { AdminTemplatesModal } from './components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from './components/PolicyModal';
 import { Product } from './types';
 import { CheckCircle2, ShoppingBag } from 'lucide-react';
+import { BUSINESS_CONFIG } from './config/business';
+import { buildWhatsAppLink, triggerWhatsAppChat } from './services/whatsappService';
 
 type RouteState =
   | { type: 'home' }

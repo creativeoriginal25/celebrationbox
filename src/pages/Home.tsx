@@ -16,6 +16,7 @@ import { AdminTemplatesModal } from '../components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from '../components/PolicyModal';
 import { ScrollReveal } from '../components/react-bits/ScrollReveal';
 import { OccasionCategoryGrid } from '../components/OccasionCategoryGrid';
+import { PRODUCTS } from '../config/products';
 import { BUSINESS_CONFIG } from '../config/business';
 import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
 import { Product, OccasionCategory } from '../types';
@@ -82,9 +83,14 @@ export const HomeContent: React.FC<HomeProps> = ({
   ) => {
     if (productId) {
       setOrderModalProductId(productId);
+      setOrderModalMode('buy-now');
+      setIsOrderModalOpen(true);
+    } else {
+      const message =
+        'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration. Please share details and availability!';
+      const url = buildWhatsAppLink(BUSINESS_CONFIG.whatsappNumber, message);
+      triggerWhatsAppChat(url);
     }
-    setOrderModalMode('buy-now');
-    setIsOrderModalOpen(true);
   };
 
   const handleOpenFallback = (message: string, isConfigured: boolean) => {
