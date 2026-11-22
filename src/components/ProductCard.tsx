@@ -40,7 +40,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           />
           <div className="absolute bottom-2.5 left-3">
             <span className="bg-white/90 backdrop-blur-xs px-2.5 py-0.5 rounded-md text-[11px] font-semibold text-brand-ink border border-brand-ink/10 shadow-xs">
-              Theme: Pastel Pop
+              Theme: Pink × Lavender × Rose Gold
             </span>
           </div>
           <div className="absolute top-2.5 right-3 opacity-0 group-hover:opacity-100 transition-opacity">

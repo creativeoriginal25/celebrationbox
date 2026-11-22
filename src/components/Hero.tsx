@@ -128,13 +128,27 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
               <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
 
-            <button
-              onClick={() => onOpenOrder('signature-celebration-box')}
+            <a
+              href={`https://wa.me/919100280705?text=${encodeURIComponent(
+                'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration. Please share details and availability!'
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                const userAgent = navigator.userAgent || '';
+                const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                if (isMobile) {
+                  e.preventDefault();
+                  window.location.href = `https://wa.me/919100280705?text=${encodeURIComponent(
+                    'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration. Please share details and availability!'
+                  )}`;
+                }
+              }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 h-[48px] rounded-xl text-[15px] font-semibold text-brand-ink bg-white hover:bg-brand-cream-100 border border-brand-ink/15 shadow-sm active:scale-98 transition-all cursor-pointer pointer-events-auto"
             >
               <MessageCircle className="w-4 h-4 text-brand-teal shrink-0" />
               <span>Order on WhatsApp</span>
-            </button>
+            </a>
           </div>
 
         </div>

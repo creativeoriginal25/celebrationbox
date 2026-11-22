@@ -60,8 +60,8 @@ export const validateOrderForm = (order: Partial<OrderDetails>): { isValid: bool
   }
 
   // Theme check
-  if (order.theme && order.theme !== 'Pastel Pop') {
-    errors.theme = 'Only the Pastel Pop theme is currently available';
+  if (order.theme && !['Pink × Lavender × Rose Gold', 'Pastel Rose', 'Pastel Pop'].includes(order.theme)) {
+    errors.theme = 'Only the Pink × Lavender × Rose Gold theme is currently available';
   }
 
   return {

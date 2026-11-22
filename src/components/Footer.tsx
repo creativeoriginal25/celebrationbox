@@ -184,13 +184,27 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
                 Find the perfect box for your next special moment.
               </h5>
             </div>
-            <button
-              onClick={() => onOpenOrder()}
+            <a
+              href={`https://wa.me/919100280705?text=${encodeURIComponent(
+                'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration.'
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                const userAgent = navigator.userAgent || '';
+                const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+                if (isMobile) {
+                  e.preventDefault();
+                  window.location.href = `https://wa.me/919100280705?text=${encodeURIComponent(
+                    'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration.'
+                  )}`;
+                }
+              }}
               className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-[0_4px_14px_0_rgba(233,30,99,0.30)] hover:shadow-[0_6px_20px_0_rgba(233,30,99,0.40)] hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <MessageCircle className="w-4 h-4" />
               <span>Order on WhatsApp</span>
-            </button>
+            </a>
           </div>
 
         </div>

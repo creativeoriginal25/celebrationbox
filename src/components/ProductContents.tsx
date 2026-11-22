@@ -33,7 +33,7 @@ export const ProductContents: React.FC<ProductContentsProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base sm:text-lg font-extrabold text-brand-ink">
-                What's Inside the Pack
+                What's Inside the Box
               </h3>
               {totalPieces && (
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">

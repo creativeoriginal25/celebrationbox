@@ -21,6 +21,14 @@ interface CategoryProductsProps {
 
 // Clean itemized contents according to exact retail specification
 const PRODUCT_INCLUSIONS: Record<string, string[]> = {
+  'signature-celebration-box': [
+    '26 Pink Latex Balloons',
+    '26 Lavender Latex Balloons',
+    '5 Rose Gold Chrome Balloons',
+    '1 Rose Gold Happy Birthday Banner',
+    '1 Balloon Arch Strip',
+    '1 Glue Dot Roll (100 dots)',
+  ],
   'mini-celebration-box': [
     '12 latex balloons (4 Peach, 4 Lilac, 4 Cream)',
     '1 Happy Birthday banner',
@@ -31,25 +39,11 @@ const PRODUCT_INCLUSIONS: Record<string, string[]> = {
     '1 DIY instruction card',
     '1 branded sticker',
   ],
-  'signature-celebration-box': [
-    '20 latex balloons',
-    '1 Happy Birthday banner',
-    '1 six-foot shimmer backdrop curtain',
-    '1 18-inch birthday foil balloon',
-    '2 metres balloon arch strip',
-    '20 balloon glue dots',
-    '6 photo booth props',
-    '1 manual balloon hand pump',
-    '1 six-piece cake candle pack',
-    '3 metres curling ribbon',
-    '1 DIY instruction card',
-    '1 branded sticker',
-  ],
 };
 
 const PRODUCT_EXCLUSIONS: Record<string, string> = {
+  'signature-celebration-box': 'Cake, backdrop curtain, metal arch stand, and balloon pump are not included.',
   'mini-celebration-box': 'Balloon pump, cake and helium are not included.',
-  'signature-celebration-box': 'Cake and helium are not included.',
 };
 
 export const CategoryProducts: React.FC<CategoryProductsProps> = ({
@@ -122,8 +116,8 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
         {/* Products Section */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {category.isAvailable ? (
-            /* Desktop: Two columns, Mobile: One column */
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+            /* Desktop: Two columns if multiple, centered if single product */
+            <div className={`grid grid-cols-1 ${productsToDisplay.length > 1 ? 'md:grid-cols-2' : 'max-w-xl mx-auto'} gap-6 lg:gap-8 items-stretch`}>
               {productsToDisplay.map((product, index) => {
                 const inclusions = PRODUCT_INCLUSIONS[product.id] || product.inclusions;
                 const exclusions = PRODUCT_EXCLUSIONS[product.id] || product.exclusions?.join('. ');
@@ -137,18 +131,18 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
                     className="h-full"
                   >
                     <div className="bg-white rounded-3xl p-6 sm:p-7 border border-brand-ink/10 shadow-xs hover:shadow-card transition-shadow flex flex-col justify-between h-full">
-                      
+
                       {/* Top Content Area */}
                       <div>
                         {/* 1. Large Product Photograph */}
                         <div
                           onClick={() => onSelectProduct(product)}
-                          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-brand-cream-50/70 border border-brand-ink/5 mb-5 cursor-pointer group flex items-center justify-center p-4"
+                          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-brand-cream-50/70 border border-brand-ink/5 mb-5 cursor-pointer group flex items-center justify-center p-3"
                         >
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-103 select-none"
+                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-102 select-none"
                             loading="eager"
                           />
                         </div>
@@ -156,10 +150,15 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
                         {/* 2. Product Name */}
                         <h2
                           onClick={() => onSelectProduct(product)}
-                          className="font-display font-extrabold text-xl sm:text-2xl text-brand-ink hover:text-brand-pink transition-colors cursor-pointer mb-2 leading-snug"
+                          className="font-display font-extrabold text-xl sm:text-2xl text-brand-ink hover:text-brand-pink transition-colors cursor-pointer mb-1 leading-snug"
                         >
                           {product.name}
                         </h2>
+
+                        {/* Tagline */}
+                        <p className="text-xs sm:text-sm font-semibold text-brand-teal mb-3">
+                          {product.tagline}
+                        </p>
 
                         {/* 3. Clearly Visible Price */}
                         <div className="flex items-baseline gap-1.5 mb-5">

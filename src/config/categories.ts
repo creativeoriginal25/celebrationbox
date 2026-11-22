@@ -7,14 +7,14 @@ export const OCCASION_CATEGORIES: OccasionCategory[] = [
     name: "Kid's Birthday",
     tagline: 'Playful & Joyful DIY Birthday Kits',
     description:
-      'Colourful balloons and celebration essentials designed for joyful birthday parties. Our universal Pastel Pop DIY birthday kits are fun, safe, and easy to set up.',
+      'Everything you need to turn an ordinary space into a beautiful birthday moment. Curated in our signature Pink × Lavender × Rose Gold theme.',
     image: '/categories/kids-birthday.svg',
     bgColor: '#FFF5E0',
     isAvailable: true,
     badge: 'Available Now',
     availableNotice:
-      'General DIY Birthday Collection: Our all-in-one birthday boxes feature aesthetic pastel color palettes and universal birthday styling suitable for kids, teens, and adults.',
-    relatedProductIds: ['mini-celebration-box', 'signature-celebration-box'],
+      'Official Birthday Collection: Featuring the Pastel Rose Celebration Box with 60 pieces.',
+    relatedProductIds: ['signature-celebration-box'],
   },
   {
     id: 'adults-birthday',
@@ -28,8 +28,8 @@ export const OCCASION_CATEGORIES: OccasionCategory[] = [
     isAvailable: true,
     badge: 'Available Now',
     availableNotice:
-      'General DIY Birthday Collection: Curated aesthetic celebration boxes with photo backdrops, metallic foil accents, and wall-safe glue dots.',
-    relatedProductIds: ['signature-celebration-box', 'mini-celebration-box'],
+      'Official Birthday Collection: Featuring the Pastel Rose Celebration Box with 60 pieces.',
+    relatedProductIds: ['signature-celebration-box'],
   },
   {
     id: 'festive',

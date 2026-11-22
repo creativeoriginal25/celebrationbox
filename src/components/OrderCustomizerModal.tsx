@@ -61,7 +61,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
     initialProductId
   );
   const [quantity, setQuantity] = useState<number>(1);
-  const [selectedTheme] = useState<string>('Marigold & Teal');
+  const [selectedTheme] = useState<string>(AVAILABLE_THEMES[0]?.name || 'Pink × Lavender × Rose Gold');
 
   // Customer & celebration fields
   const [customerName, setCustomerName] = useState<string>('');
@@ -77,6 +77,9 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [showConfigHelper, setShowConfigHelper] = useState<boolean>(false);
   const [customWhatsAppOverride, setCustomWhatsAppOverride] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submittedUrl, setSubmittedUrl] = useState<string | null>(null);
+  const [submitAttempted, setSubmitAttempted] = useState<boolean>(false);
 
   const activeProduct = PRODUCTS.find((p) => p.id === selectedProductId) || PRODUCTS[1];
   const activeTheme = AVAILABLE_THEMES.find((t) => t.name === selectedTheme) || AVAILABLE_THEMES[0];
@@ -402,8 +405,8 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {PRODUCTS.map((prod) => {
+              <div className={`grid grid-cols-1 ${PRODUCTS.filter((p) => p.active !== false).length > 1 ? 'sm:grid-cols-2' : ''} gap-3`}>
+                {PRODUCTS.filter((p) => p.active !== false).map((prod) => {
                   const isSelected = selectedProductId === prod.id;
                   return (
                     <div

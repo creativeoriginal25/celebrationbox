@@ -160,9 +160,9 @@ export const HomeContent: React.FC<HomeProps> = ({
               </div>
             </ScrollReveal>
 
-            {/* Product Cards Grid: Exactly Two Products */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-              {PRODUCTS.map((product, idx) => (
+            {/* Product Cards Grid: Active Products */}
+            <div className={`grid grid-cols-1 ${PRODUCTS.filter((p) => p.active !== false).length > 1 ? 'md:grid-cols-2 max-w-5xl' : 'max-w-xl'} gap-8 mx-auto`}>
+              {PRODUCTS.filter((p) => p.active !== false).map((product, idx) => (
                 <ScrollReveal key={product.id} delay={idx * 0.1} yOffset={24}>
                   <ProductCard
                     product={product}
@@ -174,19 +174,23 @@ export const HomeContent: React.FC<HomeProps> = ({
             </div>
 
             {/* Bottom Inclusions Note */}
-            <div className="mt-12 text-center">
-              <p className="text-xs text-brand-ink-muted">
-                Need to compare full kit items side-by-side? See the complete comparison table below.
-              </p>
-            </div>
+            {PRODUCTS.filter((p) => p.active !== false).length > 1 && (
+              <div className="mt-12 text-center">
+                <p className="text-xs text-brand-ink-muted">
+                  Need to compare full kit items side-by-side? See the complete comparison table below.
+                </p>
+              </div>
+            )}
 
           </div>
         </section>
 
         {/* Product Comparison Section with ScrollReveal */}
-        <ScrollReveal yOffset={24}>
-          <ProductComparison onOrderNow={handleDirectWhatsAppOrder} />
-        </ScrollReveal>
+        {PRODUCTS.filter((p) => p.active !== false).length > 1 && (
+          <ScrollReveal yOffset={24}>
+            <ProductComparison onOrderNow={handleDirectWhatsAppOrder} />
+          </ScrollReveal>
+        )}
 
         {/* How It Works Section with ScrollReveal */}
         <ScrollReveal yOffset={24}>

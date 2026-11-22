@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, ShoppingCart, Check, Clock, ShieldCheck, Sparkles, Truck, HelpCircle } from 'lucide-react';
+import { Zap, ShoppingCart, Sparkles, Check, Info } from 'lucide-react';
 import { Product } from '../types';
 import { AVAILABLE_THEMES } from '../config/products';
 import { formatPrice } from '../utils/currency';
@@ -18,11 +18,10 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState<number>(1);
 
-  const isSignature = product.id === 'signature-celebration-box';
-  const setupTime = isSignature ? '30–40 mins DIY' : '15–20 mins DIY';
-
-  // Get active theme
-  const currentTheme = AVAILABLE_THEMES.find((t) => product.availableThemes.includes(t.id)) || AVAILABLE_THEMES[0];
+  // Active theme
+  const currentTheme =
+    AVAILABLE_THEMES.find((t) => product.availableThemes.includes(t.id)) ||
+    AVAILABLE_THEMES[0];
 
   const handleDecreaseQty = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -42,95 +41,68 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
 
   return (
     <div className="flex flex-col space-y-6">
-      {/* Title & Badge */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase badge-pink">
+      {/* 1. Product Name */}
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-brand-pink/10 text-brand-pink border border-brand-pink/20">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>{product.badge || (isSignature ? 'Signature Edition' : 'Budget Pick')}</span>
-          </span>
-
-          {/* Actual Inventory Availability Status */}
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>In Stock • Ready to Dispatch</span>
+            <span>Official Celebration Kit</span>
           </span>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-ink leading-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-ink leading-tight font-display">
           {product.name}
         </h1>
-
-        <p className="text-sm sm:text-base font-semibold text-brand-teal">
-          {product.tagline}
-        </p>
       </div>
 
-      {/* Price & Value Proposition */}
-      <div className="flex items-baseline gap-3 pb-4 border-b border-brand-ink/10">
+      {/* 2. Price */}
+      <div className="flex items-baseline gap-3 pb-3 border-b border-brand-ink/10">
         <span className="text-3xl sm:text-4xl font-black text-brand-pink tracking-tight">
           {formatPrice(product.price)}
         </span>
         <span className="text-xs sm:text-sm text-brand-ink-muted">
-          All taxes included • 100% complete kit
+          All-inclusive price • 60 pieces total
         </span>
       </div>
 
-      {/* Short Description */}
-      <div className="text-xs sm:text-sm text-brand-ink-light leading-relaxed space-y-2">
-        <p>{product.description}</p>
-        <p className="text-xs text-brand-ink-muted">
-          <strong>Ideal For:</strong> {product.idealFor}
+      {/* 3. Tagline & Short Description */}
+      <div className="space-y-1.5">
+        <p className="text-base sm:text-lg font-bold text-brand-teal">
+          "{product.tagline}"
+        </p>
+        <p className="text-sm text-brand-ink-light leading-relaxed">
+          {product.description}
         </p>
       </div>
 
-      {/* Theme Configuration */}
-      <div className="p-3.5 rounded-xl bg-brand-cream-50 border border-brand-ink/10 space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-ink">
-              Theme: {currentTheme.name}
-            </span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-pink/15 text-brand-pink">
-              Active Color Palette
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            {currentTheme.colors.map((c, idx) => (
-              <span
-                key={idx}
-                className="w-4 h-4 rounded-full border border-brand-ink/20 shadow-2xs"
-                style={{ backgroundColor: c.hex }}
-                title={`${c.name} (${c.hex})`}
-              />
-            ))}
-          </div>
+      {/* Theme Colors Indicator */}
+      <div className="p-3.5 rounded-xl bg-brand-cream-50 border border-brand-ink/10 flex items-center justify-between">
+        <div>
+          <span className="text-[11px] font-bold uppercase tracking-wider text-brand-ink-muted block">
+            Theme Palette
+          </span>
+          <span className="text-xs sm:text-sm font-bold text-brand-ink">
+            {currentTheme.name}
+          </span>
         </div>
-        <p className="text-[11px] text-brand-ink-muted">
-          {currentTheme.description}
-        </p>
-      </div>
-
-      {/* Setup Highlights & Quick Specs */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-        <div className="p-2.5 rounded-xl bg-white border border-brand-ink/10 text-center">
-          <Clock className="w-4 h-4 text-brand-marigold mx-auto mb-1" />
-          <span className="text-[11px] font-bold text-brand-ink block">{setupTime}</span>
-          <span className="text-[10px] text-brand-ink-muted">Foolproof DIY</span>
-        </div>
-        <div className="p-2.5 rounded-xl bg-white border border-brand-ink/10 text-center">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
-          <span className="text-[11px] font-bold text-brand-ink block">Wall-Safe Dots</span>
-          <span className="text-[10px] text-brand-ink-muted">Zero wall marks</span>
-        </div>
-        <div className="p-2.5 rounded-xl bg-white border border-brand-ink/10 text-center col-span-2 sm:col-span-1">
-          <Truck className="w-4 h-4 text-brand-teal mx-auto mb-1" />
-          <span className="text-[11px] font-bold text-brand-ink block">Fast Dispatch</span>
-          <span className="text-[10px] text-brand-ink-muted">Campus &amp; Local</span>
+        <div className="flex items-center gap-1.5">
+          {currentTheme.colors.map((c, idx) => (
+            <span
+              key={idx}
+              className="w-5 h-5 rounded-full border border-brand-ink/20 shadow-xs"
+              style={{ backgroundColor: c.hex }}
+              title={c.name}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Purchase Actions: Quantity + Buy Now + Add to Cart */}
+      {/* 4. What's Inside the Box & Exact Product Contents */}
+      <div>
+        <ProductContents product={product} defaultExpanded={true} />
+      </div>
+
+      {/* 5. Quantity + Buy Now & Add to Cart */}
       <div className="space-y-3 pt-2">
         <div className="flex items-center gap-3">
           {/* Quantity selector */}
@@ -163,9 +135,9 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
           </div>
         </div>
 
-        {/* TWO PRIMARY SHOPPING BUTTONS */}
+        {/* Action Buttons: Buy Now & Add to Cart */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* 1. Buy Now (Primary rani-pink button, direct purchase) */}
+          {/* Buy Now */}
           <button
             type="button"
             onClick={handleDirectBuy}
@@ -175,7 +147,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
             <span>Buy Now</span>
           </button>
 
-          {/* 2. Add to Cart (White/warm off-white background, dark ink text, subtle dark/pink border) */}
+          {/* Add to Cart */}
           <button
             type="button"
             onClick={handleAddToCart}
@@ -187,9 +159,12 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
         </div>
       </div>
 
-      {/* What's Inside the Pack (Collapsible / structured panel) */}
-      <div className="pt-2">
-        <ProductContents product={product} defaultExpanded={true} />
+      {/* 6. Honest Preview Note (Section 9) */}
+      <div className="p-3.5 rounded-xl bg-brand-cream-50 border border-brand-ink/10 flex items-start gap-2.5 text-xs text-brand-ink-muted leading-relaxed">
+        <Info className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
+        <p>
+          <strong>Visual Note:</strong> The garland photograph is an illustrative setup preview. Please refer to the "What's Inside the Box" infographic and itemized list above for the exact verified contents included in your kit.
+        </p>
       </div>
     </div>
   );

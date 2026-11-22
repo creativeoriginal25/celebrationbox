@@ -176,14 +176,49 @@ export const prepareCartWhatsAppOrder = (
 };
 
 /**
- * Dispatches order by opening WhatsApp reliably across desktop and mobile
+ * Dispatches order by opening WhatsApp reliably across desktop and mobile.
+ * Avoids popup-blocker issues on iOS/Android by navigating directly on mobile,
+ * and using window.open with location fallback on desktop.
  */
 export const triggerWhatsAppChat = (url: string): boolean => {
+  if (typeof window === 'undefined') return false;
+
+  const userAgent =
+    navigator.userAgent ||
+    navigator.vendor ||
+    (window as unknown as { opera?: string }).opera ||
+    '';
+  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+  // 1. Mobile devices (iOS Safari, Android Chrome):
+  // Direct location navigation triggers the mobile OS to launch the native WhatsApp app
+  // without triggering popup blockers or opening broken blank tabs.
+  if (isMobile) {
+    try {
+      window.location.href = url;
+      return true;
+    } catch (e) {
+      console.warn('Direct location navigation on mobile failed, trying fallback:', e);
+    }
+  }
+
+  // 2. Desktop browsers:
+  // Attempt window.open first
   try {
-    // 1. Try DOM anchor click - universally permitted by browsers as direct user navigation
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
+    if (win && !win.closed && typeof win.closed !== 'undefined') {
+      win.focus();
+      return true;
+    }
+  } catch (e) {
+    console.warn('window.open was blocked on desktop:', e);
+  }
+
+  // 3. Fallback: Hidden DOM anchor
+  try {
     const link = document.createElement('a');
     link.href = url;
-    link.target = '_blank';
+    link.target = isMobile ? '_self' : '_blank';
     link.rel = 'noopener noreferrer';
     document.body.appendChild(link);
     link.click();
@@ -191,15 +226,28 @@ export const triggerWhatsAppChat = (url: string): boolean => {
       if (document.body.contains(link)) {
         document.body.removeChild(link);
       }
-    }, 100);
+    }, 300);
     return true;
-  } catch (error) {
-    console.error('Failed to trigger WhatsApp link via anchor, falling back to location:', error);
-    try {
-      window.location.href = url;
-      return true;
-    } catch {
-      return false;
-    }
+  } catch (e) {
+    console.warn('Anchor fallback failed:', e);
   }
+
+  // 4. Universal fallback
+  try {
+    window.location.href = url;
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Direct WhatsApp chat launcher with default or custom order message
+ */
+export const openWhatsAppDirectly = (
+  customMessage: string = 'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration.'
+): boolean => {
+  const targetNumber = BUSINESS_CONFIG.whatsappNumber;
+  const url = buildWhatsAppLink(targetNumber, customMessage);
+  return triggerWhatsAppChat(url);
 };

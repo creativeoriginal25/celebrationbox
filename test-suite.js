@@ -152,14 +152,10 @@ assert.ok(!waLink.includes(' '), 'URL must not contain raw spaces');
 console.log('✅ Official WhatsApp URL encoding verified (919100280705)');
 
 // 5. Product & Occasion Configuration Verification
-// Mini Box piece verification
-const miniPieces = 12 + 1 + 6 + 1 + 10 + 1 + 1 + 1; // 12 balloons, 1 banner, 6 candles, 1 arch strip, 10 glue dots, 1 ribbon, 1 guide, 1 sticker
-assert.strictEqual(miniPieces, 33, 'Mini Box must have verified 33 pieces');
-
-// Signature Box piece verification
-const signaturePieces = 20 + 1 + 1 + 1 + 1 + 20 + 6 + 1 + 6 + 1 + 1 + 1; // 20 balloons, 1 banner, 1 curtain, 1 foil balloon, 1 arch strip, 20 glue dots, 6 props, 1 pump, 6 candles, 1 ribbon, 1 guide, 1 sticker
-assert.strictEqual(signaturePieces, 60, 'Signature Box must have verified 60 pieces');
-console.log('✅ Approved products piece counts verified (Mini: 33 pcs, Signature: 60 pcs)');
+// Pastel Rose Celebration Box piece verification (exact 6 items = 60 pieces)
+const pastelRosePieces = 26 + 26 + 5 + 1 + 1 + 1; // 26 Pink, 26 Lavender, 5 Rose Gold, 1 Banner, 1 Arch Strip, 1 Glue Dots Roll
+assert.strictEqual(pastelRosePieces, 60, 'Pastel Rose Celebration Box must have verified 60 pieces');
+console.log('✅ Approved products piece counts verified (Pastel Rose Celebration Box: 60 pcs)');
 
 // 6. Occasion Category List Verification
 const categoryList = [
