@@ -25,14 +25,26 @@ const NAV_ITEMS: NavItem[] = [
 export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('home');
   const { totalCount, setIsCartOpen } = useCart();
   const shouldReduceMotion = useReducedMotion();
 
-  // Scroll detection to subtly tune glass opacity & shadow
+  // Scroll detection to tune glass opacity, shadow & compact height on scroll down
   useEffect(() => {
+    let lastY = window.scrollY;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      const currentY = window.scrollY;
+      setIsScrolled(currentY > 15);
+
+      if (currentY > 60 && currentY > lastY) {
+        setIsCompact(true);
+      } else if (currentY < lastY || currentY <= 30) {
+        setIsCompact(false);
+      }
+
+      lastY = currentY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -125,20 +137,29 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
   return (
     <>
       {/* Sticky Floating Header Container */}
-      <header className="sticky top-3.5 sm:top-4 z-40 w-full px-3 sm:px-6 pointer-events-none transition-all duration-300">
+      <header
+        className={`sticky ${isCompact ? 'top-1.5 sm:top-2' : 'top-2 sm:top-3.5'} z-40 w-full px-2.5 sm:px-6 pointer-events-none transition-all duration-300`}
+        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      >
         <div
-          className={`max-w-[1240px] mx-auto pointer-events-auto rounded-[20px] transition-all duration-300 ${isScrolled
-              ? 'bg-white/[0.88] shadow-[0_12px_36px_0_rgba(43,43,58,0.08)] border-white/85'
-              : 'bg-white/[0.78] shadow-[0_8px_30px_0_rgba(43,43,58,0.04)] border-white/65'
-            } border backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]`}
+          className={`max-w-[1240px] mx-auto pointer-events-auto rounded-[18px] sm:rounded-[20px] transition-all duration-300 ${
+            isScrolled
+              ? 'bg-white/[0.88] shadow-[0_8px_30px_0_rgba(43,43,58,0.08)] border-white/85'
+              : 'bg-white/[0.80] shadow-[0_4px_20px_0_rgba(43,43,58,0.04)] border-white/70'
+          } border backdrop-blur-[20px] [-webkit-backdrop-filter:blur(20px)]`}
           style={{
-            // Inline fallbacks ensuring exact glassmorphism rendering across all browsers
-            backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.88)' : 'rgba(255, 255, 255, 0.78)',
+            backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.88)' : 'rgba(255, 255, 255, 0.80)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
           }}
         >
-          <div className="flex items-center justify-between h-[68px] sm:h-[72px] px-4 sm:px-6 lg:px-8">
+          <div
+            className={`flex items-center justify-between transition-all duration-300 px-3 sm:px-6 lg:px-8 ${
+              isCompact
+                ? 'h-[50px] sm:h-[58px] md:h-[64px]'
+                : 'h-[56px] sm:h-[64px] md:h-[68px]'
+            }`}
+          >
 
             {/* ========================================================
                 1. LEFT: OFFICIAL LOGO (COMPACT, NO RECTANGULAR BOX)
@@ -154,7 +175,7 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
                 aria-label="Celebration Box Home"
               >
                 <CelebrationBoxLogo
-                  className="w-[120px] sm:w-[125px] md:w-auto h-auto md:h-9"
+                  className="w-[115px] sm:w-[125px] md:w-auto h-auto md:h-9"
                   animated={false}
                   interactive={false}
                 />
@@ -174,10 +195,11 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
                   <button
                     key={item.id}
                     onClick={() => handleLinkClick(item.href)}
-                    className={`relative px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/50 ${isActive
+                    className={`relative px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/50 ${
+                      isActive
                         ? 'text-brand-pink font-semibold'
                         : 'text-brand-ink/80 hover:text-brand-pink hover:bg-brand-cream-50/60'
-                      }`}
+                    }`}
                   >
                     <span>{item.label}</span>
 
@@ -197,14 +219,14 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
             {/* ========================================================
                 3. RIGHT: SHOPPING BAG + PRIMARY PINK "SHOP NOW" CTA
                ======================================================== */}
-            <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-              {/* Minimal Outlined Shopping Bag Icon */}
+            <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+              {/* Minimal Outlined Shopping Bag Icon (Min 44x44px target) */}
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="relative w-10 h-10 sm:w-10.5 sm:h-10.5 rounded-[14px] border border-white/80 bg-white/70 hover:bg-white text-brand-ink hover:text-brand-pink transition-all duration-200 flex items-center justify-center shadow-xs hover:shadow-sm active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
+                className="relative w-11 h-11 sm:w-10.5 sm:h-10.5 rounded-[14px] border border-white/80 bg-white/70 hover:bg-white text-brand-ink hover:text-brand-pink transition-all duration-200 flex items-center justify-center shadow-xs hover:shadow-sm active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60"
                 aria-label={`View shopping cart with ${totalCount} items`}
               >
-                <ShoppingBag className="w-4.5 h-4.5 stroke-[2]" />
+                <ShoppingBag className="w-5 h-5 sm:w-4.5 sm:h-4.5 stroke-[2]" />
                 {totalCount > 0 && (
                   <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full bg-brand-pink text-white text-[11px] font-black flex items-center justify-center shadow-xs">
                     {totalCount}
@@ -220,10 +242,10 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick }) => {
                 <span>Shop Now</span>
               </button>
 
-              {/* Mobile Hamburger Toggle Button */}
+              {/* Mobile Hamburger Toggle Button (Min 44x44px target) */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden w-10 h-10 rounded-[14px] border border-white/80 bg-white/70 hover:bg-white text-brand-ink hover:text-brand-pink transition-colors flex items-center justify-center shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 cursor-pointer"
+                className="md:hidden w-11 h-11 rounded-[14px] border border-white/80 bg-white/70 hover:bg-white text-brand-ink hover:text-brand-pink transition-colors flex items-center justify-center shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink/60 cursor-pointer"
                 aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
                 aria-expanded={mobileMenuOpen}
               >
