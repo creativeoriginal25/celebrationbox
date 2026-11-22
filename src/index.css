@@ -105,3 +105,15 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #B8B0A5;
 }
+
+/* Glass & Surface Modals */
+.glass-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(43, 43, 58, 0.10);
+  box-shadow: 0 20px 45px -10px rgba(43, 43, 58, 0.20);
+}
+
+.glass-panel {
+  background-color: #FFF8F0;
+  border: 1px solid rgba(43, 43, 58, 0.08);
+}

@@ -19,9 +19,12 @@ export const AdminTemplatesModal: React.FC<AdminTemplatesModalProps> = ({ onClos
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn"
+      onClick={onClose}
+    >
       <div
-        className="relative w-full max-w-2xl glass-card rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-white text-left max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-brand-ink/10 text-left max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -48,7 +51,7 @@ export const AdminTemplatesModal: React.FC<AdminTemplatesModalProps> = ({ onClos
         </div>
 
         {/* Quick parameters editor */}
-        <div className="p-4 rounded-2xl glass-panel mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="p-4 rounded-2xl bg-brand-cream-50/80 border border-brand-ink/10 mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label className="block text-[11px] font-bold uppercase text-brand-ink mb-1">
               Customer Name
@@ -141,8 +144,9 @@ export const AdminTemplatesModal: React.FC<AdminTemplatesModalProps> = ({ onClos
         {/* Footer */}
         <div className="mt-6 pt-4 border-t border-brand-ink/10 flex justify-end">
           <button
+            type="button"
             onClick={onClose}
-            className="px-6 py-2.5 rounded-xl text-xs font-bold text-brand-ink glass-panel hover:bg-white transition-colors"
+            className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-pink hover:bg-brand-pink-hover transition-colors shadow-sm cursor-pointer"
           >
             Done
           </button>

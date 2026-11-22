@@ -27,9 +27,12 @@ export const WhatsAppFallbackModal: React.FC<WhatsAppFallbackModalProps> = ({
   const testUrl = cleanTestNumber ? buildWhatsAppLink(cleanTestNumber, message) : '';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-ink/60 backdrop-blur-sm animate-fadeIn"
+      onClick={onClose}
+    >
       <div
-        className="relative w-full max-w-xl glass-card rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-white text-left max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-xl bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-brand-ink/10 text-left max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -136,14 +139,16 @@ export const WhatsAppFallbackModal: React.FC<WhatsAppFallbackModalProps> = ({
         {/* Footer Actions */}
         <div className="flex justify-end gap-3 pt-3 border-t border-brand-ink/10">
           <button
+            type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold text-brand-ink glass-panel hover:bg-white transition-colors"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/10 transition-colors cursor-pointer"
           >
             Close
           </button>
           <button
+            type="button"
             onClick={handleCopy}
-            className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm transition-all flex items-center gap-1.5"
+            className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Copy className="w-3.5 h-3.5" />
             <span>Copy & Send Manually</span>
