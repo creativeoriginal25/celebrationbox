@@ -3,11 +3,14 @@ import { Home } from './pages/Home';
 import { ProductDetails } from './pages/ProductDetails';
 import { CategoryProducts } from './pages/CategoryProducts';
 import { CartProvider, useCart } from './context/CartContext';
+import { AdminAuthProvider, useAdminAuth } from './context/AdminAuthContext';
 import { CartDrawer } from './components/CartDrawer';
 import { OrderCustomizerModal } from './components/OrderCustomizerModal';
 import { WhatsAppFallbackModal } from './components/WhatsAppFallbackModal';
 import { AdminTemplatesModal } from './components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from './components/PolicyModal';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminLogin } from './pages/admin/AdminLogin';
 import { Product } from './types';
 import { CheckCircle2, ShoppingBag } from 'lucide-react';
 import { BUSINESS_CONFIG } from './config/business';
@@ -16,12 +19,24 @@ import { buildWhatsAppLink, triggerWhatsAppChat } from './services/whatsappServi
 type RouteState =
   | { type: 'home' }
   | { type: 'product'; id: string }
-  | { type: 'category'; slug: string };
+  | { type: 'category'; slug: string }
+  | { type: 'admin'; subroute?: string };
 
-const parseHash = (): RouteState => {
+const parseRoute = (): RouteState => {
   if (typeof window === 'undefined') return { type: 'home' };
-  const hash = window.location.hash.replace(/^#\/?/, '');
 
+  const pathname = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+
+  // 1. Direct path check for /admin or /admin/login or /admin/:tab
+  if (pathname.startsWith('/admin') || hash.startsWith('admin')) {
+    const adminSegment = pathname.startsWith('/admin')
+      ? pathname.replace(/^\/admin\/?/, '')
+      : hash.replace(/^admin\/?/, '');
+    return { type: 'admin', subroute: adminSegment || undefined };
+  }
+
+  // 2. Hash-based product/category check
   if (hash.startsWith('product/')) {
     const id = hash.replace('product/', '').split('?')[0].split('/')[0];
     if (id) return { type: 'product', id };
@@ -35,9 +50,51 @@ const parseHash = (): RouteState => {
   return { type: 'home' };
 };
 
+// Admin Container: handles auth check & redirects to /admin/login if unauthenticated
+const AdminRouteView: React.FC<{
+  subroute?: string;
+  onNavigateHome: () => void;
+}> = ({ subroute, onNavigateHome }) => {
+  const { user, isLoading } = useAdminAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center text-xs font-bold text-slate-500 space-y-2">
+        <div className="w-8 h-8 rounded-full border-2 border-brand-pink border-t-transparent animate-spin" />
+        <span>Authenticating admin session...</span>
+      </div>
+    );
+  }
+
+  // If not authenticated, always show AdminLogin (Redirect to /admin/login)
+  if (!user || subroute === 'login') {
+    return (
+      <AdminLogin
+        onSuccess={() => {
+          if (window.location.pathname.startsWith('/admin')) {
+            window.history.pushState(null, '', '/admin');
+          } else {
+            window.location.hash = '/admin';
+          }
+          window.location.reload();
+        }}
+        onNavigateHome={onNavigateHome}
+      />
+    );
+  }
+
+  // Authenticated Admin Dashboard
+  return (
+    <AdminLayout
+      onNavigateHome={onNavigateHome}
+      initialTab={subroute && subroute !== 'login' ? subroute : 'overview'}
+    />
+  );
+};
+
 const AppRouter: React.FC = () => {
   const { toastMessage, totalCount, setIsCartOpen } = useCart();
-  const [route, setRoute] = useState<RouteState>(parseHash);
+  const [route, setRoute] = useState<RouteState>(parseRoute);
 
   // Modals state (accessible across all pages)
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
@@ -53,12 +110,32 @@ const AppRouter: React.FC = () => {
 
   // Handle hash changes & browser back/forward
   useEffect(() => {
-    const handleHashChange = () => {
-      setRoute(parseHash());
+    const handleNavigationChange = () => {
+      setRoute(parseRoute());
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', handleNavigationChange);
+    window.addEventListener('popstate', handleNavigationChange);
+    return () => {
+      window.removeEventListener('hashchange', handleNavigationChange);
+      window.removeEventListener('popstate', handleNavigationChange);
+    };
   }, []);
+
+  // Manage noindex meta tag dynamically for search engine privacy
+  useEffect(() => {
+    const existingMeta = document.querySelector('meta[data-admin-robots]');
+    if (route.type === 'admin') {
+      if (!existingMeta) {
+        const meta = document.createElement('meta');
+        meta.name = 'robots';
+        meta.content = 'noindex, nofollow';
+        meta.setAttribute('data-admin-robots', 'true');
+        document.head.appendChild(meta);
+      }
+    } else if (existingMeta) {
+      existingMeta.remove();
+    }
+  }, [route.type]);
 
   // Founder admin modal shortcut (Alt + Shift + A or ?admin=templates)
   useEffect(() => {
@@ -82,8 +159,13 @@ const AppRouter: React.FC = () => {
 
   // Navigation handlers
   const navigateToHome = () => {
-    window.location.hash = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.location.pathname.startsWith('/admin')) {
+      window.location.href = '/';
+    } else {
+      window.location.hash = '';
+      setRoute({ type: 'home' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const navigateToProduct = (productId: string) => {
@@ -155,40 +237,45 @@ const AppRouter: React.FC = () => {
         </div>
       )}
 
-          {/* Route Views */}
-          {route.type === 'product' ? (
-            <ProductDetails
-              productId={route.id}
-              onNavigateHome={navigateToHome}
-              onSelectProduct={(prod) => navigateToProduct(prod.id)}
-              onBuyNow={handleBuyNow}
-              onOpenOrderModal={handleDirectWhatsAppOrder}
-              onOpenPolicy={(policy) => setActivePolicy(policy)}
-            />
-          ) : route.type === 'category' ? (
-            <CategoryProducts
-              categorySlug={route.slug}
-              onNavigateHome={navigateToHome}
-              onSelectProduct={(prod) => navigateToProduct(prod.id)}
-              onBuyNow={handleBuyNow}
-              onOpenOrderModal={handleDirectWhatsAppOrder}
-              onOpenPolicy={(policy) => setActivePolicy(policy)}
-            />
-          ) : (
-            <Home
-              onNavigateToProduct={navigateToProduct}
-              onNavigateToCategory={navigateToCategory}
-            />
-          )}
+      {/* Route Views */}
+      {route.type === 'admin' ? (
+        <AdminRouteView
+          subroute={route.subroute}
+          onNavigateHome={navigateToHome}
+        />
+      ) : route.type === 'product' ? (
+        <ProductDetails
+          productId={route.id}
+          onNavigateHome={navigateToHome}
+          onSelectProduct={(prod) => navigateToProduct(prod.id)}
+          onBuyNow={handleBuyNow}
+          onOpenOrderModal={handleDirectWhatsAppOrder}
+          onOpenPolicy={(policy) => setActivePolicy(policy)}
+        />
+      ) : route.type === 'category' ? (
+        <CategoryProducts
+          categorySlug={route.slug}
+          onNavigateHome={navigateToHome}
+          onSelectProduct={(prod) => navigateToProduct(prod.id)}
+          onBuyNow={handleBuyNow}
+          onOpenOrderModal={handleDirectWhatsAppOrder}
+          onOpenPolicy={(policy) => setActivePolicy(policy)}
+        />
+      ) : (
+        <Home
+          onNavigateToProduct={navigateToProduct}
+          onNavigateToCategory={navigateToCategory}
+        />
+      )}
 
-          {/* Global Modals & Drawers */}
-          {/* 1. Shopping Cart Drawer */}
+      {/* Global Modals & Drawers (Only for public store views) */}
+      {route.type !== 'admin' && (
+        <>
           <CartDrawer
             onCheckout={handleCartCheckout}
             onExplore={handleExploreShop}
           />
 
-          {/* 2. Order Customizer & WhatsApp Checkout Modal */}
           {isOrderModalOpen && (
             <OrderCustomizerModal
               initialProductId={orderModalProductId}
@@ -198,7 +285,6 @@ const AppRouter: React.FC = () => {
             />
           )}
 
-          {/* 3. WhatsApp Fallback Modal */}
           {fallbackMessage && (
             <WhatsAppFallbackModal
               message={fallbackMessage}
@@ -207,18 +293,16 @@ const AppRouter: React.FC = () => {
             />
           )}
 
-          {/* 4. Founder Message Templates Modal */}
           {isAdminTemplatesOpen && (
             <AdminTemplatesModal onClose={() => setIsAdminTemplatesOpen(false)} />
           )}
 
-          {/* 5. Policies Modal */}
           <PolicyModal
             policyType={activePolicy}
             onClose={() => setActivePolicy(null)}
           />
 
-          {/* Sticky Mobile Cart Floating Pill on all views */}
+          {/* Sticky Mobile Cart Floating Pill */}
           {totalCount > 0 && (
             <div className="fixed bottom-5 right-4 z-40 lg:hidden animate-fadeIn pb-[env(safe-area-inset-bottom)]">
               <button
@@ -231,15 +315,19 @@ const AppRouter: React.FC = () => {
               </button>
             </div>
           )}
+        </>
+      )}
     </div>
   );
 };
 
 export const App: React.FC = () => {
   return (
-    <CartProvider>
-      <AppRouter />
-    </CartProvider>
+    <AdminAuthProvider>
+      <CartProvider>
+        <AppRouter />
+      </CartProvider>
+    </AdminAuthProvider>
   );
 };
 

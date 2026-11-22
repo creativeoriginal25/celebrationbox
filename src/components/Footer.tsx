@@ -298,6 +298,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPolicy }) => {
             >
               Cancellation &amp; Returns
             </button>
+            <span className="text-white/20">•</span>
+            <a
+              href="/admin"
+              className="text-gray-500 hover:text-brand-pink transition-colors cursor-pointer"
+            >
+              Business Admin
+            </a>
           </div>
         </div>
 
