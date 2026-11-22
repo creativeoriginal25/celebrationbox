@@ -111,9 +111,14 @@ const AppRouter: React.FC = () => {
   ) => {
     if (productId) {
       setOrderModalProductId(productId);
+      setOrderModalMode('buy-now');
+      setIsOrderModalOpen(true);
+    } else {
+      const message =
+        'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration. Please share details and availability!';
+      const url = buildWhatsAppLink(BUSINESS_CONFIG.whatsappNumber, message);
+      triggerWhatsAppChat(url);
     }
-    setOrderModalMode('buy-now');
-    setIsOrderModalOpen(true);
   };
 
   const handleOpenFallback = (message: string, isConfigured: boolean) => {
