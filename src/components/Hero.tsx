@@ -61,7 +61,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
 
         {/* Main Centered Composition Container */}
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-          
+
           {/* ELEMENT 1: TOP BRAND BADGE (With ~32-36px spacing to the main logo) */}
           <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-pink-50 border border-brand-pink-200/80 text-xs font-bold tracking-wider uppercase mb-8 sm:mb-9 shadow-xs select-none">
             <Sparkles className="w-3.5 h-3.5 text-brand-pink fill-brand-pink/20" />
