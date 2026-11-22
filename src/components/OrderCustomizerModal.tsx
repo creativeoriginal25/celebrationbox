@@ -140,8 +140,9 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
     birthdayMessage: birthdayMessage ? birthdayMessage : undefined,
   };
 
-  const handleOrderSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleOrderSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setSubmitAttempted(true);
 
     const { isValid, errors: validationErrors } = validateOrderForm(currentOrderDetails);
     setErrors(validationErrors);
@@ -184,8 +185,16 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       clearCart();
     }
 
+    setSubmittedUrl(payload.waMeUrl);
+    setIsSubmitting(true);
+
+    // Launch WhatsApp directly
     triggerWhatsAppChat(payload.waMeUrl);
-    onClose();
+
+    // Close modal after brief delay so user sees confirmation and browser navigation begins cleanly
+    setTimeout(() => {
+      onClose();
+    }, 1500);
   };
 
   const handleCopyMessage = () => {
@@ -874,13 +883,42 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
         {/* STICKY BOTTOM MODAL FOOTER                                     */}
         {/* ============================================================== */}
         <div className="shrink-0 px-5 sm:px-8 py-3.5 sm:py-4 bg-white/95 backdrop-blur-md border-t border-brand-ink/10 z-10">
+          {/* Validation Warning Alert if user tried to submit with missing fields */}
+          {submitAttempted && Object.keys(errors).length > 0 && (
+            <div className="mb-2.5 p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center gap-2">
+              <Info className="w-4 h-4 text-rose-600 shrink-0" />
+              <span>Please enter your Full Name and WhatsApp Mobile Number above to continue to WhatsApp.</span>
+            </div>
+          )}
+
+          {/* Success / Launch Status Banner */}
+          {isSubmitting && (
+            <div className="mb-2.5 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 animate-pulse shrink-0" />
+                <span className="font-semibold">Opening WhatsApp with your order details...</span>
+              </div>
+              {submittedUrl && (
+                <a
+                  href={submittedUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold underline text-brand-pink hover:text-brand-pink-hover shrink-0"
+                >
+                  Click here if not opening
+                </a>
+              )}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={handleOrderSubmit}
-            className="w-full py-3.5 px-6 min-h-[48px] rounded-xl text-sm sm:text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-md active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-4 focus:ring-brand-pink/20"
+            disabled={isSubmitting}
+            className="w-full py-3.5 px-6 min-h-[48px] rounded-xl text-sm sm:text-base font-bold text-white bg-brand-pink hover:bg-brand-pink-hover disabled:opacity-80 shadow-md active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-4 focus:ring-brand-pink/20"
           >
             <MessageCircle className="w-5 h-5" />
-            <span>Confirm Order on WhatsApp</span>
+            <span>{isSubmitting ? 'Opening WhatsApp...' : 'Confirm Order on WhatsApp'}</span>
           </button>
 
           <div className="flex items-center justify-between text-[11px] text-brand-ink-muted mt-2 px-1">
