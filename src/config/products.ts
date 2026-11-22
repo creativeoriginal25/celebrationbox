@@ -19,7 +19,7 @@ export const PRODUCTS: Product[] = [
     id: 'signature-celebration-box',
     name: 'Pastel Rose Celebration Box',
     tagline: 'Big Moments. One Little Box.',
-    price: 499,
+    price: 399,
     description:
       'Everything you need to turn an ordinary space into a beautiful birthday moment.',
     idealFor: 'Bedroom, living room, and hostel birthday celebrations',

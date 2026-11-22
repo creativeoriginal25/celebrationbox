@@ -114,8 +114,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
                   onClick={() => onOpenOrder('signature-celebration-box')}
                   className="hover:text-brand-pink transition-colors text-left cursor-pointer flex items-center gap-1.5"
                 >
-                  <span>Signature Celebration Box</span>
-                  <span className="text-brand-pink font-semibold text-xs">— ₹499</span>
+                  <span>Pastel Rose Celebration Box</span>
+                  <span className="text-brand-pink font-semibold text-xs">— ₹399</span>
                 </button>
               </li>
               <li>

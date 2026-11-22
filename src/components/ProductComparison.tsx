@@ -14,7 +14,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
     {
       feature: 'Selling Price',
       mini: formatPrice(249),
-      signature: formatPrice(499),
+      signature: formatPrice(399),
       isHighlight: true,
     },
     {
@@ -196,7 +196,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
             >
               <ShoppingBag className="w-4 h-4" />
               <span>
-                Order {mobileTab === 'mini' ? 'Mini (₹249)' : 'Signature (₹499)'}
+                Order {mobileTab === 'mini' ? 'Mini (₹249)' : 'Pastel Rose (₹399)'}
               </span>
             </button>
           </div>
@@ -294,7 +294,7 @@ export const ProductComparison: React.FC<ProductComparisonProps> = ({ onOrderNow
                     className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm transition-all cursor-pointer"
                   >
                     <ShoppingBag className="w-3.5 h-3.5" />
-                    <span>Order Signature (₹499)</span>
+                    <span>Order Pastel Rose (₹399)</span>
                   </button>
                 </td>
               </tr>

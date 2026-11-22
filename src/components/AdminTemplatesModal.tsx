@@ -10,7 +10,7 @@ export const AdminTemplatesModal: React.FC<AdminTemplatesModalProps> = ({ onClos
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [sampleCustomerName, setSampleCustomerName] = useState('Rahul');
   const [sampleProduct, setSampleProduct] = useState('Signature Celebration Box');
-  const [sampleAmount, setSampleAmount] = useState(499);
+  const [sampleAmount, setSampleAmount] = useState(399);
 
   const handleCopy = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
@@ -69,11 +69,11 @@ export const AdminTemplatesModal: React.FC<AdminTemplatesModalProps> = ({ onClos
               value={sampleProduct}
               onChange={(e) => {
                 setSampleProduct(e.target.value);
-                setSampleAmount(e.target.value.includes('Mini') ? 249 : 499);
+                setSampleAmount(e.target.value.includes('Mini') ? 249 : 399);
               }}
               className="w-full px-3 py-1.5 rounded-lg border border-brand-ink/15 text-xs bg-white font-medium"
             >
-              <option value="Signature Celebration Box">Signature Box (₹499)</option>
+              <option value="Pastel Rose Celebration Box">Pastel Rose Box (₹399)</option>
               <option value="Mini Celebration Box">Mini Box (₹249)</option>
             </select>
           </div>
