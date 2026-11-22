@@ -68,76 +68,187 @@ const invalidPhone = validateOrder({
 assert.strictEqual(invalidPhone.isValid, false, 'Invalid phone number should fail');
 console.log('✅ Form validation rules verified');
 
-// 3. Multi-Item Cart WhatsApp Message Construction
-const generateCartWhatsAppOrderMessage = (cartOrder) => {
-  const totalValue = cartOrder.items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+// 3. WhatsApp Message Construction (New Official Celebration Box Format)
+const formatOrderWhatsAppMessage = (params) => {
+  const sanitize = (text) => {
+    if (!text) return '';
+    return text.replace(/\uFFFD/g, '').trim();
+  };
 
-  const deliveryLabel =
-    cartOrder.deliveryMethod === 'pickup'
-      ? 'College Pickup (Bhimavaram)'
-      : 'Nearby Delivery (Bhimavaram)';
+  const cleanCustomerName = sanitize(params.customerName);
+
+  // Format clean 10-digit Indian mobile number: +91 XXXXXXXXXX
+  const rawDigits = (params.customerPhone || '').replace(/\D/g, '');
+  let formattedMobile = sanitize(params.customerPhone);
+  if (rawDigits.length === 10) {
+    formattedMobile = `+91 ${rawDigits}`;
+  } else if (rawDigits.length === 12 && rawDigits.startsWith('91')) {
+    formattedMobile = `+91 ${rawDigits.slice(2)}`;
+  }
+
+  // Format rupee amounts cleanly
+  const formatRupee = (val) => `₹${val.toLocaleString('en-IN')}`;
 
   const lines = [
-    'Hello Celebration Box! 🎉',
+    '🎉 *CELEBRATION BOX* 🎉',
+    '✨ Making Moments Magical ✨',
     '',
-    'I would like to place an order.',
+    "Hi! 👋 I'd like to place an order for the following:",
     '',
-    'ORDER SUMMARY:',
+    '🎁 *ORDER DETAILS*',
     '',
   ];
 
-  cartOrder.items.forEach((item) => {
-    lines.push(
-      item.name,
-      `Quantity: ${item.quantity}`,
-      `Price: ₹${item.price} each`,
-      `Subtotal: ₹${item.price * item.quantity}`,
-      ''
-    );
-  });
+  // 1. ORDER DETAILS (Single item vs Multiple items)
+  const isMultiItem = Array.isArray(params.cartItems) && params.cartItems.length > 1;
 
-  lines.push(
-    `TOTAL PRODUCT VALUE: ₹${totalValue}`,
-    '',
-    'CUSTOMER DETAILS:',
-    '',
-    `Name: ${cartOrder.customerName}`,
-    `Phone: ${cartOrder.customerPhone}`,
-    `Celebration Date: ${cartOrder.celebrationDate}`,
-    `Preferred Time: ${cartOrder.preferredTime}`,
-    '',
-    'FULFILMENT:',
-    '',
-    deliveryLabel
-  );
+  if (isMultiItem && params.cartItems) {
+    params.cartItems.forEach((item, idx) => {
+      lines.push(`Product: ${sanitize(item.name)}`);
+      lines.push(`Quantity: ${item.quantity}`);
+      lines.push(`Price per Box: ${formatRupee(item.price)}`);
+      lines.push(`Line Total: ${formatRupee(item.price * item.quantity)}`);
+      if (idx < params.cartItems.length - 1) {
+        lines.push('');
+      }
+    });
+  } else {
+    // Single product (Buy Now or single-item cart)
+    const singleName =
+      params.cartItems && params.cartItems.length === 1
+        ? sanitize(params.cartItems[0].name)
+        : sanitize(params.productName);
+    const singleQty =
+      params.cartItems && params.cartItems.length === 1
+        ? params.cartItems[0].quantity
+        : params.quantity;
+    const singlePrice =
+      params.cartItems && params.cartItems.length === 1
+        ? params.cartItems[0].price
+        : params.unitPrice;
 
-  if (cartOrder.deliveryMethod === 'delivery' && cartOrder.deliveryAddress) {
-    lines.push(`Delivery Address: ${cartOrder.deliveryAddress}`);
+    lines.push(`Product: ${singleName}`);
+    lines.push(`Quantity: ${singleQty}`);
+    lines.push(`Price per Box: ${formatRupee(singlePrice)}`);
   }
 
-  lines.push('', 'Please confirm availability and delivery charges.', '', 'Thank you!');
+  lines.push('');
+  lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
+  lines.push('');
+
+  // 2. CUSTOMER DETAILS
+  lines.push('👤 *CUSTOMER DETAILS*');
+  lines.push('');
+  lines.push(`Name: ${cleanCustomerName}`);
+  lines.push(`Mobile: ${formattedMobile}`);
+
+  const cleanDate = sanitize(params.celebrationDate);
+  const cleanTime = sanitize(params.preferredTime);
+  if (cleanDate && cleanDate !== '—' && cleanDate !== 'null' && cleanDate !== 'undefined') {
+    lines.push(
+      `Celebration Date: ${cleanDate}${
+        cleanTime && cleanTime !== '—' && cleanTime !== 'null' && cleanTime !== 'undefined'
+          ? ` (${cleanTime})`
+          : ''
+      }`
+    );
+  }
+
+  lines.push('');
+
+  // 3. FULFILMENT
+  lines.push('📍 *FULFILMENT*');
+  const cleanAddress = sanitize(params.deliveryAddress);
+  if (params.fulfilment === 'delivery') {
+    lines.push('Nearby Delivery (Bhimavaram)');
+    if (cleanAddress && cleanAddress !== '—' && cleanAddress !== 'null' && cleanAddress !== 'undefined') {
+      lines.push(`Address: ${cleanAddress}`);
+    }
+  } else {
+    lines.push('Campus Pickup (Bhimavaram)');
+  }
+
+  // 4. SPECIAL INSTRUCTIONS / CUSTOMER MESSAGE (Only when provided)
+  const cleanMessage = sanitize(params.personalMessage);
+  if (cleanMessage && cleanMessage !== '—' && cleanMessage !== 'null' && cleanMessage !== 'undefined') {
+    lines.push('');
+    lines.push('💬 *SPECIAL INSTRUCTIONS*');
+    lines.push(cleanMessage);
+  }
+
+  // 5. CLOSING NOTE
+  lines.push('');
+  if (params.fulfilment === 'delivery') {
+    lines.push('Please confirm the availability and delivery details. Thank you! 💖');
+  } else {
+    lines.push('Please confirm the availability and pickup details. Thank you! 💖');
+  }
 
   return lines.join('\n');
 };
 
+// Test A: Single Product Order (Buy Now)
+const singleOrder = {
+  productName: 'Pastel Rose Celebration Box',
+  quantity: 1,
+  unitPrice: 299,
+  total: 299,
+  customerName: 'Rahul Verma',
+  customerPhone: '9876543210',
+  fulfilment: 'pickup',
+  celebrationDate: '2026-11-25',
+  preferredTime: 'Evening (4:00 PM - 7:00 PM)',
+};
+const singleMsg = formatOrderWhatsAppMessage(singleOrder);
+
+assert.ok(singleMsg.includes('🎉 *CELEBRATION BOX* 🎉'), 'Header must contain celebration box');
+assert.ok(singleMsg.includes('✨ Making Moments Magical ✨'), 'Header must contain tagline');
+assert.ok(singleMsg.includes("Hi! 👋 I'd like to place an order for the following:"), 'Intro greeting matches');
+assert.ok(singleMsg.includes('🎁 *ORDER DETAILS*'), 'Order details heading matches');
+assert.ok(singleMsg.includes('Product: Pastel Rose Celebration Box'), 'Product name matches');
+assert.ok(singleMsg.includes('Quantity: 1'), 'Quantity matches');
+assert.ok(singleMsg.includes('Price per Box: ₹299'), 'Price per box matches');
+assert.ok(singleMsg.includes('💰 *Total Amount: ₹299*'), 'Total amount heading matches');
+assert.ok(singleMsg.includes('👤 *CUSTOMER DETAILS*'), 'Customer details heading matches');
+assert.ok(singleMsg.includes('Name: Rahul Verma'), 'Customer name matches');
+assert.ok(singleMsg.includes('Mobile: +91 9876543210'), 'Customer mobile matches');
+assert.ok(singleMsg.includes('📍 *FULFILMENT*'), 'Fulfilment heading matches');
+assert.ok(singleMsg.includes('Campus Pickup (Bhimavaram)'), 'Fulfilment method matches');
+assert.ok(singleMsg.includes('Please confirm the availability and pickup details. Thank you! 💖'), 'Closing line matches');
+assert.ok(!singleMsg.includes('undefined'), 'No undefined in single order');
+assert.ok(!singleMsg.includes('null'), 'No null in single order');
+assert.ok(!singleMsg.includes('—'), 'No em dashes in single order');
+assert.ok(!singleMsg.includes('\uFFFD'), 'No replacement characters in single order');
+console.log('✅ Single-product WhatsApp message format verified');
+
+// Test B: Multi-Item Cart Order with Special Instructions
 const sampleCartOrder = {
-  items: cartItems,
+  cartItems,
+  total: 797,
   customerName: 'Lokesh T',
   customerPhone: '9100280705',
   celebrationDate: '2026-11-25',
   preferredTime: 'Evening (4:00 PM - 7:00 PM)',
-  deliveryMethod: 'pickup',
+  fulfilment: 'delivery',
+  deliveryAddress: 'Room 102, Near Campus Gate, Bhimavaram',
+  personalMessage: 'Please pack with extra pastel ribbons!',
 };
 
-const cartMsg = generateCartWhatsAppOrderMessage(sampleCartOrder);
-assert.ok(cartMsg.includes('Mini Celebration Box'), 'Cart message must include Mini Box');
-assert.ok(cartMsg.includes('Pastel Rose Celebration Box'), 'Cart message must include Pastel Rose Box');
-assert.ok(cartMsg.includes('TOTAL PRODUCT VALUE: ₹797'), 'Cart message must show ₹797 total');
-assert.ok(cartMsg.includes('College Pickup (Bhimavaram)'), 'Cart message must show college pickup');
-console.log('✅ Consolidated multi-product cart message verified');
+const cartMsg = formatOrderWhatsAppMessage(sampleCartOrder);
+assert.ok(cartMsg.includes('Product: Mini Celebration Box'), 'Cart message must include Mini Box');
+assert.ok(cartMsg.includes('Line Total: ₹498'), 'Cart message must include line total for Mini Box');
+assert.ok(cartMsg.includes('Product: Pastel Rose Celebration Box'), 'Cart message must include Pastel Rose Box');
+assert.ok(cartMsg.includes('Line Total: ₹299'), 'Cart message must include line total for Pastel Rose Box');
+assert.ok(cartMsg.includes('💰 *Total Amount: ₹797*'), 'Cart message must show ₹797 total');
+assert.ok(cartMsg.includes('Nearby Delivery (Bhimavaram)'), 'Cart message must show delivery');
+assert.ok(cartMsg.includes('Address: Room 102, Near Campus Gate, Bhimavaram'), 'Delivery address included');
+assert.ok(cartMsg.includes('💬 *SPECIAL INSTRUCTIONS*'), 'Special instructions heading present');
+assert.ok(cartMsg.includes('Please pack with extra pastel ribbons!'), 'Special instructions content present');
+assert.ok(cartMsg.includes('Please confirm the availability and delivery details. Thank you! 💖'), 'Delivery closing line matches');
+assert.ok(!cartMsg.includes('undefined'), 'No undefined in cart order');
+assert.ok(!cartMsg.includes('null'), 'No null in cart order');
+assert.ok(!cartMsg.includes('—'), 'No em dashes in cart order');
+console.log('✅ Multi-product cart WhatsApp message with special instructions verified');
 
 // 4. URL Encoding and Link Generation with official number 919100280705
 const buildWhatsAppLink = (number, text) => {
