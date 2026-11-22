@@ -8,6 +8,7 @@ import { Footer } from '../components/Footer';
 import { AnimatedContent } from '../components/react-bits/AnimatedContent';
 import { useCart } from '../context/CartContext';
 import { BUSINESS_CONFIG } from '../config/business';
+import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
 
 interface CategoryProductsProps {
   categorySlug: string;
@@ -73,10 +74,9 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
   const productsToDisplay: Product[] = PRODUCTS.filter((p) => p.active);
 
   const handleWhatsAppNotify = () => {
-    const text = encodeURIComponent(
-      `Hi Celebration Box team! 👋 I'm interested in the upcoming *${category.name}* collection. Please notify me when it launches!`
-    );
-    window.open(`https://wa.me/${BUSINESS_CONFIG.whatsappNumber}?text=${text}`, '_blank');
+    const text = `Hi Celebration Box team! 👋 I'm interested in the upcoming *${category.name}* collection. Please notify me when it launches!`;
+    const url = buildWhatsAppLink(BUSINESS_CONFIG.whatsappNumber, text);
+    triggerWhatsAppChat(url);
   };
 
   return (

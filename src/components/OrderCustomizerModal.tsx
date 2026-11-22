@@ -28,6 +28,7 @@ import {
   generateCartWhatsAppOrderMessage,
   prepareWhatsAppOrder,
   prepareCartWhatsAppOrder,
+  triggerWhatsAppChat,
 } from '../services/whatsappService';
 import { saveOrderToLocalHistory, getOrderSummary } from '../services/orderService';
 import { useCart } from '../context/CartContext';
@@ -180,10 +181,8 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       clearCart();
     }
 
-    const opened = window.open(payload.waMeUrl, '_blank', 'noopener,noreferrer');
-    if (!opened) {
-      onOpenFallback(payload.formattedMessage, true);
-    }
+    triggerWhatsAppChat(payload.waMeUrl);
+    onClose();
   };
 
   const handleCopyMessage = () => {

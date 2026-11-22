@@ -4,6 +4,7 @@ import { OccasionCategory } from '../types';
 import { OccasionCategoryCard } from './OccasionCategoryCard';
 import { X, BellRing, Sparkles, MessageCircle, ArrowRight } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/business';
+import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
 
 interface OccasionCategoryGridProps {
   onSelectCategory: (category: OccasionCategory) => void;
@@ -23,10 +24,9 @@ export const OccasionCategoryGrid: React.FC<OccasionCategoryGridProps> = ({
   };
 
   const handleWhatsAppNotify = (category: OccasionCategory) => {
-    const text = encodeURIComponent(
-      `Hi Celebration Box team! 👋 I'm interested in the upcoming *${category.name}* collection. Please notify me when it launches!`
-    );
-    window.open(`https://wa.me/${BUSINESS_CONFIG.whatsappNumber}?text=${text}`, '_blank');
+    const text = `Hi Celebration Box team! 👋 I'm interested in the upcoming *${category.name}* collection. Please notify me when it launches!`;
+    const url = buildWhatsAppLink(BUSINESS_CONFIG.whatsappNumber, text);
+    triggerWhatsAppChat(url);
     setComingSoonModalCategory(null);
   };
 

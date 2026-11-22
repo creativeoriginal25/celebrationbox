@@ -127,7 +127,10 @@ export const generateCartWhatsAppOrderMessage = (cartOrder: CartOrderDetails): s
  * Builds the official wa.me click-to-chat link with URL-encoded message
  */
 export const buildWhatsAppLink = (number: string, message: string): string => {
-  const cleanNumber = number.replace(/\D/g, '');
+  let cleanNumber = number.replace(/\D/g, '');
+  if (cleanNumber.length === 10) {
+    cleanNumber = `91${cleanNumber}`;
+  }
   const encodedText = encodeURIComponent(message);
   return `https://wa.me/${cleanNumber}?text=${encodedText}`;
 };
@@ -173,14 +176,30 @@ export const prepareCartWhatsAppOrder = (
 };
 
 /**
- * Dispatches order by opening WhatsApp in a new tab/app
+ * Dispatches order by opening WhatsApp reliably across desktop and mobile
  */
 export const triggerWhatsAppChat = (url: string): boolean => {
   try {
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-    return !!newWindow;
+    // 1. Try DOM anchor click - universally permitted by browsers as direct user navigation
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      if (document.body.contains(link)) {
+        document.body.removeChild(link);
+      }
+    }, 100);
+    return true;
   } catch (error) {
-    console.error('Failed to trigger WhatsApp link:', error);
-    return false;
+    console.error('Failed to trigger WhatsApp link via anchor, falling back to location:', error);
+    try {
+      window.location.href = url;
+      return true;
+    } catch {
+      return false;
+    }
   }
 };
