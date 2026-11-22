@@ -1,15 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 import { Confetti, ConfettiRef } from './react-bits/Confetti';
 import GradientText from './react-bits/GradientText';
 
 interface HeroProps {
   onExplore: () => void;
-  onOpenOrder: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
+  onOpenOrder?: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
+export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
   const confettiRef = useRef<ConfettiRef>(null);
   const [logoKey, setLogoKey] = useState<number>(0);
 
@@ -118,37 +118,15 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
             <span className="inline-block">Made for Your Moments</span>
           </p>
 
-          {/* ELEMENT 6: ACTION BUTTONS (48px height, isolated above confetti, full-width responsive within screen margins) */}
-          <div className="relative z-20 isolate flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-[340px] sm:max-w-none mx-auto px-4">
+          {/* ELEMENT 6: ACTION BUTTON (Isolated above confetti, responsive primary CTA) */}
+          <div className="relative z-20 isolate flex items-center justify-center w-full max-w-[340px] sm:max-w-none mx-auto px-4">
             <button
               onClick={onExplore}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 h-[48px] rounded-xl text-[15px] font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm active:scale-98 transition-all cursor-pointer pointer-events-auto"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 h-[48px] rounded-xl text-[15px] font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-sm hover:shadow active:scale-98 transition-all cursor-pointer pointer-events-auto"
             >
               <span>Explore Celebration Boxes</span>
               <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
-
-            <a
-              href={`https://wa.me/919100280705?text=${encodeURIComponent(
-                'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration. Please share details and availability!'
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                const userAgent = navigator.userAgent || '';
-                const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-                if (isMobile) {
-                  e.preventDefault();
-                  window.location.href = `https://wa.me/919100280705?text=${encodeURIComponent(
-                    'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration. Please share details and availability!'
-                  )}`;
-                }
-              }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 h-[48px] rounded-xl text-[15px] font-semibold text-brand-ink bg-white hover:bg-brand-cream-100 border border-brand-ink/15 shadow-sm active:scale-98 transition-all cursor-pointer pointer-events-auto"
-            >
-              <MessageCircle className="w-4 h-4 text-brand-teal shrink-0" />
-              <span>Order on WhatsApp</span>
-            </a>
           </div>
 
         </div>
