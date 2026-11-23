@@ -22,7 +22,7 @@ const STORAGE_KEYS = {
   SETTINGS: 'cb_admin_settings_v2',
 };
 
-// Initial Verified Seed Product: Pastel Rose Celebration Box (₹299, 60 pieces)
+// Initial Verified Seed Product: Pastel Rose Celebration Box (₹399, 60 pieces)
 const INITIAL_PRODUCTS: AdminProduct[] = [
   {
     id: '00000000-0000-0000-0000-000000000001',
@@ -31,7 +31,7 @@ const INITIAL_PRODUCTS: AdminProduct[] = [
     tagline: 'Big Moments. One Little Box.',
     description: 'Everything you need to turn an ordinary space into a beautiful birthday moment.',
     ideal_for: 'Bedroom, living room, and hostel birthday celebrations',
-    selling_price: 299.00,
+    selling_price: 399.00,
     material_cost: 110.00,
     packaging_cost: 30.00,
     other_variable_cost: 10.00,
@@ -178,7 +178,20 @@ export const getProducts = async (): Promise<AdminProduct[]> => {
       console.warn('Supabase getProducts fallback to local store:', err);
     }
   }
-  return getLocalData<AdminProduct[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+  const local = getLocalData<AdminProduct[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+  // Auto-migrate any cached fallback with outdated 299 price to 399
+  let hasUpdates = false;
+  const migrated = local.map((p) => {
+    if (p.slug === 'pastel-rose-celebration-box' && (p.selling_price === 299 || !p.selling_price)) {
+      hasUpdates = true;
+      return { ...p, selling_price: 399.00 };
+    }
+    return p;
+  });
+  if (hasUpdates) {
+    setLocalData(STORAGE_KEYS.PRODUCTS, migrated);
+  }
+  return migrated;
 };
 
 export const getProductById = async (id: string): Promise<AdminProduct | null> => {
@@ -352,7 +365,7 @@ export const updateProduct = async (
       name: updates.name || 'Pastel Rose Celebration Box',
       tagline: updates.tagline || 'Big Moments. One Little Box.',
       description: updates.description || '',
-      selling_price: updates.selling_price ?? 299,
+      selling_price: updates.selling_price ?? 399,
       material_cost: 110,
       packaging_cost: 30,
       other_variable_cost: 10,

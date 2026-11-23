@@ -80,8 +80,8 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
     name: '',
     tagline: 'Big Moments. One Little Box.',
     description: 'Everything you need to turn an ordinary space into a beautiful birthday moment.',
-    selling_price: 299,
-    compare_at_price: 399,
+    selling_price: 399,
+    compare_at_price: 499,
     material_cost: 110,
     packaging_cost: 30,
     other_variable_cost: 10,
@@ -139,8 +139,8 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
       name: '',
       tagline: 'Big Moments. One Little Box.',
       description: 'Everything you need to turn an ordinary space into a beautiful birthday moment.',
-      selling_price: 299,
-      compare_at_price: 399,
+      selling_price: 399,
+      compare_at_price: 499,
       material_cost: 110,
       packaging_cost: 30,
       other_variable_cost: 10,
@@ -188,8 +188,8 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
         product.status === 'published' || (product.status as any) === 'active'
           ? 'published'
           : (product.status as any) === 'archived'
-          ? 'archived'
-          : 'draft',
+            ? 'archived'
+            : 'draft',
       badge: product.badge || '',
       images: (product.images || []).map((img, idx) => ({
         url: img.url,
@@ -595,13 +595,12 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
 
                       <td className="py-3.5 px-4">
                         <span
-                          className={`font-bold ${
-                            (p.stock_quantity ?? 50) <= 0
+                          className={`font-bold ${(p.stock_quantity ?? 50) <= 0
                               ? 'text-rose-600'
                               : (p.stock_quantity ?? 50) <= 10
-                              ? 'text-amber-600'
-                              : 'text-slate-700'
-                          }`}
+                                ? 'text-amber-600'
+                                : 'text-slate-700'
+                            }`}
                         >
                           {(p.stock_quantity ?? 50) <= 0 ? 'Out of Stock' : `${p.stock_quantity ?? 50} kits`}
                         </span>
@@ -610,11 +609,10 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
                       <td className="py-3.5 px-4">
                         <button
                           onClick={() => handleTogglePublish(p)}
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
-                            isPublished
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${isPublished
                               ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
                               : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
-                          }`}
+                            }`}
                           title={isPublished ? 'Click to Unpublish' : 'Click to Publish'}
                         >
                           {isPublished ? (
@@ -859,11 +857,10 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
                         <div
                           key={c.id}
                           onClick={() => handleToggleCategory(c.id)}
-                          className={`p-2.5 rounded-xl border text-xs cursor-pointer flex items-center justify-between transition-all ${
-                            isSelected
+                          className={`p-2.5 rounded-xl border text-xs cursor-pointer flex items-center justify-between transition-all ${isSelected
                               ? 'bg-pink-50/80 border-brand-pink text-brand-pink font-bold'
                               : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
-                          }`}
+                            }`}
                         >
                           <span>{c.name}</span>
                           {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -939,9 +936,8 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
                     {formData.images.map((img, idx) => (
                       <div
                         key={idx}
-                        className={`relative rounded-xl border p-2 flex flex-col justify-between group ${
-                          img.is_primary ? 'border-brand-pink bg-pink-50/20 shadow-xs' : 'border-slate-200 bg-slate-50'
-                        }`}
+                        className={`relative rounded-xl border p-2 flex flex-col justify-between group ${img.is_primary ? 'border-brand-pink bg-pink-50/20 shadow-xs' : 'border-slate-200 bg-slate-50'
+                          }`}
                       >
                         <div className="aspect-[4/3] rounded-lg overflow-hidden bg-white mb-2 flex items-center justify-center border border-slate-100">
                           <img
@@ -956,9 +952,8 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
                             <button
                               type="button"
                               onClick={() => handleSetPrimaryImage(idx)}
-                              className={`inline-flex items-center gap-1 font-bold ${
-                                img.is_primary ? 'text-brand-pink' : 'text-slate-400 hover:text-slate-700'
-                              }`}
+                              className={`inline-flex items-center gap-1 font-bold ${img.is_primary ? 'text-brand-pink' : 'text-slate-400 hover:text-slate-700'
+                                }`}
                             >
                               <Star className={`w-3 h-3 ${img.is_primary ? 'fill-brand-pink' : ''}`} />
                               <span>{img.is_primary ? 'Primary' : 'Set Primary'}</span>

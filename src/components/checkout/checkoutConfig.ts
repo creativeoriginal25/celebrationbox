@@ -20,7 +20,7 @@ export const CHECKOUT_CONFIG: CheckoutConfig = {
   // Featured flagship product defaults
   defaultProductId: 'signature-celebration-box',
   defaultProductName: 'Pastel Rose Celebration Box',
-  defaultProductPrice: 299,
+  defaultProductPrice: 399,
 
   // Campus Pickup details (FREE for college students in Bhimavaram)
   pickupPointTitle: 'College Campus Pickup',

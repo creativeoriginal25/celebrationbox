@@ -294,7 +294,7 @@ CREATE POLICY "Admins can delete product images"
     USING (bucket_id = 'product-images' AND public.is_admin());
 
 -- ============================================================================
--- 11. INITIAL SEED DATA (Pastel Rose Celebration Box at ₹299)
+-- 11. INITIAL SEED DATA (Pastel Rose Celebration Box at ₹399)
 -- ============================================================================
 
 -- Themes
@@ -323,7 +323,7 @@ VALUES
     ('party-essentials', 'Party Essentials', 'party-essentials', 'A la carte supplies & add-ons', 'Individual balloon packs, ribbons, and styling accessories.', '/categories/party-essentials.png', '#E0F2F1', 9, false, 'Coming Soon')
 ON CONFLICT (id) DO NOTHING;
 
--- Seed Product: Pastel Rose Celebration Box (₹299, 60 pieces)
+-- Seed Product: Pastel Rose Celebration Box (₹399, 60 pieces)
 DO $$
 DECLARE
     v_product_id UUID := '00000000-0000-0000-0000-000000000001'::uuid;
@@ -339,15 +339,16 @@ BEGIN
         'CB-PR-001',
         'Big Moments. One Little Box.',
         'Everything you need to turn an ordinary space into a beautiful birthday moment.',
-        299.00,
         399.00,
+        499.00,
         'pastel-rose',
         'published',
         50
     )
     ON CONFLICT (id) DO UPDATE SET
         name = EXCLUDED.name,
-        price = 299.00,
+        price = 399.00,
+        compare_at_price = 499.00,
         status = 'published',
         updated_at = timezone('utc'::text, now());
 

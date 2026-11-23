@@ -7,17 +7,17 @@ console.log('--- Starting Celebration Box Automated Verification ---');
 const calculateSubtotal = (price, quantity) => price * Math.max(1, quantity);
 assert.strictEqual(calculateSubtotal(249, 1), 249, 'Mini box single subtotal should be 249');
 assert.strictEqual(calculateSubtotal(249, 2), 498, 'Mini box double subtotal should be 498');
-assert.strictEqual(calculateSubtotal(299, 1), 299, 'Pastel Rose Celebration Box single subtotal should be 299');
-assert.strictEqual(calculateSubtotal(299, 3), 897, 'Pastel Rose Celebration Box triple subtotal should be 897');
+assert.strictEqual(calculateSubtotal(399, 1), 399, 'Pastel Rose Celebration Box single subtotal should be 399');
+assert.strictEqual(calculateSubtotal(399, 3), 1197, 'Pastel Rose Celebration Box triple subtotal should be 1197');
 
-// Multi-item cart calculation (2 Mini @ 249 + 1 Pastel Rose @ 299)
+// Multi-item cart calculation (2 Mini @ 249 + 1 Pastel Rose @ 399)
 const cartItems = [
   { id: 'mini-celebration-box', name: 'Mini Celebration Box', price: 249, quantity: 2 },
-  { id: 'signature-celebration-box', name: 'Pastel Rose Celebration Box', price: 299, quantity: 1 },
+  { id: 'signature-celebration-box', name: 'Pastel Rose Celebration Box', price: 399, quantity: 1 },
 ];
 const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-assert.strictEqual(cartTotal, 797, 'Cart total for 2 Mini (498) + 1 Pastel Rose (299) must be 797');
-console.log('✅ Single & multi-item cart calculations verified (including ₹299 Pastel Rose Box)');
+assert.strictEqual(cartTotal, 897, 'Cart total for 2 Mini (498) + 1 Pastel Rose (399) must be 897');
+console.log('✅ Single & multi-item cart calculations verified (including ₹399 Pastel Rose Box)');
 
 // 2. Validation Test
 const validateOrder = (order) => {
@@ -146,10 +146,9 @@ const formatOrderWhatsAppMessage = (params) => {
   const cleanTime = sanitize(params.preferredTime);
   if (cleanDate && cleanDate !== '—' && cleanDate !== 'null' && cleanDate !== 'undefined') {
     lines.push(
-      `Celebration Date: ${cleanDate}${
-        cleanTime && cleanTime !== '—' && cleanTime !== 'null' && cleanTime !== 'undefined'
-          ? ` (${cleanTime})`
-          : ''
+      `Celebration Date: ${cleanDate}${cleanTime && cleanTime !== '—' && cleanTime !== 'null' && cleanTime !== 'undefined'
+        ? ` (${cleanTime})`
+        : ''
       }`
     );
   }
@@ -187,12 +186,12 @@ const formatOrderWhatsAppMessage = (params) => {
   return lines.join('\n');
 };
 
-// Test A: Single Product Order (Buy Now)
+// Test A: Single Product Order (Buy Now - 1 Unit)
 const singleOrder = {
   productName: 'Pastel Rose Celebration Box',
   quantity: 1,
-  unitPrice: 299,
-  total: 299,
+  unitPrice: 399,
+  total: 399,
   customerName: 'Rahul Verma',
   customerPhone: '9876543210',
   fulfilment: 'pickup',
@@ -207,8 +206,8 @@ assert.ok(singleMsg.includes("Hi! 👋 I'd like to place an order for the follow
 assert.ok(singleMsg.includes('🎁 *ORDER DETAILS*'), 'Order details heading matches');
 assert.ok(singleMsg.includes('Product: Pastel Rose Celebration Box'), 'Product name matches');
 assert.ok(singleMsg.includes('Quantity: 1'), 'Quantity matches');
-assert.ok(singleMsg.includes('Price per Box: ₹299'), 'Price per box matches');
-assert.ok(singleMsg.includes('💰 *Total Amount: ₹299*'), 'Total amount heading matches');
+assert.ok(singleMsg.includes('Price per Box: ₹399'), 'Price per box matches');
+assert.ok(singleMsg.includes('💰 *Total Amount: ₹399*'), 'Total amount heading matches');
 assert.ok(singleMsg.includes('👤 *CUSTOMER DETAILS*'), 'Customer details heading matches');
 assert.ok(singleMsg.includes('Name: Rahul Verma'), 'Customer name matches');
 assert.ok(singleMsg.includes('Mobile: +91 9876543210'), 'Customer mobile matches');
@@ -221,10 +220,28 @@ assert.ok(!singleMsg.includes('—'), 'No em dashes in single order');
 assert.ok(!singleMsg.includes('\uFFFD'), 'No replacement characters in single order');
 console.log('✅ Single-product WhatsApp message format verified');
 
+// Test A2: Multiple-Unit Product Purchase (3 Units @ ₹399 = ₹1197)
+const multiUnitOrder = {
+  productName: 'Pastel Rose Celebration Box',
+  quantity: 3,
+  unitPrice: 399,
+  total: 1197,
+  customerName: 'Sneha Patel',
+  customerPhone: '9876543211',
+  fulfilment: 'pickup',
+  celebrationDate: '2026-11-26',
+  preferredTime: 'Morning (10:00 AM - 1:00 PM)',
+};
+const multiUnitMsg = formatOrderWhatsAppMessage(multiUnitOrder);
+assert.ok(multiUnitMsg.includes('Quantity: 3'), 'Multi-unit quantity matches');
+assert.ok(multiUnitMsg.includes('Price per Box: ₹399'), 'Multi-unit price per box matches');
+assert.ok(multiUnitMsg.includes('💰 *Total Amount: ₹1,197*'), 'Multi-unit total amount matches ₹1,197');
+console.log('✅ Multiple-unit purchase WhatsApp message format verified (3 boxes @ ₹399 = ₹1,197)');
+
 // Test B: Multi-Item Cart Order with Special Instructions
 const sampleCartOrder = {
   cartItems,
-  total: 797,
+  total: 897,
   customerName: 'Lokesh T',
   customerPhone: '9100280705',
   celebrationDate: '2026-11-25',
@@ -238,8 +255,8 @@ const cartMsg = formatOrderWhatsAppMessage(sampleCartOrder);
 assert.ok(cartMsg.includes('Product: Mini Celebration Box'), 'Cart message must include Mini Box');
 assert.ok(cartMsg.includes('Line Total: ₹498'), 'Cart message must include line total for Mini Box');
 assert.ok(cartMsg.includes('Product: Pastel Rose Celebration Box'), 'Cart message must include Pastel Rose Box');
-assert.ok(cartMsg.includes('Line Total: ₹299'), 'Cart message must include line total for Pastel Rose Box');
-assert.ok(cartMsg.includes('💰 *Total Amount: ₹797*'), 'Cart message must show ₹797 total');
+assert.ok(cartMsg.includes('Line Total: ₹399'), 'Cart message must include line total for Pastel Rose Box');
+assert.ok(cartMsg.includes('💰 *Total Amount: ₹897*'), 'Cart message must show ₹897 total');
 assert.ok(cartMsg.includes('Nearby Delivery (Bhimavaram)'), 'Cart message must show delivery');
 assert.ok(cartMsg.includes('Address: Room 102, Near Campus Gate, Bhimavaram'), 'Delivery address included');
 assert.ok(cartMsg.includes('💬 *SPECIAL INSTRUCTIONS*'), 'Special instructions heading present');

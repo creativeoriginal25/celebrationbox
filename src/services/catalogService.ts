@@ -105,7 +105,7 @@ export const mapDbProductToPublic = (dbProd: any): Product => {
     sku: dbProd.sku,
     name: dbProd.name,
     tagline: dbProd.short_description || dbProd.tagline || 'Big Moments. One Little Box.',
-    price: Number(dbProd.price || dbProd.selling_price || 299),
+    price: Number(dbProd.price || dbProd.selling_price || 399),
     compare_at_price: dbProd.compare_at_price ? Number(dbProd.compare_at_price) : undefined,
     description: dbProd.description || 'Everything you need to turn an ordinary space into a beautiful birthday moment.',
     short_description: dbProd.short_description,
@@ -237,7 +237,7 @@ export const verifyProductPrice = async (
   try {
     const product = await getProductByIdOrSlug(productId);
     if (!product || !product.active) {
-      return { price: 299, isAvailable: false, name: product?.name || 'Product' };
+      return { price: 399, isAvailable: false, name: product?.name || 'Product' };
     }
     return {
       price: product.price,
@@ -245,6 +245,6 @@ export const verifyProductPrice = async (
       name: product.name,
     };
   } catch {
-    return { price: 299, isAvailable: true, name: 'Celebration Box' };
+    return { price: 399, isAvailable: true, name: 'Celebration Box' };
   }
 };
