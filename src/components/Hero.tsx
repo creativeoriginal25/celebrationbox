@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight, PackageCheck, Sparkles, Truck, Layers, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, PackageCheck, Sparkles, Truck, Layers, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Confetti, ConfettiRef } from './react-bits/Confetti';
 
@@ -11,9 +11,8 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
   const confettiRef = useRef<ConfettiRef>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
-  // Both flagship photos configured in the carousel
+  // Both flagship photos configured in the continuous carousel
   const slides = [
     {
       id: 'pastel-rose-setup',
@@ -57,22 +56,13 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Auto-advance slides every 5.5 seconds unless paused by mouse hover
+  // Continuous auto-advance: moves automatically every 4 seconds even on user hover or touch
   useEffect(() => {
-    if (isHovered) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5500);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [isHovered, slides.length]);
-
-  const handleNextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
+  }, [slides.length]);
 
   const activeSlide = slides[currentSlide];
 
@@ -97,31 +87,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           
           {/* Main Showcase Hero Card */}
-          <div
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="relative rounded-[28px] sm:rounded-[36px] bg-gradient-to-r from-[#FFF8F6] via-[#FFF5F6] to-[#FCEEF2] border border-[#F4E0E5] shadow-[0_8px_30px_0_rgba(74,21,37,0.04)] overflow-hidden"
-          >
-            
-            {/* Left Carousel Arrow Button */}
-            <button
-              type="button"
-              onClick={handlePrevSlide}
-              aria-label="Previous Slide"
-              className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-brand-ink hover:text-[#8A1538] shadow-md flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer border border-brand-ink/5"
-            >
-              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
-
-            {/* Right Carousel Arrow Button */}
-            <button
-              type="button"
-              onClick={handleNextSlide}
-              aria-label="Next Slide"
-              className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-brand-ink hover:text-[#8A1538] shadow-md flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer border border-brand-ink/5"
-            >
-              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
+          <div className="relative rounded-[28px] sm:rounded-[36px] bg-gradient-to-r from-[#FFF8F6] via-[#FFF5F6] to-[#FCEEF2] border border-[#F4E0E5] shadow-[0_8px_30px_0_rgba(74,21,37,0.04)] overflow-hidden">
 
             {/* Hero Card Interior Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 items-center min-h-[420px] sm:min-h-[460px]">
@@ -197,7 +163,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
                       initial={{ opacity: 0, scale: 0.98 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.35 }}
+                      transition={{ duration: 0.4 }}
                       className={`w-full h-full ${activeSlide.imageFit} object-center filter drop-shadow-sm transition-transform duration-700 hover:scale-[1.02]`}
                       loading="eager"
                     />
