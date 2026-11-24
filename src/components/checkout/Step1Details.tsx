@@ -32,6 +32,58 @@ export const Step1Details: React.FC<Step1DetailsProps> = ({
 
   const subtotal = product.price * formData.quantity;
 
+  // Referral code live validation state
+  const [validatingReferral, setValidatingReferral] = useState(false);
+  const [referralStatus, setReferralStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
+  const [referralMessage, setReferralMessage] = useState<string | null>(null);
+
+  const handleReferralChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const code = e.target.value.toUpperCase().replace(/\s+/g, '');
+    onSetField('referralCode', code);
+    if (!code) {
+      setReferralStatus('idle');
+      setReferralMessage(null);
+    } else {
+      setReferralStatus('idle');
+      setReferralMessage(null);
+    }
+  };
+
+  const handleValidateReferral = async (codeToVerify?: string) => {
+    const code = (codeToVerify ?? formData.referralCode ?? '').trim().toUpperCase();
+    if (!code) {
+      setReferralStatus('idle');
+      setReferralMessage(null);
+      return;
+    }
+
+    setValidatingReferral(true);
+    setReferralMessage(null);
+
+    try {
+      const res = await fetch(`/api/referral/validate?code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+      if (data.valid) {
+        setReferralStatus('valid');
+        setReferralMessage('✓ Referral code applied');
+      } else {
+        setReferralStatus('invalid');
+        setReferralMessage(data.error || 'Invalid or unassigned referral code');
+      }
+    } catch {
+      // Fallback: If network is offline or static preview, check standard pattern
+      if (/^CBX-[A-Z0-9]{4}$/i.test(code)) {
+        setReferralStatus('valid');
+        setReferralMessage('✓ Referral code applied');
+      } else {
+        setReferralStatus('invalid');
+        setReferralMessage('Invalid code format. Expected CBX-XXXX');
+      }
+    } finally {
+      setValidatingReferral(false);
+    }
+  };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
     const digits = cleanPhoneDigits(raw);
@@ -199,6 +251,63 @@ export const Step1Details: React.FC<Step1DetailsProps> = ({
           ) : (
             <p className="text-[11px] text-brand-ink-muted mt-1">
               We&apos;ll open your order details directly in WhatsApp with this number.
+            </p>
+          )}
+        </div>
+
+        {/* Have a Referral Code Field (Optional) */}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <label htmlFor="checkout-referralCode" className="block text-xs font-semibold text-brand-ink">
+              Have a Referral Code?
+            </label>
+            <span className="text-[10px] text-brand-ink-muted/80">Optional</span>
+          </div>
+          <div className="relative flex items-center">
+            <input
+              id="checkout-referralCode"
+              type="text"
+              autoCapitalize="characters"
+              placeholder="Enter referral code (optional)"
+              value={formData.referralCode || ''}
+              onChange={handleReferralChange}
+              onBlur={() => {
+                if (formData.referralCode) {
+                  handleValidateReferral(formData.referralCode);
+                }
+              }}
+              className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-xl border text-sm text-brand-ink transition-all placeholder:text-brand-ink-muted/50 bg-white focus:outline-none focus:ring-2 focus:ring-brand-pink/25 font-mono tracking-wider uppercase pr-20 ${
+                referralStatus === 'valid'
+                  ? 'border-emerald-500 bg-emerald-50/20 ring-1 ring-emerald-500/20'
+                  : referralStatus === 'invalid'
+                  ? 'border-rose-400 bg-rose-50/20 ring-1 ring-rose-400/20'
+                  : 'border-brand-ink/15 hover:border-brand-ink/30 focus:border-brand-pink'
+              }`}
+            />
+            {formData.referralCode && (
+              <button
+                type="button"
+                onClick={() => handleValidateReferral(formData.referralCode)}
+                disabled={validatingReferral}
+                className="absolute right-2 px-2.5 py-1 text-xs font-bold rounded-lg text-white bg-brand-pink hover:bg-brand-pink-hover active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+              >
+                {validatingReferral ? 'Checking...' : 'Apply'}
+              </button>
+            )}
+          </div>
+          {referralStatus === 'valid' && referralMessage && (
+            <p className="text-[11px] text-emerald-700 font-medium mt-1 flex items-center gap-1" role="status">
+              <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3]" /> {referralMessage}
+            </p>
+          )}
+          {referralStatus === 'invalid' && referralMessage && (
+            <p className="text-[11px] text-rose-600 font-medium mt-1 flex items-center gap-1" role="alert">
+              <span>⚠️</span> {referralMessage}
+            </p>
+          )}
+          {referralStatus === 'idle' && (
+            <p className="text-[11px] text-brand-ink-muted mt-1">
+              Referred by a friend? Enter their code here.
             </p>
           )}
         </div>

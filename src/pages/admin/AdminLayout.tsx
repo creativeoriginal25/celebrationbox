@@ -14,12 +14,14 @@ import {
   Database,
   ChevronRight,
   ShieldCheck,
+  Gift,
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { AdminOverview } from './AdminOverview';
 import { AdminProducts } from './AdminProducts';
 import { AdminCategoriesThemes } from './AdminCategoriesThemes';
 import { AdminOrders } from './AdminOrders';
+import { AdminReferrals } from './AdminReferrals';
 import { AdminInventory } from './AdminInventory';
 import { AdminPricingMargins } from './AdminPricingMargins';
 import { AdminSettings } from './AdminSettings';
@@ -133,6 +135,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     { id: 'products', label: 'Products', icon: Package, badge: products.length },
     { id: 'categories', label: 'Categories & Themes', icon: Layers },
     { id: 'orders', label: 'Orders', icon: ShoppingBag, badge: orders.filter(o => o.order_status === 'new').length || undefined },
+    { id: 'referrals', label: 'Refer & Earn', icon: Gift },
     { id: 'inventory', label: 'Inventory', icon: Boxes },
     { id: 'pricing', label: 'Pricing & Margins', icon: TrendingUp },
     { id: 'settings', label: 'Settings', icon: Settings },
@@ -353,6 +356,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 products={products}
                 onRefresh={loadData}
               />
+            )}
+
+            {currentTab === 'referrals' && (
+              <AdminReferrals />
             )}
 
             {currentTab === 'inventory' && (

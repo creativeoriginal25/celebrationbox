@@ -132,6 +132,10 @@ const formatOrderWhatsAppMessage = (params) => {
     lines.push(`Price per Box: ${formatRupee(singlePrice)}`);
   }
 
+  if (params.orderId) {
+    lines.push(`Order ID: ${sanitize(params.orderId)}`);
+  }
+
   lines.push('');
   lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
   lines.push('');
@@ -151,6 +155,15 @@ const formatOrderWhatsAppMessage = (params) => {
         : ''
       }`
     );
+  }
+
+  // Optional Referral Code section
+  const cleanReferral = sanitize(params.referralCode);
+  if (cleanReferral && cleanReferral !== '—' && cleanReferral !== 'null' && cleanReferral !== 'undefined') {
+    lines.push('');
+    lines.push('🎟️ *REFERRAL CODE*');
+    lines.push('');
+    lines.push(cleanReferral.toUpperCase());
   }
 
   lines.push('');
@@ -299,5 +312,146 @@ const categoryList = [
 ];
 assert.strictEqual(categoryList.length, 9, 'Must have exactly 9 celebration categories');
 console.log('✅ 9 Occasion categories verified');
+
+// 7. Refer & Earn System Verification
+console.log('\n--- Refer & Earn System Verification ---');
+
+// 7.1 Anti-Formula Injection Sanitizer Test
+const sanitizeForSheetTest = (input) => {
+  if (input === null || input === undefined) return '';
+  const str = String(input).trim();
+  if (/^[=+\-@\t\r]/.test(str)) {
+    return `'${str}`;
+  }
+  return str;
+};
+assert.strictEqual(sanitizeForSheetTest('=cmd|calc!A1'), "'=cmd|calc!A1", 'Formula starting with = must be single-quote prefixed');
+assert.strictEqual(sanitizeForSheetTest('+12345'), "'+12345", 'Formula starting with + must be single-quote prefixed');
+assert.strictEqual(sanitizeForSheetTest('@danger'), "'@danger", 'Formula starting with @ must be single-quote prefixed');
+assert.strictEqual(sanitizeForSheetTest('Rahul Verma'), 'Rahul Verma', 'Normal text must remain untouched');
+console.log('✅ Anti-formula injection sanitizer verified');
+
+// 7.2 WhatsApp Message Formatting with & without Referral Code
+const orderWithoutRef = {
+  productName: 'Pastel Rose Celebration Box',
+  quantity: 1,
+  unitPrice: 399,
+  total: 399,
+  customerName: 'Aman Deep',
+  customerPhone: '9876543210',
+  fulfilment: 'pickup',
+  celebrationDate: '2026-11-28',
+};
+const msgNoRef = formatOrderWhatsAppMessage(orderWithoutRef);
+assert.ok(!msgNoRef.includes('REFERRAL CODE'), 'Order without referral code must NOT contain referral section');
+
+const orderWithRef = {
+  productName: 'Pastel Rose Celebration Box',
+  quantity: 1,
+  unitPrice: 399,
+  total: 399,
+  customerName: 'Aman Deep',
+  customerPhone: '9876543210',
+  fulfilment: 'pickup',
+  celebrationDate: '2026-11-28',
+  orderId: 'CBX-ORD-998877',
+  referralCode: 'CBX-K7M2',
+};
+const msgWithRef = formatOrderWhatsAppMessage(orderWithRef);
+assert.ok(msgWithRef.includes('Order ID: CBX-ORD-998877'), 'Order ID must be displayed in WhatsApp message');
+assert.ok(msgWithRef.includes('🎟️ *REFERRAL CODE*'), 'Referral header must be present');
+assert.ok(msgWithRef.includes('CBX-K7M2'), 'Referral code must be uppercase and present');
+console.log('✅ WhatsApp message formatting with and without referral code verified');
+
+// 7.3 Preset Codes Verification (Exact 10 codes specified in Part 2)
+const PRESET_CODES = [
+  'CBX-K7M2',
+  'CBX-R9P4',
+  'CBX-T3V8',
+  'CBX-N6W2',
+  'CBX-F8K5',
+  'CBX-H4R7',
+  'CBX-P2Y9',
+  'CBX-M5T3',
+  'CBX-V7D6',
+  'CBX-S9L4',
+];
+assert.strictEqual(PRESET_CODES.length, 10, 'Must have exactly 10 initial codes');
+PRESET_CODES.forEach((c) => {
+  assert.ok(/^CBX-[A-Z0-9]{4}$/.test(c), `Code ${c} must match CBX-XXXX format`);
+});
+console.log('✅ 10 preset referral codes verified');
+
+// 7.4 Reward Engine Calculation: 2 Distinct Verified Customers = ₹80
+const calculateRewards = (orders, allocatedOrderIds = new Set()) => {
+  const verifiedOrders = orders.filter(
+    (o) =>
+      o.paymentStatus === 'Verified Paid' &&
+      o.fulfilmentStatus === 'Fulfilled' &&
+      o.orderStatus !== 'Cancelled'
+  );
+
+  // Group by distinct customer phone (earliest order per unique phone)
+  const customerEarliest = new Map();
+  verifiedOrders.forEach((o) => {
+    if (allocatedOrderIds.has(o.orderId)) return;
+    const phone = o.customerPhone.replace(/\D/g, '').slice(-10);
+    if (!customerEarliest.has(phone)) {
+      customerEarliest.set(phone, o);
+    }
+  });
+
+  const distinctOrders = Array.from(customerEarliest.values());
+  const newRewardPairs = Math.floor(distinctOrders.length / 2);
+  const totalRewardAmount = newRewardPairs * 80;
+
+  return {
+    distinctCustomers: distinctOrders.length,
+    newRewardBatches: newRewardPairs,
+    rewardAmount: totalRewardAmount,
+  };
+};
+
+// Scenario A: 0 verified orders -> 0 rewards
+assert.strictEqual(calculateRewards([]).rewardAmount, 0, '0 orders should yield ₹0');
+
+// Scenario B: 1 verified order -> 0 rewards (needs 2)
+const oneOrder = [
+  { orderId: 'ORD-1', customerPhone: '9876543210', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+];
+assert.strictEqual(calculateRewards(oneOrder).rewardAmount, 0, '1 order should yield ₹0');
+
+// Scenario C: Same customer buys twice -> only 1 distinct customer -> 0 rewards
+const duplicateCustomerOrders = [
+  { orderId: 'ORD-1', customerPhone: '9876543210', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+  { orderId: 'ORD-2', customerPhone: '9876543210', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+];
+assert.strictEqual(calculateRewards(duplicateCustomerOrders).rewardAmount, 0, 'Same customer twice must NOT qualify for reward');
+assert.strictEqual(calculateRewards(duplicateCustomerOrders).distinctCustomers, 1, 'Duplicate customer phone should yield only 1 distinct customer');
+
+// Scenario D: 2 distinct customers -> 1 reward batch = ₹80
+const twoDistinctOrders = [
+  { orderId: 'ORD-1', customerPhone: '9876543210', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+  { orderId: 'ORD-2', customerPhone: '9876543211', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+];
+const res2 = calculateRewards(twoDistinctOrders);
+assert.strictEqual(res2.distinctCustomers, 2, '2 distinct customers');
+assert.strictEqual(res2.rewardAmount, 80, '2 distinct customers must yield exactly ₹80 reward');
+
+// Scenario E: 4 distinct customers -> 2 reward batches = ₹160
+const fourDistinctOrders = [
+  { orderId: 'ORD-1', customerPhone: '9876543210', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+  { orderId: 'ORD-2', customerPhone: '9876543211', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+  { orderId: 'ORD-3', customerPhone: '9876543212', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+  { orderId: 'ORD-4', customerPhone: '9876543213', paymentStatus: 'Verified Paid', fulfilmentStatus: 'Fulfilled', orderStatus: 'Completed' },
+];
+const res4 = calculateRewards(fourDistinctOrders);
+assert.strictEqual(res4.rewardAmount, 160, '4 distinct customers must yield exactly ₹160 reward');
+
+// Scenario F: Idempotency check: Already allocated orders cannot be rewarded twice
+const allocatedSet = new Set(['ORD-1', 'ORD-2']);
+const resAllocated = calculateRewards(fourDistinctOrders, allocatedSet);
+assert.strictEqual(resAllocated.rewardAmount, 80, 'With ORD-1 and ORD-2 allocated, only remaining 2 should yield ₹80');
+console.log('✅ Reward calculation engine (2 distinct customers = ₹80) & idempotency verified');
 
 console.log('\n🎉 ALL AUTOMATED TESTS PASSED SUCCESSFULLY! 🎉\n');

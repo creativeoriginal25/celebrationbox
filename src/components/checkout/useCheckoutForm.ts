@@ -14,12 +14,14 @@ export interface FormFields {
   celebrationDate: string;
   preferredTime: string;
   selectedProductId: string;
+  referralCode?: string;
 }
 
 export interface FormErrors {
   customerName?: string;
   customerPhone?: string;
   deliveryAddress?: string;
+  referralCode?: string;
 }
 
 const INDIAN_PHONE_REGEX = /^[6-9]\d{9}$/;
@@ -46,6 +48,7 @@ export const useCheckoutForm = (initialProductId?: string) => {
       celebrationDate: '',
       preferredTime: CHECKOUT_CONFIG.timeSlots[2] || 'Evening (4:00 PM - 7:00 PM)',
       selectedProductId: initialProductId || CHECKOUT_CONFIG.defaultProductId,
+      referralCode: '',
     };
 
     if (typeof window !== 'undefined') {

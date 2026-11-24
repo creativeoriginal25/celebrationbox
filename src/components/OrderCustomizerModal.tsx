@@ -120,14 +120,59 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
     onClose();
   };
 
-  // Submit order to WhatsApp
-  const handleConfirmOrder = () => {
+  // Submit order to WhatsApp & record in Google Sheets
+  const handleConfirmOrder = async () => {
     if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError(null);
 
     const total = isCartMode
       ? cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
       : activeProduct.price * formData.quantity;
 
+    let serverOrderId: string | undefined = undefined;
+    let validatedCode: string | undefined = formData.referralCode?.trim().toUpperCase();
+
+    // 1. Record order in Google Sheets tracker via secure serverless endpoint
+    try {
+      const response = await fetch('/api/referral/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customerName: formData.customerName,
+          customerPhone: formData.customerPhone,
+          productId: activeProduct.id,
+          quantity: formData.quantity,
+          deliveryMethod: formData.deliveryMethod,
+          deliveryAddress: formData.deliveryAddress,
+          personalMessage: formData.personalMessage,
+          celebrationDate: formData.celebrationDate,
+          preferredTime: formData.preferredTime,
+          referralCode: validatedCode || undefined,
+          cartItems: isCartMode ? cartItems : undefined,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.savedToDurableStorage && data.orderId) {
+          serverOrderId = data.orderId;
+          validatedCode = data.referralCode || validatedCode;
+        }
+      }
+    } catch (apiErr) {
+      console.warn('Google Sheets order recording endpoint offline, continuing with WhatsApp direct order:', apiErr);
+    }
+
+    // Client fallback ID if durable storage was unconfigured
+    if (!serverOrderId) {
+      serverOrderId = `CBX-INQ-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    }
+
+    // 2. Format official WhatsApp message with Order ID and Referral Code (if present)
     const formattedMessage = formatOrderWhatsAppMessage({
       productName: activeProduct.name,
       quantity: formData.quantity,
@@ -140,12 +185,12 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       personalMessage: formData.personalMessage,
       celebrationDate: formData.celebrationDate,
       preferredTime: formData.preferredTime,
+      orderId: serverOrderId,
+      referralCode: validatedCode || undefined,
       cartItems: isCartMode ? cartItems : undefined,
     });
 
     const waUrl = buildWhatsAppUrl(formattedMessage, CHECKOUT_CONFIG.whatsappNumber);
-
-    setIsSubmitting(true);
     setSubmittedUrl(waUrl);
     setSubmitError(null);
 

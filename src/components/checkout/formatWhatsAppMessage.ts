@@ -12,6 +12,9 @@ export interface FormatOrderParams {
   personalMessage?: string;
   celebrationDate?: string;
   preferredTime?: string;
+  // Optional referral code & order ID support
+  orderId?: string;
+  referralCode?: string;
   // Optional multi-item cart items support
   cartItems?: Array<{ name: string; quantity: number; price: number }>;
 }
@@ -106,6 +109,10 @@ export const formatOrderWhatsAppMessage = (params: FormatOrderParams): string =>
     lines.push(`Price per Box: ${formatRupee(singlePrice)}`);
   }
 
+  if (params.orderId) {
+    lines.push(`Order ID: ${sanitize(params.orderId)}`);
+  }
+
   lines.push('');
   lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
   lines.push('');
@@ -126,6 +133,15 @@ export const formatOrderWhatsAppMessage = (params: FormatOrderParams): string =>
           : ''
       }`
     );
+  }
+
+  // Optional Referral Code Section
+  const cleanReferral = sanitize(params.referralCode);
+  if (cleanReferral && cleanReferral !== '—' && cleanReferral !== 'null' && cleanReferral !== 'undefined') {
+    lines.push('');
+    lines.push('🎟️ *REFERRAL CODE*');
+    lines.push('');
+    lines.push(cleanReferral.toUpperCase());
   }
 
   lines.push('');
