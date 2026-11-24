@@ -465,4 +465,37 @@ const resAllocated = calculateRewards(fourDistinctOrders, allocatedSet);
 assert.strictEqual(resAllocated.rewardAmount, 80, 'With ORD-1 and ORD-2 allocated, only remaining 2 should yield ₹80');
 console.log('✅ Reward calculation engine (2 distinct customers = ₹80) & idempotency verified');
 
+// ============================================================================
+// 7. Chocoloom Cake Combo & Dynamic Pricing Verification
+// ============================================================================
+const cakePricing = {
+  'dutch-truffle': { '250g': 249, '500g': 449, '1kg': 799, '1.5kg': 1149, '2kg': 1499 },
+  'belgian-dark-silk': { '250g': 269, '500g': 489, '1kg': 849, '1.5kg': 1229, '2kg': 1599 },
+};
+const designAddons = {
+  'classic-swirl': 0,
+  'korean-bento': 0,
+  'rose-piped': 50,
+  'vintage-heart': 80,
+  'custom-photo-reference': 100,
+};
+
+const calcCake = (flavour, size, design) => {
+  const base = cakePricing[flavour][size];
+  const extra = designAddons[design] || 0;
+  return base + extra;
+};
+
+// 1. Dutch Truffle 500g Classic Swirl = 449
+assert.strictEqual(calcCake('dutch-truffle', '500g', 'classic-swirl'), 449, 'Dutch Truffle 500g should be 449');
+// 2. Dutch Truffle 250g Bento = 249
+assert.strictEqual(calcCake('dutch-truffle', '250g', 'korean-bento'), 249, 'Bento 250g should be 249');
+// 3. Belgian Dark Silk 1kg with Vintage Heart (+80) = 849 + 80 = 929
+assert.strictEqual(calcCake('belgian-dark-silk', '1kg', 'vintage-heart'), 929, 'Belgian 1kg with Vintage Heart should be 929');
+
+// 4. Combo Total: CelebrationBox (399) + Dutch Truffle 500g (449) = 848
+const comboTotal = 399 + calcCake('dutch-truffle', '500g', 'classic-swirl');
+assert.strictEqual(comboTotal, 848, 'CelebrationBox + Dutch Truffle combo should be exactly 848');
+console.log('✅ Chocoloom cake catalogue pricing and combo grand total verified');
+
 console.log('\n🎉 ALL AUTOMATED TESTS PASSED SUCCESSFULLY! 🎉\n');

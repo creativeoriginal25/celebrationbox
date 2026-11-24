@@ -16,6 +16,8 @@ import { AdminTemplatesModal } from '../components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from '../components/PolicyModal';
 import { ScrollReveal } from '../components/react-bits/ScrollReveal';
 import { OccasionCategoryGrid } from '../components/OccasionCategoryGrid';
+import { CompleteYourCelebration } from '../components/CompleteYourCelebration';
+import { CakeCustomizationState } from '../config/chocoloomCakes';
 import { PRODUCTS } from '../config/products';
 import { getPublishedProducts } from '../services/catalogService';
 import { BUSINESS_CONFIG } from '../config/business';
@@ -62,6 +64,7 @@ export const HomeContent: React.FC<HomeProps> = ({
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
   const [orderModalMode, setOrderModalMode] = useState<'buy-now' | 'cart'>('buy-now');
   const [orderModalProductId, setOrderModalProductId] = useState<string>('signature-celebration-box');
+  const [orderModalCakeState, setOrderModalCakeState] = useState<Partial<CakeCustomizationState> | undefined>(undefined);
 
   const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
   const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
@@ -90,11 +93,27 @@ export const HomeContent: React.FC<HomeProps> = ({
 
   const handleBuyNow = (product: Product) => {
     setOrderModalProductId(product.id);
+    setOrderModalCakeState(undefined);
+    setOrderModalMode('buy-now');
+    setIsOrderModalOpen(true);
+  };
+
+  const handleOrderCakeCombo = (cakeState: CakeCustomizationState, wantsLighting: boolean) => {
+    setOrderModalProductId(liveProducts[0]?.id || 'signature-celebration-box');
+    setOrderModalCakeState(cakeState);
+    setOrderModalMode('buy-now');
+    setIsOrderModalOpen(true);
+  };
+
+  const handleOrderBoxOnly = () => {
+    setOrderModalProductId(liveProducts[0]?.id || 'signature-celebration-box');
+    setOrderModalCakeState({ includeCake: false });
     setOrderModalMode('buy-now');
     setIsOrderModalOpen(true);
   };
 
   const handleCartCheckout = () => {
+    setOrderModalCakeState(undefined);
     setOrderModalMode('cart');
     setIsOrderModalOpen(true);
   };
@@ -213,6 +232,12 @@ export const HomeContent: React.FC<HomeProps> = ({
           </div>
         </section>
 
+        {/* Complete Your Celebration: CelebrationBox × Chocoloom Cake Combo Showcase */}
+        <CompleteYourCelebration
+          onOrderCombo={handleOrderCakeCombo}
+          onOrderBoxOnly={handleOrderBoxOnly}
+        />
+
         {/* Product Comparison Section with ScrollReveal */}
         {liveProducts.length > 1 && (
           <ScrollReveal yOffset={24}>
@@ -265,8 +290,12 @@ export const HomeContent: React.FC<HomeProps> = ({
       {isOrderModalOpen && (
         <OrderCustomizerModal
           initialProductId={orderModalProductId}
+          initialCakeCustomization={orderModalCakeState}
           mode={orderModalMode}
-          onClose={() => setIsOrderModalOpen(false)}
+          onClose={() => {
+            setIsOrderModalOpen(false);
+            setOrderModalCakeState(undefined);
+          }}
           onOpenFallback={handleOpenFallback}
         />
       )}

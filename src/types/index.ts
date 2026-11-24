@@ -254,3 +254,22 @@ export interface BusinessSettings {
   brand_logo_url?: string;
   business_description: string;
 }
+
+export type CakeSize = '250g' | '500g' | '1kg' | '1.5kg' | '2kg';
+export type CakeDietType = 'eggless' | 'contains_egg';
+
+export interface CakeCustomizationDetails {
+  includeCake: boolean;
+  flavourId: string;
+  flavourName: string;
+  size: CakeSize;
+  dietType: CakeDietType;
+  designId: string;
+  designName: string;
+  nameOnCake: string;
+  customMessage: string;
+  referenceImage?: string;
+  referenceImageName?: string;
+  specialInstructions: string;
+  cakePrice: number;
+}

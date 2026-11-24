@@ -1,8 +1,10 @@
 import React from 'react';
-import { Building2, MapPin, Check, CheckCircle2, Calendar, Clock, Lightbulb, Sparkles } from 'lucide-react';
+import { Building2, MapPin, Check, CheckCircle2, Calendar, Clock, Lightbulb, Sparkles, Cake } from 'lucide-react';
 import { CHECKOUT_CONFIG } from './checkoutConfig';
 import { FormFields, FormErrors, FulfilmentMethod } from './useCheckoutForm';
 import { ReferralCodeInput } from './ReferralCodeInput';
+import { CakeCustomizerFields } from '../CakeCustomizerFields';
+import { DEFAULT_CAKE_CUSTOMIZATION, CakeCustomizationState } from '../../config/chocoloomCakes';
 
 interface Step2CelebrationProps {
   formData: FormFields;
@@ -214,6 +216,19 @@ export const Step2Celebration: React.FC<Step2CelebrationProps> = ({
           className="w-full px-3.5 py-2.5 rounded-xl border border-brand-ink/15 bg-white text-sm text-brand-ink placeholder:text-brand-ink-muted/50 focus:outline-none focus:ring-2 focus:ring-brand-pink/25 focus:border-brand-pink transition-all"
         />
       </div>
+
+      {/* ============================================================== */}
+      {/* 2B. CAKE COMBO BY CHOCOLOOM (CELEBRATIONBOX × CHOCOLOOM)       */}
+      {/* ============================================================== */}
+      <CakeCustomizerFields
+        cakeState={formData.cakeCustomization || DEFAULT_CAKE_CUSTOMIZATION}
+        onChange={(updater) => {
+          const currentCake = formData.cakeCustomization || DEFAULT_CAKE_CUSTOMIZATION;
+          const updated = updater(currentCake);
+          onSetField('cakeCustomization', updated);
+        }}
+        showToggleHeader={true}
+      />
 
       {/* ============================================================== */}
       {/* 3. OPTIONAL LIGHTING RENTAL ENQUIRY (MAKE IT GLOW ✨)          */}

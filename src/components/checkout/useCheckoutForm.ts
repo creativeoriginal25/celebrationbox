@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { CHECKOUT_CONFIG } from './checkoutConfig';
+import { CakeCustomizationState, DEFAULT_CAKE_CUSTOMIZATION } from '../../config/chocoloomCakes';
 
 export type CheckoutStep = 1 | 2 | 3;
 export type FulfilmentMethod = 'pickup' | 'delivery';
@@ -16,6 +17,7 @@ export interface FormFields {
   selectedProductId: string;
   referralCode?: string;
   wantsLightingRental?: boolean;
+  cakeCustomization?: CakeCustomizationState;
 }
 
 export interface FormErrors {
@@ -51,6 +53,7 @@ export const useCheckoutForm = (initialProductId?: string) => {
       selectedProductId: initialProductId || CHECKOUT_CONFIG.defaultProductId,
       referralCode: '',
       wantsLightingRental: false,
+      cakeCustomization: DEFAULT_CAKE_CUSTOMIZATION,
     };
 
     if (typeof window !== 'undefined') {
@@ -77,7 +80,7 @@ export const useCheckoutForm = (initialProductId?: string) => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
-      const { customerName, customerPhone, quantity, deliveryMethod, deliveryAddress, personalMessage, celebrationDate, preferredTime, selectedProductId, wantsLightingRental } = formData;
+      const { customerName, customerPhone, quantity, deliveryMethod, deliveryAddress, personalMessage, celebrationDate, preferredTime, selectedProductId, wantsLightingRental, cakeCustomization } = formData;
       localStorage.setItem(
         CHECKOUT_CONFIG.storageKey,
         JSON.stringify({
@@ -91,6 +94,7 @@ export const useCheckoutForm = (initialProductId?: string) => {
           preferredTime,
           selectedProductId,
           wantsLightingRental,
+          cakeCustomization,
         })
       );
     } catch {

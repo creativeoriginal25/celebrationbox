@@ -22,9 +22,15 @@ import { formatOrderWhatsAppMessage, buildWhatsAppUrl } from './checkout/formatW
 import { Step1Details } from './checkout/Step1Details';
 import { Step2Celebration } from './checkout/Step2Celebration';
 import { Step3Review } from './checkout/Step3Review';
+import {
+  CakeCustomizationState,
+  DEFAULT_CAKE_CUSTOMIZATION,
+  calculateCakePrice,
+} from '../config/chocoloomCakes';
 
 export interface OrderCustomizerModalProps {
   initialProductId?: string;
+  initialCakeCustomization?: Partial<CakeCustomizationState>;
   mode?: 'buy-now' | 'cart';
   onClose: () => void;
   onOpenFallback?: (message: string, isConfigured: boolean) => void;
@@ -32,6 +38,7 @@ export interface OrderCustomizerModalProps {
 
 export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
   initialProductId = 'signature-celebration-box',
+  initialCakeCustomization,
   mode = 'buy-now',
   onClose,
   onOpenFallback,
@@ -65,6 +72,16 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       PRODUCTS[0]
     );
   });
+
+  useEffect(() => {
+    if (initialCakeCustomization) {
+      setField('cakeCustomization', {
+        ...DEFAULT_CAKE_CUSTOMIZATION,
+        ...initialCakeCustomization,
+        includeCake: initialCakeCustomization.includeCake !== false,
+      });
+    }
+  }, [initialCakeCustomization, setField]);
 
   useEffect(() => {
     let isMounted = true;
@@ -127,9 +144,15 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
     setIsSubmitting(true);
     setSubmitError(null);
 
-    const total = isCartMode
+    const cakePrice = formData.cakeCustomization?.includeCake
+      ? calculateCakePrice(formData.cakeCustomization)
+      : 0;
+
+    const kitTotal = isCartMode
       ? cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
       : activeProduct.price * formData.quantity;
+
+    const total = kitTotal + cakePrice;
 
     let serverOrderId: string | undefined = undefined;
     let validatedCode: string | undefined = formData.referralCode?.trim().toUpperCase();
@@ -153,6 +176,8 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
           preferredTime: formData.preferredTime,
           referralCode: validatedCode || undefined,
           cartItems: isCartMode ? cartItems : undefined,
+          cakeCustomization: formData.cakeCustomization,
+          totalAmount: total,
         }),
       });
 
@@ -189,6 +214,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       referralCode: validatedCode || undefined,
       wantsLightingRental: formData.wantsLightingRental,
       cartItems: isCartMode ? cartItems : undefined,
+      cakeCustomization: formData.cakeCustomization,
     });
 
     const waUrl = buildWhatsAppUrl(formattedMessage, CHECKOUT_CONFIG.whatsappNumber);

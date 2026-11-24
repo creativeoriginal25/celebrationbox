@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Copy, Check, Edit2, ShieldCheck, MessageCircle, MapPin, Building2, User, Phone, FileText } from 'lucide-react';
+import { ShoppingBag, Copy, Check, Edit2, ShieldCheck, MessageCircle, MapPin, Building2, User, Phone, FileText, Cake, Sparkles } from 'lucide-react';
 import { Product } from '../../types';
 import { formatPrice } from '../../utils/currency';
 import { FormFields, CheckoutStep } from './useCheckoutForm';
 import { formatOrderWhatsAppMessage } from './formatWhatsAppMessage';
+import {
+  calculateCakePrice,
+  getCakeFlavour,
+  getCakeDesign,
+  CHOCOLOOM_CONFIG,
+} from '../../config/chocoloomCakes';
 
 interface Step3ReviewProps {
   formData: FormFields;
@@ -22,9 +28,16 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
 }) => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const total = isCartMode
+  const hasCake = !!formData.cakeCustomization?.includeCake;
+  const cakePrice = hasCake && formData.cakeCustomization
+    ? calculateCakePrice(formData.cakeCustomization)
+    : 0;
+
+  const kitSubtotal = isCartMode
     ? cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
     : product.price * formData.quantity;
+
+  const total = kitSubtotal + cakePrice;
 
   const handleCopy = () => {
     const formatted = formatOrderWhatsAppMessage({
@@ -42,6 +55,7 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
       referralCode: formData.referralCode?.trim() || undefined,
       wantsLightingRental: formData.wantsLightingRental,
       cartItems: isCartMode ? cartItems : undefined,
+      cakeCustomization: formData.cakeCustomization,
     });
 
     if (navigator?.clipboard?.writeText) {
@@ -108,10 +122,56 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
                 </div>
               </div>
               <span className="text-sm font-black text-brand-pink shrink-0">
-                {formatPrice(total)}
+                {formatPrice(kitSubtotal)}
               </span>
             </div>
           )}
+
+          {/* CHOCOLOOM CAKE COMBO CARD IN REVIEW */}
+          {hasCake && formData.cakeCustomization && (() => {
+            const flavour = getCakeFlavour(formData.cakeCustomization.flavourId);
+            const design = getCakeDesign(formData.cakeCustomization.designId);
+            const sizeObj = CHOCOLOOM_CONFIG.sizes.find((s) => s.id === formData.cakeCustomization!.size);
+            return (
+              <div className="mt-2.5 p-3 rounded-xl bg-gradient-to-r from-pink-50/70 via-rose-50/50 to-amber-50/30 border border-brand-pink/25">
+                <div className="flex items-start justify-between gap-2.5">
+                  <div className="flex items-start gap-2.5 min-w-0">
+                    <img
+                      src={flavour.image}
+                      alt={flavour.name}
+                      className="w-11 h-11 object-cover rounded-lg border border-brand-pink/30 shrink-0 mt-0.5"
+                    />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-xs font-bold text-brand-ink">
+                          {flavour.name}
+                        </span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-brand-pink/15 text-brand-pink">
+                          Cakes by Chocoloom
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-brand-ink-light mt-0.5">
+                        {sizeObj?.label || formData.cakeCustomization.size} • {formData.cakeCustomization.dietType === 'eggless' ? '100% Eggless 🟢' : 'Regular 🥚'} • {design.name}
+                      </p>
+                      {formData.cakeCustomization.nameOnCake && (
+                        <p className="text-[11px] text-brand-pink font-semibold mt-0.5">
+                          Name on Cake: &ldquo;{formData.cakeCustomization.nameOnCake}&rdquo;
+                        </p>
+                      )}
+                      {formData.cakeCustomization.referenceImage && (
+                        <p className="text-[10px] text-emerald-700 font-semibold mt-0.5 flex items-center gap-1">
+                          ✓ Custom reference photo attached
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-xs font-extrabold text-brand-pink shrink-0">
+                    +{formatPrice(cakePrice)}
+                  </span>
+                </div>
+              </div>
+            );
+          })()}
         </div>
 
         {/* SECTION B: CUSTOMER CONTACT */}
@@ -235,10 +295,10 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
         <div className="pt-3.5 border-t border-brand-ink/10 flex items-baseline justify-between">
           <div>
             <span className="text-sm font-black text-brand-ink block">
-              Total
+              {hasCake ? 'Total (Box + Chocoloom Cake)' : 'Total'}
             </span>
             <span className="text-[11px] text-brand-ink-muted">
-              Delivery charge, if any, is confirmed on WhatsApp.
+              {hasCake ? `Kit: ${formatPrice(kitSubtotal)} + Cake: ${formatPrice(cakePrice)}` : 'Delivery charge, if any, is confirmed on WhatsApp.'}
             </span>
           </div>
           <div className="text-right">

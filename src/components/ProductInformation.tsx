@@ -7,6 +7,7 @@ import {
   Lightbulb,
   Info,
   ShieldAlert,
+  Cake,
 } from 'lucide-react';
 import { Product } from '../types';
 import { AVAILABLE_THEMES } from '../config/products';
@@ -194,6 +195,37 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
         <Info className="w-4 h-4 text-brand-teal shrink-0 mt-0.5" />
         <p>
           <strong className="font-semibold text-brand-ink">Styling inspiration.</strong> Cake, table and additional props are not included. Decorative lighting is available separately on rent.
+        </p>
+      </div>
+
+      {/* ============================================================== */}
+      {/* 7B. CELEBRATIONBOX × CHOCOLOOM CAKE COMBO CALLOUT              */}
+      {/* ============================================================== */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-pink-50 via-rose-50/70 to-amber-50/40 border-2 border-brand-pink/25 shadow-xs space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <span className="w-8 h-8 rounded-xl bg-brand-pink text-white flex items-center justify-center shrink-0 shadow-2xs">
+              <Cake className="w-4 h-4" />
+            </span>
+            <div>
+              <span className="text-xs font-black text-brand-ink block">
+                Make it a Birthday Combo ✨
+              </span>
+              <p className="text-[11px] text-brand-pink font-semibold">
+                Cakes by Chocoloom • from +₹219
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleDirectBuy}
+            className="px-3 py-1.5 rounded-xl bg-brand-pink text-white text-xs font-extrabold hover:bg-brand-pink-hover transition-colors shadow-2xs cursor-pointer active:scale-95"
+          >
+            Add a Cake
+          </button>
+        </div>
+        <p className="text-[11px] text-brand-ink-light">
+          Pair this kit with a fresh Dutch Truffle, Belgian Silk, or Bento cake. Choose size & flavor during checkout!
         </p>
       </div>
 

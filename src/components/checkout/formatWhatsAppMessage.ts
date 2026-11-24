@@ -1,4 +1,11 @@
 import { CHECKOUT_CONFIG } from './checkoutConfig';
+import {
+  CakeCustomizationState,
+  calculateCakePrice,
+  getCakeFlavour,
+  getCakeDesign,
+  CHOCOLOOM_CONFIG,
+} from '../../config/chocoloomCakes';
 
 export interface FormatOrderParams {
   productName: string;
@@ -18,6 +25,8 @@ export interface FormatOrderParams {
   wantsLightingRental?: boolean;
   // Optional multi-item cart items support
   cartItems?: Array<{ name: string; quantity: number; price: number }>;
+  // Optional Chocoloom Cake Customization
+  cakeCustomization?: CakeCustomizationState;
 }
 
 /**
@@ -114,8 +123,45 @@ export const formatOrderWhatsAppMessage = (params: FormatOrderParams): string =>
     lines.push(`Order ID: ${sanitize(params.orderId)}`);
   }
 
+  // Chocoloom Cake Combo Section
+  if (params.cakeCustomization?.includeCake) {
+    const cake = params.cakeCustomization;
+    const flavour = getCakeFlavour(cake.flavourId);
+    const design = getCakeDesign(cake.designId);
+    const cakePrice = calculateCakePrice(cake);
+    const sizeObj = CHOCOLOOM_CONFIG.sizes.find((s) => s.id === cake.size);
+
+    lines.push('');
+    lines.push('🎂 *CHOCOLOOM CAKE COMBO* (Bakery Partner)');
+    lines.push(`• Bakery: ${CHOCOLOOM_CONFIG.tagline} (${CHOCOLOOM_CONFIG.websiteUrl})`);
+    lines.push(`• Flavour: ${flavour.name}`);
+    lines.push(`• Size / Weight: ${sizeObj ? sizeObj.label : cake.size}`);
+    lines.push(`• Diet Preference: ${cake.dietType === 'eggless' ? '100% Eggless 🟢' : 'Contains Egg 🥚'}`);
+    lines.push(`• Cake Design: ${design.name}${design.additionalCost > 0 ? ` (+${formatRupee(design.additionalCost)})` : ''}`);
+    if (cake.nameOnCake && cake.nameOnCake.trim()) {
+      lines.push(`• Name on Cake: "${sanitize(cake.nameOnCake)}"`);
+    }
+    if (cake.customMessage && cake.customMessage.trim()) {
+      lines.push(`• Cake Message: "${sanitize(cake.customMessage)}"`);
+    }
+    if (cake.referenceImage) {
+      lines.push(`• Reference Photo: Uploaded (${cake.referenceImageName || 'Custom Cake Design'})`);
+    }
+    if (cake.specialInstructions && cake.specialInstructions.trim()) {
+      lines.push(`• Cake Special Instructions: ${sanitize(cake.specialInstructions)}`);
+    }
+    lines.push(`• Cake Price: ${formatRupee(cakePrice)}`);
+  }
+
   lines.push('');
-  lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
+  if (params.cakeCustomization?.includeCake) {
+    const cakePrice = calculateCakePrice(params.cakeCustomization);
+    const kitSubtotal = Math.max(0, params.total - cakePrice);
+    lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
+    lines.push(`   (Decoration Kit: ${formatRupee(kitSubtotal)} + Chocoloom Cake: ${formatRupee(cakePrice)})`);
+  } else {
+    lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
+  }
   lines.push('');
   lines.push(
     `Optional Lighting Rental Enquiry: ${
