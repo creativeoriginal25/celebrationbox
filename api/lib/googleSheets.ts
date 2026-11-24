@@ -137,7 +137,36 @@ export const fetchReferralCodes = async (): Promise<ReferralCodeRecord[]> => {
     }
   }
 
-  // If Google Sheets credentials are not configured, return the initial preset codes with UNASSIGNED status
+  // Fallback: If Google Service Account credentials are not configured, fetch live via Google Visualization endpoint
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent('Referral Codes')}`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const text = await res.text();
+      const match = text.match(/setResponse\((.*)\);/s);
+      if (match) {
+        const data = JSON.parse(match[1]);
+        if (data.table && Array.isArray(data.table.rows) && data.table.rows.length > 0) {
+          return data.table.rows.map((r: any) => {
+            const cells = r.c ? r.c.map((cell: any) => (cell ? cell.v : null)) : [];
+            return {
+              code: String(cells[0] || '').trim().toUpperCase(),
+              partnerName: String(cells[1] || '').trim(),
+              partnerContact: String(cells[2] || '').trim(),
+              notes: '',
+              status: (String(cells[3] || 'UNASSIGNED').trim().toUpperCase()) as 'UNASSIGNED' | 'ACTIVE' | 'INACTIVE',
+              createdAt: cells[4] ? String(cells[4]) : new Date().toISOString(),
+              updatedAt: cells[9] ? String(cells[9]) : new Date().toISOString(),
+            };
+          });
+        }
+      }
+    }
+  } catch (gvizErr) {
+    console.warn('Gviz live fetch fallback error:', gvizErr);
+  }
+
+  // If both fail, return preset codes
   const now = new Date().toISOString();
   return INITIAL_PRESET_CODES.map((code) => ({
     code,

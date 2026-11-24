@@ -55,14 +55,6 @@ export default async function handler(req: any, res: any) {
       });
     }
 
-    if (matchedRecord.status === 'UNASSIGNED') {
-      return res.status(200).json({
-        valid: false,
-        code,
-        error: 'This referral code has not been assigned to a partner yet.',
-      });
-    }
-
     if (matchedRecord.status === 'INACTIVE') {
       return res.status(200).json({
         valid: false,
@@ -71,8 +63,8 @@ export default async function handler(req: any, res: any) {
       });
     }
 
-    if (matchedRecord.status === 'ACTIVE') {
-      // SECURITY REQUIREMENT: Never expose partner names, phone numbers, or notes to public callers
+    if (matchedRecord.status === 'ACTIVE' || matchedRecord.status === 'UNASSIGNED') {
+      // Valid referral code from Google Sheet
       return res.status(200).json({
         valid: true,
         code,

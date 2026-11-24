@@ -107,10 +107,10 @@ export default async function handler(req: any, res: any) {
         });
       }
 
-      if (matched.status !== 'ACTIVE') {
+      if (matched.status === 'INACTIVE') {
         return res.status(400).json({
           success: false,
-          error: `Referral code "${code}" is ${matched.status.toLowerCase()}. Only active partner codes are eligible.`,
+          error: `Referral code "${code}" is inactive. Please use an active partner code.`,
         });
       }
 

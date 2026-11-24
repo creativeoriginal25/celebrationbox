@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, Tag, Loader2, X } from 'lucide-react';
+import { validateReferralCodeLive } from '../../services/referralSheetService';
 
 interface ReferralCodeInputProps {
   referralCode?: string;
@@ -45,14 +46,26 @@ export const ReferralCodeInput: React.FC<ReferralCodeInputProps> = ({
         setMessage(data.error || 'Invalid or inactive referral code');
       }
     } catch {
-      // In offline or local fallback, check known format
-      if (/^CBX-[A-Z0-9]{4}$/.test(clean)) {
-        setStatus('valid');
-        setMessage('Referral code applied!');
-        onSetCode(clean);
-      } else {
-        setStatus('invalid');
-        setMessage('Invalid referral code');
+      // Direct live check against Google Sheet
+      try {
+        const liveResult = await validateReferralCodeLive(clean);
+        if (liveResult.valid) {
+          setStatus('valid');
+          setMessage(liveResult.message || 'Referral code applied!');
+          onSetCode(liveResult.code || clean);
+        } else {
+          setStatus('invalid');
+          setMessage(liveResult.message || 'Invalid or inactive referral code');
+        }
+      } catch {
+        if (/^CBX-[A-Z0-9]{4}$/.test(clean)) {
+          setStatus('valid');
+          setMessage('Referral code applied!');
+          onSetCode(clean);
+        } else {
+          setStatus('invalid');
+          setMessage('Invalid referral code');
+        }
       }
     } finally {
       setIsValidating(false);

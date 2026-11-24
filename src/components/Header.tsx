@@ -10,12 +10,17 @@ import {
   Gift,
   ArrowRight,
   Sparkles,
+  ExternalLink,
+  Users,
+  Award,
+  CheckCircle2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 import { BUSINESS_CONFIG } from '../config/business';
 import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
+import { SPREADSHEET_URL, fetchPartnerStats, SheetReferralCode } from '../services/referralSheetService';
 
 interface HeaderProps {
   onShopClick: () => void;
@@ -27,7 +32,32 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick, onOpenCategory }) =
   const [searchQuery, setSearchQuery] = useState('');
   const [referModalOpen, setReferModalOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const [partnerSearchCode, setPartnerSearchCode] = useState('');
+  const [partnerStats, setPartnerStats] = useState<SheetReferralCode | null>(null);
+  const [isSearchingPartner, setIsSearchingPartner] = useState(false);
+  const [partnerLookupError, setPartnerLookupError] = useState<string | null>(null);
   const { totalCount, setIsCartOpen } = useCart();
+
+  const handleLookupPartnerCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = partnerSearchCode.trim().toUpperCase();
+    if (!clean) return;
+    setIsSearchingPartner(true);
+    setPartnerLookupError(null);
+    setPartnerStats(null);
+    try {
+      const stats = await fetchPartnerStats(clean);
+      if (stats) {
+        setPartnerStats(stats);
+      } else {
+        setPartnerLookupError(`Code "${clean}" not found in Google Sheet.`);
+      }
+    } catch {
+      setPartnerLookupError('Could not connect to Google Sheet tracker.');
+    } finally {
+      setIsSearchingPartner(false);
+    }
+  };
 
   // Prevent background scrolling when mobile menu or referral modal is open
   useEffect(() => {
@@ -380,7 +410,7 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick, onOpenCategory }) =
       </AnimatePresence>
 
       {/* ========================================================
-          REFER & EARN MODAL
+          REFER & EARN MODAL (Connected to Google Sheets Tracker)
          ======================================================== */}
       {referModalOpen && (
         <div
@@ -390,60 +420,133 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick, onOpenCategory }) =
           onClick={() => setReferModalOpen(false)}
         >
           <div
-            className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-pink-100 text-center space-y-4"
+            className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-pink-100 text-center space-y-4 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setReferModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full text-brand-ink-muted hover:text-brand-ink hover:bg-brand-cream-50 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full text-brand-ink-muted hover:text-brand-ink hover:bg-brand-cream-50 transition-colors cursor-pointer"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-16 h-16 rounded-full bg-[#FFF0F4] border border-[#FCD6E0] mx-auto flex items-center justify-center text-3xl shadow-xs">
+            <div className="w-14 h-14 rounded-full bg-[#FFF0F4] border border-[#FCD6E0] mx-auto flex items-center justify-center text-2xl shadow-xs">
               🎁
             </div>
 
             <div className="space-y-1">
-              <span className="inline-block px-3 py-0.5 rounded-full text-[11px] font-bold bg-pink-100 text-pink-800">
-                Celebration Rewards
+              <span className="inline-block px-3 py-0.5 rounded-full text-[11px] font-bold bg-pink-100 text-[#8A1538]">
+                Campus Ambassadors &amp; Partners
               </span>
               <h3 className="font-serif text-2xl font-bold text-[#5C112A]">
-                Refer &amp; Earn ₹50 OFF
+                Refer &amp; Earn ₹80 per 2 Orders
               </h3>
-              <p className="text-xs text-brand-ink-light max-w-xs mx-auto">
-                Share the joy of effortless celebrations! When your friends place their first Celebration Box order, you both get ₹50 off.
+              <p className="text-xs text-brand-ink-light max-w-sm mx-auto leading-relaxed">
+                Become a Celebration Partner! Share your unique partner code with friends &amp; classmates. For every 2 completed orders, earn <strong>₹80 cash reward</strong> sent directly via UPI.
               </p>
             </div>
 
-            <div className="bg-[#FFF8F9] border border-dashed border-[#F3A5BA] rounded-2xl p-3.5 space-y-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-ink-muted">
-                Your Universal Referral Code
-              </span>
-              <div className="flex items-center justify-center gap-2">
-                <span className="font-mono font-bold text-lg text-[#8A1538] tracking-widest">
-                  CELEBRATE50
-                </span>
-                <button
-                  onClick={copyReferralCode}
-                  className="px-3 py-1 rounded-full text-xs font-bold text-white bg-[#8A1538] hover:bg-[#72112E] transition-all cursor-pointer"
-                >
-                  {copiedCode ? 'Copied! ✓' : 'Copy'}
-                </button>
+            {/* 3 Step Flow */}
+            <div className="grid grid-cols-3 gap-2 py-1 text-left">
+              <div className="p-2.5 rounded-xl bg-[#FFF8F9] border border-[#FCD6E0] space-y-1">
+                <span className="text-[10px] font-bold text-[#8A1538] uppercase block">Step 1</span>
+                <p className="text-[11px] font-bold text-brand-ink">Get Your Code</p>
+                <p className="text-[10px] text-brand-ink-muted">Receive your CBX-XXXX code on WhatsApp</p>
+              </div>
+              <div className="p-2.5 rounded-xl bg-[#FFF8F9] border border-[#FCD6E0] space-y-1">
+                <span className="text-[10px] font-bold text-[#8A1538] uppercase block">Step 2</span>
+                <p className="text-[11px] font-bold text-brand-ink">Friends Order</p>
+                <p className="text-[10px] text-brand-ink-muted">They enter your code at kit checkout</p>
+              </div>
+              <div className="p-2.5 rounded-xl bg-[#FFF8F9] border border-[#FCD6E0] space-y-1">
+                <span className="text-[10px] font-bold text-[#8A1538] uppercase block">Step 3</span>
+                <p className="text-[11px] font-bold text-brand-ink">Earn ₹80 / 2 Kits</p>
+                <p className="text-[10px] text-brand-ink-muted">Cash rewards paid directly to your UPI</p>
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                const text = `Hey! 👋 Check out Celebration Box for DIY birthday decoration kits: https://celebrations.vercel.app - Use my code *CELEBRATE50* to get ₹50 off! 🎉`;
-                const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-                window.open(url, '_blank');
-              }}
-              className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span>Share on WhatsApp</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {/* Live Partner Code Lookup from Google Sheet */}
+            <div className="bg-[#FAF8F5] border border-brand-ink/10 rounded-2xl p-3.5 space-y-2 text-left">
+              <label htmlFor="partner-code-check" className="text-[11px] font-bold uppercase tracking-wider text-brand-ink block">
+                Already a Partner? Check Live Status from Google Sheet
+              </label>
+              <form onSubmit={handleLookupPartnerCode} className="flex gap-2">
+                <input
+                  id="partner-code-check"
+                  type="text"
+                  placeholder="Enter partner code (e.g. CBX-K7M2)"
+                  value={partnerSearchCode}
+                  onChange={(e) => setPartnerSearchCode(e.target.value.toUpperCase())}
+                  className="flex-1 px-3 py-2 text-xs font-mono rounded-xl border border-brand-ink/15 uppercase tracking-wider bg-white focus:outline-none focus:border-brand-pink"
+                />
+                <button
+                  type="submit"
+                  disabled={isSearchingPartner}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#8A1538] hover:bg-[#72112E] transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {isSearchingPartner ? 'Checking...' : 'Check'}
+                </button>
+              </form>
+
+              {partnerLookupError && (
+                <p className="text-[11px] text-rose-600 font-semibold">{partnerLookupError}</p>
+              )}
+
+              {partnerStats && (
+                <div className="mt-2 p-2.5 rounded-xl bg-white border border-emerald-200 text-xs space-y-1.5 animate-fadeIn">
+                  <div className="flex items-center justify-between font-bold text-brand-ink">
+                    <span>Code: {partnerStats.code}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] ${
+                      partnerStats.status === 'ACTIVE'
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-amber-100 text-amber-800'
+                    }`}>
+                      {partnerStats.status}
+                    </span>
+                  </div>
+                  {partnerStats.partnerName && (
+                    <p className="text-[11px] text-brand-ink-light">Partner: <strong>{partnerStats.partnerName}</strong></p>
+                  )}
+                  <div className="grid grid-cols-2 gap-2 pt-1 border-t border-brand-ink/5">
+                    <div>
+                      <span className="text-[10px] text-brand-ink-muted block">Verified Orders</span>
+                      <strong className="text-[#8A1538]">{partnerStats.verifiedReferrals}</strong>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-brand-ink-muted block">Rewards Earned</span>
+                      <strong className="text-emerald-600">₹{partnerStats.rewardsEarned}</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const text = `Hi Celebration Box! 👋 I would like to become a Referral Partner and get my unique partner code to earn rewards! 🎉`;
+                  const url = buildWhatsAppLink(BUSINESS_CONFIG.whatsappNumber, text);
+                  triggerWhatsAppChat(url);
+                }}
+                className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Get Your Partner Code on WhatsApp</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <a
+                href={SPREADSHEET_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 text-[11px] font-semibold text-brand-ink-light hover:text-[#8A1538] transition-colors pt-1"
+              >
+                <span>View Google Sheet Partner Registry</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
       )}
