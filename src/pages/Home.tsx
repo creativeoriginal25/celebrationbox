@@ -16,6 +16,7 @@ import { AdminTemplatesModal } from '../components/AdminTemplatesModal';
 import { PolicyModal, PolicyType } from '../components/PolicyModal';
 import { ScrollReveal } from '../components/react-bits/ScrollReveal';
 import { OccasionCategoryGrid } from '../components/OccasionCategoryGrid';
+import { TrustBadgesStrip } from '../components/TrustBadgesStrip';
 import { PRODUCTS } from '../config/products';
 import { getPublishedProducts } from '../services/catalogService';
 import { BUSINESS_CONFIG } from '../config/business';
@@ -163,11 +164,14 @@ export const HomeContent: React.FC<HomeProps> = ({
 
       {/* Main Content */}
       <main className="flex-1">
-        {/* Centered Hero Section with X Buddy visual hierarchy */}
+        {/* Flagship Hero Showcase Card */}
         <Hero
           onExplore={scrollToShop}
           onOpenOrder={handleDirectWhatsAppOrder}
         />
+
+        {/* Trust Badges Strip (Pan-India Delivery, Quality Checked, Easy Setup, Dedicated Support) */}
+        <TrustBadgesStrip />
 
         {/* Visual Celebration Categories Discovery Grid */}
         <OccasionCategoryGrid onSelectCategory={handleSelectCategory} />

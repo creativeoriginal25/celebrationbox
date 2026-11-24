@@ -57,6 +57,7 @@ export default {
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         display: ['Poppins', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       boxShadow: {
         'sm': '0 1px 2px 0 rgba(43, 43, 58, 0.05)',
