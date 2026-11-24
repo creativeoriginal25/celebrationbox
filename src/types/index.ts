@@ -106,6 +106,7 @@ export interface OrderDetails {
   deliveryMethod: DeliveryMethod;
   deliveryAddress?: string;
   birthdayMessage?: string;
+  wantsLightingRental?: boolean;
 }
 
 export interface CartOrderDetails {
@@ -117,6 +118,7 @@ export interface CartOrderDetails {
   deliveryMethod: DeliveryMethod;
   deliveryAddress?: string;
   birthdayMessage?: string;
+  wantsLightingRental?: boolean;
 }
 
 export interface OrderSummary {

@@ -15,6 +15,7 @@ export interface FormatOrderParams {
   // Optional referral code & order ID support
   orderId?: string;
   referralCode?: string;
+  wantsLightingRental?: boolean;
   // Optional multi-item cart items support
   cartItems?: Array<{ name: string; quantity: number; price: number }>;
 }
@@ -115,6 +116,14 @@ export const formatOrderWhatsAppMessage = (params: FormatOrderParams): string =>
 
   lines.push('');
   lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
+  lines.push('');
+  lines.push(
+    `Optional Lighting Rental Enquiry: ${
+      params.wantsLightingRental
+        ? 'Yes (Note: Decorative lighting is rented separately and not included in checkout total)'
+        : 'No'
+    }`
+  );
   lines.push('');
 
   // 2. CUSTOMER DETAILS

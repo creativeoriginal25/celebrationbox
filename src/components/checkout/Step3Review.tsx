@@ -40,6 +40,7 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
       celebrationDate: formData.celebrationDate,
       preferredTime: formData.preferredTime,
       referralCode: formData.referralCode?.trim() || undefined,
+      wantsLightingRental: formData.wantsLightingRental,
       cartItems: isCartMode ? cartItems : undefined,
     });
 
@@ -207,6 +208,27 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
               <span>{formData.referralCode}</span>
             </div>
           </div>
+        )}
+
+        {/* SECTION: OPTIONAL LIGHTING RENTAL */}
+        <div className="pt-3 border-t border-brand-ink/5 flex items-center justify-between text-xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-brand-ink-muted block">
+            Lighting Rental Enquiry
+          </span>
+          <span
+            className={`font-bold px-2.5 py-0.5 rounded-full text-[10px] ${
+              formData.wantsLightingRental
+                ? 'bg-amber-100 text-amber-900 border border-amber-200'
+                : 'bg-brand-cream-100 text-brand-ink-muted'
+            }`}
+          >
+            {formData.wantsLightingRental ? '✨ Yes (Enquiry Included)' : 'No'}
+          </span>
+        </div>
+        {formData.wantsLightingRental && (
+          <p className="text-[10px] text-amber-800/90 italic -mt-2">
+            * Lighting is rented separately and its price is not included in the kit total.
+          </p>
         )}
 
         {/* SECTION E: TOTAL */}

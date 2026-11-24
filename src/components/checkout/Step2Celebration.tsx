@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, MapPin, Check, CheckCircle2, Calendar, Clock } from 'lucide-react';
+import { Building2, MapPin, Check, CheckCircle2, Calendar, Clock, Lightbulb, Sparkles } from 'lucide-react';
 import { CHECKOUT_CONFIG } from './checkoutConfig';
 import { FormFields, FormErrors, FulfilmentMethod } from './useCheckoutForm';
 import { ReferralCodeInput } from './ReferralCodeInput';
@@ -216,7 +216,52 @@ export const Step2Celebration: React.FC<Step2CelebrationProps> = ({
       </div>
 
       {/* ============================================================== */}
-      {/* 3. OPTIONAL PREFERRED DATE & TIME SLOT                         */}
+      {/* 3. OPTIONAL LIGHTING RENTAL ENQUIRY (MAKE IT GLOW ✨)          */}
+      {/* ============================================================== */}
+      <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 shadow-xs space-y-2">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+              <Lightbulb className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h4 className="text-xs sm:text-sm font-bold text-brand-ink">
+                  Make It Glow ✨ — Lighting Available on Rent
+                </h4>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900">
+                  Optional Add-on
+                </span>
+              </div>
+              <p className="text-xs text-brand-ink-light mt-0.5">
+                Want to add a warm glow to your birthday setup? Ask us about our optional milky-white decorative lighting rental.
+              </p>
+            </div>
+          </div>
+
+          <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-1 select-none">
+            <input
+              type="checkbox"
+              checked={formData.wantsLightingRental || false}
+              onChange={(e) => onSetField('wantsLightingRental', e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-10 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+          </label>
+        </div>
+
+        <div className="pl-10.5 text-[11px] text-amber-950/80 leading-relaxed space-y-0.5">
+          <p className="font-semibold text-amber-900">
+            ⚠️ Lighting is NOT included in the ₹399 kit price.
+          </p>
+          <p>
+            Enquiry will be sent to WhatsApp. Rental duration, deposit, and return arrangements must be confirmed before accepting the rental.
+          </p>
+        </div>
+      </div>
+
+      {/* ============================================================== */}
+      {/* 4. OPTIONAL PREFERRED DATE & TIME SLOT                         */}
       {/* ============================================================== */}
       <div className="p-3.5 rounded-2xl bg-white border border-brand-ink/10 shadow-xs space-y-3">
         <div className="flex items-center justify-between">

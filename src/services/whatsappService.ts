@@ -26,6 +26,7 @@ export const generateWhatsAppOrderMessage = (order: OrderDetails): string => {
     personalMessage: order.birthdayMessage,
     celebrationDate: order.celebrationDate,
     preferredTime: order.preferredTime,
+    wantsLightingRental: order.wantsLightingRental,
   });
 };
 
@@ -50,6 +51,7 @@ export const generateCartWhatsAppOrderMessage = (cartOrder: CartOrderDetails): s
     personalMessage: cartOrder.birthdayMessage,
     celebrationDate: cartOrder.celebrationDate,
     preferredTime: cartOrder.preferredTime,
+    wantsLightingRental: cartOrder.wantsLightingRental,
     cartItems: cartOrder.items,
   });
 };

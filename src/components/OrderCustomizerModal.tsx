@@ -187,6 +187,7 @@ export const OrderCustomizerModal: React.FC<OrderCustomizerModalProps> = ({
       preferredTime: formData.preferredTime,
       orderId: serverOrderId,
       referralCode: validatedCode || undefined,
+      wantsLightingRental: formData.wantsLightingRental,
       cartItems: isCartMode ? cartItems : undefined,
     });
 

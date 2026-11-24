@@ -139,6 +139,14 @@ const formatOrderWhatsAppMessage = (params) => {
   lines.push('');
   lines.push(`💰 *Total Amount: ${formatRupee(params.total)}*`);
   lines.push('');
+  lines.push(
+    `Optional Lighting Rental Enquiry: ${
+      params.wantsLightingRental
+        ? 'Yes (Note: Decorative lighting is rented separately and not included in checkout total)'
+        : 'No'
+    }`
+  );
+  lines.push('');
 
   // 2. CUSTOMER DETAILS
   lines.push('👤 *CUSTOMER DETAILS*');
@@ -225,6 +233,7 @@ assert.ok(singleMsg.includes('👤 *CUSTOMER DETAILS*'), 'Customer details headi
 assert.ok(singleMsg.includes('Name: Rahul Verma'), 'Customer name matches');
 assert.ok(singleMsg.includes('Mobile: +91 9876543210'), 'Customer mobile matches');
 assert.ok(singleMsg.includes('📍 *FULFILMENT*'), 'Fulfilment heading matches');
+assert.ok(singleMsg.includes('Optional Lighting Rental Enquiry: No'), 'Lighting rental enquiry defaulted to No');
 assert.ok(singleMsg.includes('Campus Pickup (Bhimavaram)'), 'Fulfilment method matches');
 assert.ok(singleMsg.includes('Please confirm the availability and pickup details. Thank you! 💖'), 'Closing line matches');
 assert.ok(!singleMsg.includes('undefined'), 'No undefined in single order');
@@ -262,9 +271,11 @@ const sampleCartOrder = {
   fulfilment: 'delivery',
   deliveryAddress: 'Room 102, Near Campus Gate, Bhimavaram',
   personalMessage: 'Please pack with extra pastel ribbons!',
+  wantsLightingRental: true,
 };
 
 const cartMsg = formatOrderWhatsAppMessage(sampleCartOrder);
+assert.ok(cartMsg.includes('Optional Lighting Rental Enquiry: Yes'), 'Cart lighting rental enquiry matches Yes');
 assert.ok(cartMsg.includes('Product: Mini Celebration Box'), 'Cart message must include Mini Box');
 assert.ok(cartMsg.includes('Line Total: ₹498'), 'Cart message must include line total for Mini Box');
 assert.ok(cartMsg.includes('Product: Pastel Rose Celebration Box'), 'Cart message must include Pastel Rose Box');
@@ -293,10 +304,10 @@ assert.ok(!waLink.includes(' '), 'URL must not contain raw spaces');
 console.log('✅ Official WhatsApp URL encoding verified (919100280705)');
 
 // 5. Product & Occasion Configuration Verification
-// Pastel Rose Celebration Box piece verification (exact 6 items = 60 pieces)
-const pastelRosePieces = 26 + 26 + 5 + 1 + 1 + 1; // 26 Pink, 26 Lavender, 5 Rose Gold, 1 Banner, 1 Arch Strip, 1 Glue Dots Roll
-assert.strictEqual(pastelRosePieces, 60, 'Pastel Rose Celebration Box must have verified 60 pieces');
-console.log('✅ Approved products piece counts verified (Pastel Rose Celebration Box: 60 pcs)');
+// Pastel Rose Celebration Box balloon count verification (exact 56 balloons)
+const pastelRoseBalloons = 20 + 20 + 16; // 20 Baby Pink, 20 Lavender, 16 Metallic Copper
+assert.strictEqual(pastelRoseBalloons, 56, 'Pastel Rose Celebration Box must have verified 56 balloons');
+console.log('✅ Approved products balloon counts verified (Pastel Rose Celebration Box: 56 balloons)');
 
 // 6. Occasion Category List Verification
 const categoryList = [

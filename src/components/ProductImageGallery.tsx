@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Maximize2, X, ZoomIn } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, X, ZoomIn, Info } from 'lucide-react';
 import { ProductGalleryImage } from '../types';
 
 interface ProductImageGalleryProps {
@@ -141,6 +141,14 @@ export const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
           })}
         </div>
       )}
+
+      {/* Visible Styling Inspiration Caption */}
+      <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/60 text-xs text-amber-900/90 flex items-start gap-2 leading-relaxed">
+        <Info className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+        <p>
+          <strong className="font-semibold text-amber-950">Styling inspiration.</strong> Cake, table and additional props are not included. Decorative lighting is available separately on rent.
+        </p>
+      </div>
 
       {/* Fullscreen Lightbox Modal */}
       {isLightboxOpen && (

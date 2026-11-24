@@ -79,7 +79,8 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
     sku: '',
     name: '',
     tagline: 'Big Moments. One Little Box.',
-    description: 'Everything you need to turn an ordinary space into a beautiful birthday moment.',
+    description:
+      'Create a beautiful birthday corner with our Pastel Rose Celebration Box. A thoughtfully curated combination of baby pink, lavender, and metallic copper balloons, complemented by a shimmering foil backdrop and a Happy Birthday banner. Everything is packed together to make decorating easier.',
     selling_price: 399,
     compare_at_price: 499,
     material_cost: 110,
@@ -89,11 +90,11 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
     theme_id: themes[0]?.id || 'pastel-rose',
     stock_quantity: 50,
     status: 'published',
-    badge: 'Best Seller',
+    badge: 'Official Birthday Kit',
     images: [
       {
         url: '/products/pastel-rose-setup.jpg',
-        alt: 'Pastel Rose Celebration Box - Decoration Setup',
+        alt: 'Pastel Rose Celebration Box - Birthday setup preview',
         title: 'Decoration Setup',
         is_primary: true,
       },
@@ -105,14 +106,19 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
       },
     ],
     contents: [
-      { name: 'Pink Latex Balloons', quantity: '26', unit: 'pcs', specification: '12-inch Natural Latex' },
-      { name: 'Lavender Latex Balloons', quantity: '26', unit: 'pcs', specification: '12-inch Natural Latex' },
-      { name: 'Rose Gold Chrome Balloons', quantity: '5', unit: 'pcs', specification: '12-inch Metallic Chrome' },
-      { name: 'Rose Gold Happy Birthday Banner', quantity: '1', unit: 'pc', specification: 'Pre-strung script banner' },
-      { name: 'Balloon Arch Strip', quantity: '1', unit: 'pc', specification: '5m double-hole strip' },
-      { name: 'Glue Dot Roll', quantity: '1', unit: 'roll', specification: '100 removable dots' },
+      { name: 'Baby Pink Latex Balloons', quantity: '20', unit: 'pcs', specification: '10-inch Natural Latex' },
+      { name: 'Lavender Latex Balloons', quantity: '20', unit: 'pcs', specification: '10-inch Natural Latex' },
+      { name: 'Metallic Copper Balloons', quantity: '16', unit: 'pcs', specification: '10-inch Metallic Copper' },
+      { name: 'Gold Glitter Happy Birthday Letter Banner', quantity: '1', unit: 'pc', specification: 'Script letter banner with thread' },
+      { name: 'Lavender-Pink Metallic Foil Fringe Backdrop', quantity: '1', unit: 'pc', specification: 'Tinsel foil fringe curtain' },
+      { name: 'Birthday Candles', quantity: '2', unit: 'pcs', specification: 'Celebration birthday candles' },
+      { name: 'Double-Sided Foam Tape', quantity: '1', unit: 'pack', specification: 'Mounting wall-safe foam tape' },
     ],
-    exclusions: ['Cake, backdrop curtain, metal arch stand, and balloon pump are not included.'],
+    exclusions: [
+      'Cake, table, gift boxes, flowers, and props are styling inspiration only and not included.',
+      'Decorative lighting string is available separately on rent.',
+      'Balloon pump is not included.',
+    ],
   });
 
   const [newContentItem, setNewContentItem] = useState({

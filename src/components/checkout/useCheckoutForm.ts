@@ -15,6 +15,7 @@ export interface FormFields {
   preferredTime: string;
   selectedProductId: string;
   referralCode?: string;
+  wantsLightingRental?: boolean;
 }
 
 export interface FormErrors {
@@ -49,6 +50,7 @@ export const useCheckoutForm = (initialProductId?: string) => {
       preferredTime: CHECKOUT_CONFIG.timeSlots[2] || 'Evening (4:00 PM - 7:00 PM)',
       selectedProductId: initialProductId || CHECKOUT_CONFIG.defaultProductId,
       referralCode: '',
+      wantsLightingRental: false,
     };
 
     if (typeof window !== 'undefined') {
@@ -75,7 +77,7 @@ export const useCheckoutForm = (initialProductId?: string) => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
-      const { customerName, customerPhone, quantity, deliveryMethod, deliveryAddress, personalMessage, celebrationDate, preferredTime, selectedProductId } = formData;
+      const { customerName, customerPhone, quantity, deliveryMethod, deliveryAddress, personalMessage, celebrationDate, preferredTime, selectedProductId, wantsLightingRental } = formData;
       localStorage.setItem(
         CHECKOUT_CONFIG.storageKey,
         JSON.stringify({
@@ -88,6 +90,7 @@ export const useCheckoutForm = (initialProductId?: string) => {
           celebrationDate,
           preferredTime,
           selectedProductId,
+          wantsLightingRental,
         })
       );
     } catch {

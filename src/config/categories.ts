@@ -7,13 +7,13 @@ export const OCCASION_CATEGORIES: OccasionCategory[] = [
     name: "Kid's Birthday",
     tagline: 'Playful & Joyful DIY Birthday Kits',
     description:
-      'Everything you need to turn an ordinary space into a beautiful birthday moment. Curated in our signature Pink × Lavender × Rose Gold theme.',
+      'Everything you need to turn an ordinary space into a beautiful birthday moment. Curated in our signature Baby Pink × Lavender × Metallic Copper theme.',
     image: '/categories/kids-birthday.svg',
     bgColor: '#FFF5E0',
     isAvailable: true,
     badge: 'Available Now',
     availableNotice:
-      'Official Birthday Collection: Featuring the Pastel Rose Celebration Box with 60 pieces.',
+      'Official Birthday Collection: Featuring the Pastel Rose Celebration Box with 56 balloons & foil backdrop.',
     relatedProductIds: ['signature-celebration-box'],
   },
   {
@@ -28,7 +28,7 @@ export const OCCASION_CATEGORIES: OccasionCategory[] = [
     isAvailable: true,
     badge: 'Available Now',
     availableNotice:
-      'Official Birthday Collection: Featuring the Pastel Rose Celebration Box with 60 pieces.',
+      'Official Birthday Collection: Featuring the Pastel Rose Celebration Box with 56 balloons & foil backdrop.',
     relatedProductIds: ['signature-celebration-box'],
   },
   {

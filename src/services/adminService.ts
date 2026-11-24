@@ -22,14 +22,15 @@ const STORAGE_KEYS = {
   SETTINGS: 'cb_admin_settings_v2',
 };
 
-// Initial Verified Seed Product: Pastel Rose Celebration Box (₹399, 60 pieces)
+// Initial Verified Seed Product: Pastel Rose Celebration Box (₹399, 56 balloons)
 const INITIAL_PRODUCTS: AdminProduct[] = [
   {
     id: '00000000-0000-0000-0000-000000000001',
     slug: 'pastel-rose-celebration-box',
     name: 'Pastel Rose Celebration Box',
     tagline: 'Big Moments. One Little Box.',
-    description: 'Everything you need to turn an ordinary space into a beautiful birthday moment.',
+    description:
+      'Create a beautiful birthday corner with our Pastel Rose Celebration Box. A thoughtfully curated combination of baby pink, lavender, and metallic copper balloons, complemented by a shimmering foil backdrop and a Happy Birthday banner. Everything is packed together to make decorating easier.',
     ideal_for: 'Bedroom, living room, and hostel birthday celebrations',
     selling_price: 399.00,
     material_cost: 110.00,
@@ -40,44 +41,49 @@ const INITIAL_PRODUCTS: AdminProduct[] = [
     images: [
       {
         url: '/products/pastel-rose-setup.jpg',
-        alt: 'Pastel Rose Celebration Box - Decoration Setup',
+        alt: 'Pastel Rose Celebration Box - Birthday setup preview',
         title: 'Decoration Setup',
-        caption: 'Pink, lavender and rose-gold balloon garland with Happy Birthday banner',
+        caption: 'Styling inspiration. Cake, table and additional props are not included. Decorative lighting is available separately on rent.',
       },
       {
         url: '/products/pastel-rose-contents.jpg',
         alt: 'Pastel Rose Celebration Box - Package Contents',
         title: "What's Inside the Box",
-        caption: 'Exact verified 60-piece kit inventory',
+        caption: 'Actual kit contents • 56 Balloons (20 Pink, 20 Lavender, 16 Copper), Gold Banner, Foil Backdrop, Tape & Candles',
       },
     ],
     contents: [
-      { name: 'Pink Latex Balloons', quantity: '26 pcs', pieceCount: 26, specification: '12-inch Natural Latex' },
-      { name: 'Lavender Latex Balloons', quantity: '26 pcs', pieceCount: 26, specification: '12-inch Natural Latex' },
-      { name: 'Rose Gold Chrome Balloons', quantity: '5 pcs', pieceCount: 5, specification: '12-inch Metallic Chrome' },
-      { name: 'Rose Gold Happy Birthday Banner', quantity: '1 pc', pieceCount: 1, specification: 'Pre-strung script banner' },
-      { name: 'Balloon Arch Strip', quantity: '1 pc', pieceCount: 1, specification: '5m double-hole transparent strip' },
-      { name: 'Glue Dot Roll', quantity: '1 roll', pieceCount: 1, specification: '100 removable wall-safe dots' },
+      { name: 'Baby Pink Latex Balloons', quantity: '20 pcs', pieceCount: 20, specification: '10-inch Natural Latex' },
+      { name: 'Lavender Latex Balloons', quantity: '20 pcs', pieceCount: 20, specification: '10-inch Natural Latex' },
+      { name: 'Metallic Copper Balloons', quantity: '16 pcs', pieceCount: 16, specification: '10-inch Metallic Copper' },
+      { name: 'Gold Glitter Happy Birthday Letter Banner', quantity: '1 pc', pieceCount: 1, specification: 'Script letter banner with thread' },
+      { name: 'Lavender-Pink Metallic Foil Fringe Backdrop', quantity: '1 pc', pieceCount: 1, specification: 'Tinsel foil fringe curtain' },
+      { name: 'Birthday Candles', quantity: '2 pcs', pieceCount: 2, specification: 'Celebration birthday candles' },
+      { name: 'Double-Sided Foam Tape', quantity: 'Included', pieceCount: 1, specification: 'Mounting wall-safe foam tape' },
     ],
-    exclusions: ['Cake, backdrop curtain, metal arch stand, and balloon pump are not included.'],
+    exclusions: [
+      'Cake, table, gift boxes, flowers, and props are styling inspiration only and not included.',
+      'Decorative lighting string is available separately on rent.',
+      'Balloon pump is not included.',
+    ],
     stock_quantity: 50,
     status: 'published' as any,
-    total_pieces: 60,
-    badge: 'Best Seller',
+    total_pieces: 56,
+    badge: 'Official Birthday Kit',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
 ];
 
 const INITIAL_INVENTORY: InventoryItem[] = [
-  { id: 'inv-1', name: 'Pink Latex Balloons (Pack of 100)', category: 'Balloons', quantity_available: 15, unit_cost: 120.00, supplier: 'Gemini Latex Supplies', reorder_level: 5, last_updated: new Date().toISOString() },
-  { id: 'inv-2', name: 'Lavender Latex Balloons (Pack of 100)', category: 'Balloons', quantity_available: 12, unit_cost: 120.00, supplier: 'Gemini Latex Supplies', reorder_level: 5, last_updated: new Date().toISOString() },
-  { id: 'inv-3', name: 'Rose Gold Chrome Balloons (Pack of 50)', category: 'Balloons', quantity_available: 8, unit_cost: 160.00, supplier: 'Metallic Party Wholesale', reorder_level: 3, last_updated: new Date().toISOString() },
-  { id: 'inv-4', name: 'Rose Gold Happy Birthday Banner', category: 'Banners', quantity_available: 45, unit_cost: 38.00, supplier: 'Celebration Print Hub', reorder_level: 10, last_updated: new Date().toISOString() },
-  { id: 'inv-5', name: 'Balloon Arch Strip 5m', category: 'Tools & Adhesive', quantity_available: 60, unit_cost: 12.00, supplier: 'Direct Polymer Co', reorder_level: 15, last_updated: new Date().toISOString() },
-  { id: 'inv-6', name: 'Wall-Safe Glue Dot Roll (100 dots)', category: 'Tools & Adhesive', quantity_available: 55, unit_cost: 14.00, supplier: 'Adhesive Pro India', reorder_level: 15, last_updated: new Date().toISOString() },
-  { id: 'inv-7', name: 'Rigid Craft Shipping Box', category: 'Packaging', quantity_available: 48, unit_cost: 28.00, supplier: 'BoxCraft Hyderabad', reorder_level: 15, last_updated: new Date().toISOString() },
-  { id: 'inv-8', name: 'Curling Ribbon 10m Spool', category: 'Tools & Adhesive', quantity_available: 30, unit_cost: 8.00, supplier: 'Decor Ribbon Works', reorder_level: 10, last_updated: new Date().toISOString() },
+  { id: 'inv-1', name: 'Baby Pink Latex Balloons (Pack of 100)', category: 'Balloons', quantity_available: 20, unit_cost: 120.00, supplier: 'Gemini Latex Supplies', reorder_level: 5, last_updated: new Date().toISOString() },
+  { id: 'inv-2', name: 'Lavender Latex Balloons (Pack of 100)', category: 'Balloons', quantity_available: 20, unit_cost: 120.00, supplier: 'Gemini Latex Supplies', reorder_level: 5, last_updated: new Date().toISOString() },
+  { id: 'inv-3', name: 'Metallic Copper Balloons (Pack of 50)', category: 'Balloons', quantity_available: 16, unit_cost: 160.00, supplier: 'Metallic Party Wholesale', reorder_level: 3, last_updated: new Date().toISOString() },
+  { id: 'inv-4', name: 'Gold Glitter Happy Birthday Letter Banner', category: 'Banners', quantity_available: 45, unit_cost: 38.00, supplier: 'Celebration Print Hub', reorder_level: 10, last_updated: new Date().toISOString() },
+  { id: 'inv-5', name: 'Lavender-Pink Metallic Foil Fringe Backdrop', category: 'Backdrops', quantity_available: 30, unit_cost: 55.00, supplier: 'Shimmer Decor Hub', reorder_level: 10, last_updated: new Date().toISOString() },
+  { id: 'inv-6', name: 'Birthday Candles (Pack of 2)', category: 'Candles & Accessories', quantity_available: 50, unit_cost: 15.00, supplier: 'Celebration Essentials', reorder_level: 15, last_updated: new Date().toISOString() },
+  { id: 'inv-7', name: 'Double-Sided Foam Tape', category: 'Tools & Adhesive', quantity_available: 55, unit_cost: 14.00, supplier: 'Adhesive Pro India', reorder_level: 15, last_updated: new Date().toISOString() },
+  { id: 'inv-8', name: 'Milky-White Decorative Lighting String (Rental Unit)', category: 'Rental Lighting', quantity_available: 10, unit_cost: 250.00, supplier: 'Luxe Lights Co', reorder_level: 2, last_updated: new Date().toISOString() },
 ];
 
 const INITIAL_SETTINGS: BusinessSettings = {

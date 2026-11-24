@@ -23,12 +23,13 @@ interface CategoryProductsProps {
 // Clean itemized contents according to exact retail specification
 const PRODUCT_INCLUSIONS: Record<string, string[]> = {
   'signature-celebration-box': [
-    '26 Pink Latex Balloons',
-    '26 Lavender Latex Balloons',
-    '5 Rose Gold Chrome Balloons',
-    '1 Rose Gold Happy Birthday Banner',
-    '1 Balloon Arch Strip',
-    '1 Glue Dot Roll (100 dots)',
+    '20 Baby Pink Latex Balloons',
+    '20 Lavender Latex Balloons',
+    '16 Metallic Copper Balloons',
+    '1 Gold Glitter Happy Birthday Letter Banner',
+    '1 Lavender-Pink Metallic Foil Fringe Backdrop',
+    '2 Birthday Candles',
+    'Double-Sided Foam Tape (Included)',
   ],
   'mini-celebration-box': [
     '12 latex balloons (4 Peach, 4 Lilac, 4 Cream)',
@@ -43,7 +44,8 @@ const PRODUCT_INCLUSIONS: Record<string, string[]> = {
 };
 
 const PRODUCT_EXCLUSIONS: Record<string, string> = {
-  'signature-celebration-box': 'Cake, backdrop curtain, metal arch stand, and balloon pump are not included.',
+  'signature-celebration-box':
+    'Cake, table, gifts, flowers, and props are styling inspiration only. Decorative lighting is available separately on rent. Balloon pump not included.',
   'mini-celebration-box': 'Balloon pump, cake and helium are not included.',
 };
 

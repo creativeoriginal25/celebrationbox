@@ -300,10 +300,10 @@ CREATE POLICY "Admins can delete product images"
 -- Themes
 INSERT INTO public.themes (id, name, colour_palette, is_active)
 VALUES
-    ('pastel-rose', 'Pink, Lavender and Rose Gold', '[
-        {"name": "Pastel Pink", "hex": "#FFB6C1"},
-        {"name": "Lavender", "hex": "#D8B4E2"},
-        {"name": "Rose Gold", "hex": "#B76E79"}
+    ('pastel-rose', 'Baby Pink × Pastel Lavender × Metallic Copper', '[
+        {"name": "Baby Pink", "hex": "#FFB6C1"},
+        {"name": "Pastel Lavender", "hex": "#D8B4E2"},
+        {"name": "Metallic Copper", "hex": "#C87A5E"}
     ]'::jsonb, true)
 ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
@@ -323,7 +323,7 @@ VALUES
     ('party-essentials', 'Party Essentials', 'party-essentials', 'A la carte supplies & add-ons', 'Individual balloon packs, ribbons, and styling accessories.', '/categories/party-essentials.png', '#E0F2F1', 9, false, 'Coming Soon')
 ON CONFLICT (id) DO NOTHING;
 
--- Seed Product: Pastel Rose Celebration Box (₹399, 60 pieces)
+-- Seed Product: Pastel Rose Celebration Box (₹399, 56 balloons)
 DO $$
 DECLARE
     v_product_id UUID := '00000000-0000-0000-0000-000000000001'::uuid;
@@ -338,7 +338,7 @@ BEGIN
         'pastel-rose-celebration-box',
         'CB-PR-001',
         'Big Moments. One Little Box.',
-        'Everything you need to turn an ordinary space into a beautiful birthday moment.',
+        'Create a beautiful birthday corner with our Pastel Rose Celebration Box. A thoughtfully curated combination of baby pink, lavender, and metallic copper balloons, complemented by a shimmering foil backdrop and a Happy Birthday banner. Everything is packed together to make decorating easier.',
         399.00,
         499.00,
         'pastel-rose',
@@ -349,6 +349,7 @@ BEGIN
         name = EXCLUDED.name,
         price = 399.00,
         compare_at_price = 499.00,
+        description = EXCLUDED.description,
         status = 'published',
         updated_at = timezone('utc'::text, now());
 
@@ -369,13 +370,14 @@ BEGIN
         (v_product_id, '/products/pastel-rose-setup.jpg', 'Pastel Rose Celebration Box - Decoration Setup', 1, true),
         (v_product_id, '/products/pastel-rose-contents.jpg', 'Pastel Rose Celebration Box - Package Contents', 2, false);
 
-    -- Exact 6 verified kit items (Total 60 pieces)
+    -- Exact verified kit items (Total 56 balloons + decor and setup)
     INSERT INTO public.product_contents (product_id, item_name, quantity, unit, specification, sort_order)
     VALUES
-        (v_product_id, 'Pink Latex Balloons', '26', 'pcs', '12-inch Natural Latex', 1),
-        (v_product_id, 'Lavender Latex Balloons', '26', 'pcs', '12-inch Natural Latex', 2),
-        (v_product_id, 'Rose Gold Chrome Balloons', '5', 'pcs', '12-inch Metallic Chrome', 3),
-        (v_product_id, 'Rose Gold Happy Birthday Banner', '1', 'pc', 'Pre-strung script banner', 4),
-        (v_product_id, 'Balloon Arch Strip', '1', 'pc', '5m double-hole transparent strip', 5),
-        (v_product_id, 'Glue Dot Roll', '1', 'roll', '100 removable wall-safe dots', 6);
+        (v_product_id, 'Baby Pink Latex Balloons', '20', 'pcs', '10-inch Natural Latex', 1),
+        (v_product_id, 'Lavender Latex Balloons', '20', 'pcs', '10-inch Natural Latex', 2),
+        (v_product_id, 'Metallic Copper Balloons', '16', 'pcs', '10-inch Metallic Copper', 3),
+        (v_product_id, 'Gold Glitter Happy Birthday Letter Banner', '1', 'pc', 'Pre-strung script letter banner', 4),
+        (v_product_id, 'Lavender-Pink Metallic Foil Fringe Backdrop', '1', 'pc', 'Tinsel foil fringe curtain', 5),
+        (v_product_id, 'Birthday Candles', '2', 'pcs', 'Celebration cake candles', 6),
+        (v_product_id, 'Double-Sided Foam Tape', '1', 'pack', 'Mounting wall-safe foam tape', 7);
 END $$;
