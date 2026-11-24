@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight, PackageCheck, Sparkles, Truck } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, PackageCheck, Sparkles, Truck, Layers, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Confetti, ConfettiRef } from './react-bits/Confetti';
 
 interface HeroProps {
@@ -7,31 +8,63 @@ interface HeroProps {
   onOpenOrder?: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
+export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
   const confettiRef = useRef<ConfettiRef>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Slides configuration (featuring Pastel Rose as the flagship hero)
+  // Both flagship photos configured in the carousel
   const slides = [
     {
-      id: 'pastel-rose',
+      id: 'pastel-rose-setup',
       tag: 'BIRTHDAY DECORATION KIT',
       title: 'Pastel Rose Celebration Box',
       subtitle:
         'A premium DIY decoration kit with a perfect pastel setup for a memorable birthday.',
       price: '₹399',
       image: '/products/pastel-rose-setup.jpg',
+      imageFit: 'object-cover',
       alt: 'Pastel Rose Celebration Box birthday setup with balloon arch and cake',
+      features: [
+        { icon: PackageCheck, title: 'Complete', sub: 'DIY Kit', bg: 'bg-[#FFEBF0]', color: 'text-[#D81B60]' },
+        { icon: Sparkles, title: 'Easy', sub: 'Setup', bg: 'bg-[#FFF4E5]', color: 'text-[#FFB400]' },
+        { icon: Truck, title: 'Fast', sub: 'Delivery', bg: 'bg-[#E0F7F6]', color: 'text-[#00A8A8]' },
+      ],
+    },
+    {
+      id: 'pastel-rose-contents',
+      tag: "WHAT'S INSIDE THE BOX",
+      title: 'Pastel Rose Celebration Box',
+      subtitle:
+        '56 balloons (Baby Pink, Lavender, Metallic Copper), Gold Banner, Foil Fringe & Birthday Candles.',
+      price: '₹399',
+      image: '/products/pastel-rose-contents.jpg',
+      imageFit: 'object-contain',
+      alt: "What's Inside the Box - 56 balloons and decoration kit contents",
+      features: [
+        { icon: Layers, title: '56 Pieces', sub: 'Balloons', bg: 'bg-[#FFEBF0]', color: 'text-[#D81B60]' },
+        { icon: Sparkles, title: 'Foil Fringe', sub: 'Backdrop', bg: 'bg-[#FFF4E5]', color: 'text-[#FFB400]' },
+        { icon: CheckCircle2, title: 'Lighting', sub: 'On Rent ✨', bg: 'bg-[#E0F7F6]', color: 'text-[#00A8A8]' },
+      ],
     },
   ];
 
   useEffect(() => {
-    // Subtle celebratory confetti on initial entrance
+    // Festive celebration cannons on initial load
     const timer = setTimeout(() => {
       confettiRef.current?.cannons();
     }, 450);
     return () => clearTimeout(timer);
   }, []);
+
+  // Auto-advance slides every 5.5 seconds unless paused by mouse hover
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5500);
+    return () => clearInterval(interval);
+  }, [isHovered, slides.length]);
 
   const handleNextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -64,14 +97,18 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           
           {/* Main Showcase Hero Card */}
-          <div className="relative rounded-[28px] sm:rounded-[36px] bg-gradient-to-r from-[#FFF8F6] via-[#FFF5F6] to-[#FCEEF2] border border-[#F4E0E5] shadow-[0_8px_30px_0_rgba(74,21,37,0.04)] overflow-hidden">
+          <div
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="relative rounded-[28px] sm:rounded-[36px] bg-gradient-to-r from-[#FFF8F6] via-[#FFF5F6] to-[#FCEEF2] border border-[#F4E0E5] shadow-[0_8px_30px_0_rgba(74,21,37,0.04)] overflow-hidden"
+          >
             
             {/* Left Carousel Arrow Button */}
             <button
               type="button"
               onClick={handlePrevSlide}
               aria-label="Previous Slide"
-              className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-brand-ink hover:text-[#8A1538] shadow-md flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer border border-brand-ink/5"
+              className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-brand-ink hover:text-[#8A1538] shadow-md flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer border border-brand-ink/5"
             >
               <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
@@ -81,7 +118,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
               type="button"
               onClick={handleNextSlide}
               aria-label="Next Slide"
-              className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-brand-ink hover:text-[#8A1538] shadow-md flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer border border-brand-ink/5"
+              className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-brand-ink hover:text-[#8A1538] shadow-md flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer border border-brand-ink/5"
             >
               <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
@@ -105,7 +142,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
                 </h1>
 
                 {/* 3. Subtitle / Description */}
-                <p className="text-sm sm:text-base text-[#5A5A6E] leading-relaxed mb-6 max-w-md">
+                <p className="text-sm sm:text-base text-[#5A5A6E] leading-relaxed mb-6 max-w-md min-h-[48px]">
                   {activeSlide.subtitle}
                 </p>
 
@@ -125,58 +162,47 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
                 </div>
 
                 {/* 5. Feature Highlights Row */}
-                <div className="flex items-center gap-4 sm:gap-6 pt-4 border-t border-[#F2D7DE] text-brand-ink-light text-xs font-semibold">
-                  {/* Complete DIY Kit */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-[#FFEBF0] text-[#D81B60] flex items-center justify-center shrink-0">
-                      <PackageCheck className="w-4 h-4" />
-                    </div>
-                    <div className="leading-tight">
-                      <span className="block font-bold text-brand-ink">Complete</span>
-                      <span className="text-[11px] text-brand-ink-muted">DIY Kit</span>
-                    </div>
-                  </div>
-
-                  <div className="w-[1px] h-6 bg-[#E8CFD5]" />
-
-                  {/* Easy Setup */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-[#FFF4E5] text-[#FFB400] flex items-center justify-center shrink-0">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div className="leading-tight">
-                      <span className="block font-bold text-brand-ink">Easy</span>
-                      <span className="text-[11px] text-brand-ink-muted">Setup</span>
-                    </div>
-                  </div>
-
-                  <div className="w-[1px] h-6 bg-[#E8CFD5]" />
-
-                  {/* Fast Delivery */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-[#E0F7F6] text-[#00A8A8] flex items-center justify-center shrink-0">
-                      <Truck className="w-4 h-4" />
-                    </div>
-                    <div className="leading-tight">
-                      <span className="block font-bold text-brand-ink">Fast</span>
-                      <span className="text-[11px] text-brand-ink-muted">Delivery</span>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-3 sm:gap-5 pt-4 border-t border-[#F2D7DE] text-brand-ink-light text-xs font-semibold">
+                  {activeSlide.features.map((feat, idx) => {
+                    const Icon = feat.icon;
+                    return (
+                      <React.Fragment key={idx}>
+                        {idx > 0 && <div className="w-[1px] h-6 bg-[#E8CFD5]" />}
+                        <div className="flex items-center gap-2">
+                          <div className={`w-7 h-7 rounded-lg ${feat.bg} ${feat.color} flex items-center justify-center shrink-0`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div className="leading-tight">
+                            <span className="block font-bold text-brand-ink">{feat.title}</span>
+                            <span className="text-[11px] text-brand-ink-muted">{feat.sub}</span>
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
                 </div>
 
               </div>
 
               {/* ========================================================
-                  RIGHT COLUMN: FULL LIFESTYLE SETUP PHOTOGRAPH
+                  RIGHT COLUMN: PHOTOGRAPH CAROUSEL STAGE
                  ======================================================== */}
               <div className="lg:col-span-7 h-full w-full relative flex items-center justify-center p-3 sm:p-5 lg:p-0">
-                <div className="relative w-full h-[280px] sm:h-[360px] md:h-[420px] lg:h-[460px] rounded-2xl lg:rounded-none lg:rounded-r-[35px] overflow-hidden">
-                  <img
-                    src={activeSlide.image}
-                    alt={activeSlide.alt}
-                    className="w-full h-full object-cover object-center filter drop-shadow-sm transition-transform duration-700 hover:scale-[1.02]"
-                    loading="eager"
-                  />
+                <div className="relative w-full h-[280px] sm:h-[360px] md:h-[420px] lg:h-[460px] rounded-2xl lg:rounded-none lg:rounded-r-[35px] overflow-hidden bg-white/40 flex items-center justify-center">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={activeSlide.id}
+                      src={activeSlide.image}
+                      alt={activeSlide.alt}
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.35 }}
+                      className={`w-full h-full ${activeSlide.imageFit} object-center filter drop-shadow-sm transition-transform duration-700 hover:scale-[1.02]`}
+                      loading="eager"
+                    />
+                  </AnimatePresence>
+
                   {/* Subtle soft gradient fade towards text on desktop */}
                   <div className="absolute inset-0 bg-gradient-to-r from-[#FFF8F6]/60 via-transparent to-transparent pointer-events-none hidden lg:block" />
                 </div>
@@ -185,10 +211,19 @@ export const Hero: React.FC<HeroProps> = ({ onExplore, onOpenOrder }) => {
             </div>
 
             {/* Bottom Slider Pagination Dots */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#7A153A]" />
-              <span className="w-2 h-2 rounded-full bg-[#E5BCC6]" />
-              <span className="w-2 h-2 rounded-full bg-[#E5BCC6]" />
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
+              {slides.map((s, idx) => (
+                <button
+                  key={s.id}
+                  onClick={() => setCurrentSlide(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`transition-all duration-300 cursor-pointer ${
+                    currentSlide === idx
+                      ? 'w-6 h-2 rounded-full bg-[#7A153A]'
+                      : 'w-2 h-2 rounded-full bg-[#E5BCC6] hover:bg-[#7A153A]/60'
+                  }`}
+                />
+              ))}
             </div>
 
           </div>
