@@ -91,6 +91,13 @@ export interface CartItem {
   image: string;
   theme: string;
   isUnavailable?: boolean;
+  // Combo and Cake details
+  isCombo?: boolean;
+  boxId?: string;
+  boxName?: string;
+  boxPrice?: number;
+  cakeDetails?: CakeCustomizationDetails;
+  wantsLightingRental?: boolean;
 }
 
 export interface OrderDetails {

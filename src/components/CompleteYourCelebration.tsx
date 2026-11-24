@@ -3,7 +3,6 @@ import {
   Cake,
   Package,
   Sparkles,
-  ExternalLink,
   CheckCircle2,
   ArrowRight,
   Heart,
@@ -88,7 +87,7 @@ export const CompleteYourCelebration: React.FC<CompleteYourCelebrationProps> = (
             Beautiful Decorations. Delicious Cakes. One Perfect Celebration.
           </p>
 
-          {/* Chocoloom Badge & External Explore Link */}
+          {/* Chocoloom Badge */}
           <div className="pt-2 flex items-center justify-center gap-3 flex-wrap">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-brand-ink/10 shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -96,15 +95,6 @@ export const CompleteYourCelebration: React.FC<CompleteYourCelebrationProps> = (
                 Cakes by Chocoloom
               </span>
             </div>
-            <a
-              href={CHOCOLOOM_CONFIG.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-pink/10 hover:bg-brand-pink/15 text-brand-pink text-xs font-bold transition-colors cursor-pointer"
-            >
-              <span>Explore Chocoloom Store</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
           </div>
         </div>
 

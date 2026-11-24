@@ -5,6 +5,18 @@ import { verifyProductPrice } from '../services/catalogService';
 interface CartContextType {
   items: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
+  addComboToCart: (combo: {
+    name: string;
+    price: number;
+    image: string;
+    quantity?: number;
+    isCombo: boolean;
+    boxId?: string;
+    boxName?: string;
+    boxPrice?: number;
+    cakeDetails?: any;
+    wantsLightingRental?: boolean;
+  }) => void;
   updateQuantity: (id: string, delta: number) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
@@ -111,6 +123,42 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsCartOpen(true);
   };
 
+  const addComboToCart = (combo: {
+    name: string;
+    price: number;
+    image: string;
+    quantity?: number;
+    isCombo: boolean;
+    boxId?: string;
+    boxName?: string;
+    boxPrice?: number;
+    cakeDetails?: any;
+    wantsLightingRental?: boolean;
+  }) => {
+    const qty = combo.quantity || 1;
+    const newItemId = `combo-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    setItems((prevItems) => [
+      ...prevItems,
+      {
+        id: newItemId,
+        name: combo.name,
+        price: combo.price,
+        quantity: qty,
+        image: combo.image,
+        theme: 'Pastel Pop',
+        isCombo: true,
+        boxId: combo.boxId,
+        boxName: combo.boxName,
+        boxPrice: combo.boxPrice,
+        cakeDetails: combo.cakeDetails,
+        wantsLightingRental: combo.wantsLightingRental,
+      },
+    ]);
+
+    showToast(`Added ${combo.name} to cart! 🎉`);
+    setIsCartOpen(true);
+  };
+
   const updateQuantity = (id: string, delta: number) => {
     setItems((prevItems) => {
       return prevItems
@@ -141,6 +189,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         items,
         addToCart,
+        addComboToCart,
         updateQuantity,
         removeItem,
         clearCart,

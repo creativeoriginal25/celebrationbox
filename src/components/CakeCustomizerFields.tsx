@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Cake, Sparkles, Image as ImageIcon, X, ExternalLink, Check, Heart } from 'lucide-react';
+import { Cake, Sparkles, Image as ImageIcon, X, Check, Heart } from 'lucide-react';
 import {
   CHOCOLOOM_CONFIG,
   CakeCustomizationState,
@@ -97,17 +97,6 @@ export const CakeCustomizerFields: React.FC<CakeCustomizerFieldsProps> = ({
               <p className="text-xs text-brand-ink-light mt-0.5">
                 Freshly baked artisanal birthday cake delivered alongside your Celebration Box.
               </p>
-              <div className="mt-1 flex items-center gap-2">
-                <a
-                  href={CHOCOLOOM_CONFIG.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-pink hover:underline"
-                >
-                  <span>Explore Chocoloom</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
             </div>
           </div>
 
