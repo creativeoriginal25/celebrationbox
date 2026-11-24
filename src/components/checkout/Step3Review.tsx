@@ -39,6 +39,7 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
       personalMessage: formData.personalMessage,
       celebrationDate: formData.celebrationDate,
       preferredTime: formData.preferredTime,
+      referralCode: formData.referralCode?.trim() || undefined,
       cartItems: isCartMode ? cartItems : undefined,
     });
 
@@ -191,6 +192,19 @@ export const Step3Review: React.FC<Step3ReviewProps> = ({
             </span>
             <div className="p-2.5 rounded-xl bg-[#FFFDFB] border border-brand-ink/10 text-xs text-brand-ink-light italic">
               &ldquo;{formData.personalMessage.trim()}&rdquo;
+            </div>
+          </div>
+        )}
+
+        {/* SECTION: REFERRAL CODE (IF APPLIED) */}
+        {formData.referralCode && (
+          <div className="pt-3 border-t border-brand-ink/5 flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-brand-ink-muted block">
+              Referral Code
+            </span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-mono font-bold">
+              <span>🎟️</span>
+              <span>{formData.referralCode}</span>
             </div>
           </div>
         )}

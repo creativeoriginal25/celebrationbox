@@ -2,6 +2,7 @@ import React from 'react';
 import { Building2, MapPin, Check, CheckCircle2, Calendar, Clock } from 'lucide-react';
 import { CHECKOUT_CONFIG } from './checkoutConfig';
 import { FormFields, FormErrors, FulfilmentMethod } from './useCheckoutForm';
+import { ReferralCodeInput } from './ReferralCodeInput';
 
 interface Step2CelebrationProps {
   formData: FormFields;
@@ -260,6 +261,16 @@ export const Step2Celebration: React.FC<Step2CelebrationProps> = ({
             </select>
           </div>
         </div>
+      </div>
+
+      {/* ============================================================== */}
+      {/* 4. REFERRAL CODE ENTRY CARD (SYNCED ACROSS STEPS)              */}
+      {/* ============================================================== */}
+      <div className="p-3.5 rounded-2xl bg-white border border-brand-ink/10 shadow-xs">
+        <ReferralCodeInput
+          referralCode={formData.referralCode}
+          onSetCode={(code) => onSetField('referralCode', code)}
+        />
       </div>
     </div>
   );
