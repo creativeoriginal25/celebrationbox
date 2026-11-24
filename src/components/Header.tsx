@@ -65,11 +65,6 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick, onOpenCategory }) =
     triggerWhatsAppChat(url);
   };
 
-  // Sign In navigation
-  const handleSignIn = () => {
-    window.location.hash = '/admin/login';
-  };
-
   // Category navigation click
   const handleCategoryClick = (categoryName: string, slug?: string) => {
     setMobileMenuOpen(false);
@@ -170,14 +165,6 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick, onOpenCategory }) =
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#E91E63] text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
                   {totalCount}
                 </span>
-              </button>
-
-              {/* Sign In Button (Wine/Maroon Pill) */}
-              <button
-                onClick={handleSignIn}
-                className="inline-flex items-center justify-center px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold text-white bg-[#8A1538] hover:bg-[#72112E] active:scale-95 shadow-sm transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8A1538]/50"
-              >
-                <span>Sign In</span>
               </button>
 
               {/* Mobile Hamburger Menu Toggle */}
@@ -386,19 +373,6 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick, onOpenCategory }) =
                     <span>Customer Support</span>
                   </button>
                 </div>
-              </div>
-
-              {/* Bottom Sign In */}
-              <div className="pt-3 border-t border-brand-ink/5">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleSignIn();
-                  }}
-                  className="w-full py-2.5 rounded-full text-xs font-bold text-white bg-[#8A1538] hover:bg-[#72112E] flex items-center justify-center gap-2"
-                >
-                  <span>Sign In / Admin</span>
-                </button>
               </div>
             </motion.div>
           </div>
