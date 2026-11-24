@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({ onShopClick, onOpenCategory }) =
                 aria-label="Celebration Box Home"
               >
                 <CelebrationBoxLogo
-                  className="w-[125px] sm:w-[150px] md:w-[170px] h-auto"
+                  className="w-[140px] sm:w-[170px] md:w-[195px] h-auto max-h-[46px]"
                   animated={false}
                   interactive={false}
                 />
