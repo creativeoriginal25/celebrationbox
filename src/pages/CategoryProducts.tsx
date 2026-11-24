@@ -1,66 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { ChevronRight, Check, ShoppingBag, ArrowRight } from 'lucide-react';
 import { OccasionCategory, Product } from '../types';
 import { OCCASION_CATEGORIES } from '../config/categories';
 import { PRODUCTS } from '../config/products';
 import { getProductsForCategory } from '../services/catalogService';
-import { Header } from '../components/Header';
-import { Footer } from '../components/Footer';
 import { AnimatedContent } from '../components/react-bits/AnimatedContent';
 import { useCart } from '../context/CartContext';
 import { BUSINESS_CONFIG } from '../config/business';
 import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
+import { formatPrice } from '../utils/currency';
 
 interface CategoryProductsProps {
-  categorySlug: string;
-  onNavigateHome: () => void;
-  onSelectProduct: (product: Product) => void;
-  onBuyNow: (product: Product) => void;
-  onOpenOrderModal: (productId?: string) => void;
-  onOpenPolicy: (policy: any) => void;
+  categorySlug?: string;
 }
 
-// Clean itemized contents according to exact retail specification
-const PRODUCT_INCLUSIONS: Record<string, string[]> = {
-  'signature-celebration-box': [
-    '20 Baby Pink Latex Balloons',
-    '20 Lavender Latex Balloons',
-    '16 Metallic Copper Balloons',
-    '1 Gold Glitter Happy Birthday Letter Banner',
-    '1 Lavender-Pink Metallic Foil Fringe Backdrop',
-    '2 Birthday Candles',
-    'Double-Sided Foam Tape (Included)',
-  ],
-  'mini-celebration-box': [
-    '12 latex balloons (4 Peach, 4 Lilac, 4 Cream)',
-    '1 Happy Birthday banner',
-    '1 six-piece cake candle pack',
-    '1 metre balloon arch strip',
-    '10 balloon glue dots',
-    '2 metres curling ribbon',
-    '1 DIY instruction card',
-    '1 branded sticker',
-  ],
-};
-
-const PRODUCT_EXCLUSIONS: Record<string, string> = {
-  'signature-celebration-box':
-    'Cake, table, gifts, flowers, and props are styling inspiration only. Decorative lighting is available separately on rent. Balloon pump not included.',
-  'mini-celebration-box': 'Balloon pump, cake and helium are not included.',
-};
-
 export const CategoryProducts: React.FC<CategoryProductsProps> = ({
-  categorySlug,
-  onNavigateHome,
-  onSelectProduct,
-  onBuyNow,
-  onOpenOrderModal,
-  onOpenPolicy,
+  categorySlug: propSlug,
 }) => {
+  const params = useParams<{ categorySlug: string }>();
   const { addToCart } = useCart();
 
+  const activeSlug = propSlug || params.categorySlug || 'kids-birthday';
+
   const category: OccasionCategory =
-    OCCASION_CATEGORIES.find((c) => c.slug === categorySlug || c.id === categorySlug) ||
+    OCCASION_CATEGORIES.find((c) => c.slug === activeSlug || c.id === activeSlug) ||
     OCCASION_CATEGORIES[0];
 
   const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(() =>
@@ -72,7 +36,7 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
     let isMounted = true;
     const fetchCategoryProducts = async () => {
       try {
-        const fetched = await getProductsForCategory(categorySlug);
+        const fetched = await getProductsForCategory(activeSlug);
         if (isMounted && fetched && fetched.length > 0) {
           setProductsToDisplay(fetched);
         }
@@ -84,7 +48,7 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [categorySlug]);
+  }, [activeSlug]);
 
   const handleWhatsAppNotify = () => {
     const text = `Hi Celebration Box team! 👋 I'm interested in the upcoming *${category.name}* collection. Please notify me when it launches!`;
@@ -93,218 +57,129 @@ export const CategoryProducts: React.FC<CategoryProductsProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-brand-cream-50 text-brand-ink selection:bg-brand-pink-100 selection:text-brand-pink">
-      <Header onShopClick={onNavigateHome} />
+    <div className="min-h-screen bg-brand-cream-50 text-brand-ink pb-16 sm:pb-24">
+      {/* Breadcrumb Navigation: Home / Occasions / Category */}
+      <div className="bg-white/80 border-b border-brand-ink/5 backdrop-blur-xs">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+          <nav className="flex items-center space-x-2 text-xs text-brand-ink-muted">
+            <Link to="/" className="hover:text-brand-pink font-medium transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20" />
+            <Link to="/celebration-boxes" className="hover:text-brand-pink font-medium transition-colors">
+              Occasions
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20" />
+            <span className="text-brand-ink font-bold">{category.name}</span>
+          </nav>
+        </div>
+      </div>
 
-      <main className="flex-1 pb-16 sm:pb-24">
-        {/* Breadcrumb Navigation: Home / Occasions / Category */}
-        <div className="bg-white/80 border-b border-brand-ink/5 backdrop-blur-xs">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
-            <nav className="flex items-center space-x-2 text-xs text-brand-ink-muted">
-              <button
-                onClick={onNavigateHome}
-                className="hover:text-brand-pink font-medium transition-colors cursor-pointer"
-              >
-                Home
-              </button>
-              <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20" />
-              <button
-                onClick={onNavigateHome}
-                className="hover:text-brand-pink font-medium transition-colors cursor-pointer"
-              >
-                Occasions
-              </button>
-              <ChevronRight className="w-3.5 h-3.5 text-brand-ink/20" />
-              <span className="text-brand-ink font-bold">{category.name}</span>
-            </nav>
+      {/* Category Hero Banner */}
+      <section className="bg-white border-b border-brand-ink/5 py-10 sm:py-14">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-brand-pink-50 to-brand-cream-100 flex items-center justify-center p-3 border border-brand-ink/10 shadow-xs shrink-0">
+              <img
+                src={category.image}
+                alt={category.name}
+                className="w-full h-full object-contain filter drop-shadow-xs"
+              />
+            </div>
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold badge-pink">
+                <span>{category.isAvailable ? 'Available Collection' : 'Upcoming Launch'}</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-ink">
+                {category.name}
+              </h1>
+              <p className="text-sm sm:text-base text-brand-ink-light leading-relaxed">
+                {category.description}
+              </p>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Compact, Shopping-Focused Collection Header */}
-        <section className="pt-8 pb-6 sm:pt-10 sm:pb-8">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl text-brand-ink tracking-tight mb-2">
-              {category.name}
-            </h1>
-            <p className="text-sm sm:text-base text-brand-ink-light">
-              Explore our DIY birthday decoration kits.
-            </p>
-          </div>
-        </section>
+      {/* Product List */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14">
+        {category.isAvailable ? (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between pb-3 border-b border-brand-ink/10">
+              <h2 className="text-base sm:text-lg font-bold text-brand-ink">
+                Available Celebration Kits ({productsToDisplay.length})
+              </h2>
+            </div>
 
-        {/* Products Section */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {category.isAvailable ? (
-            /* Desktop: Two columns if multiple, centered if single product */
-            <div className={`grid grid-cols-1 ${productsToDisplay.length > 1 ? 'md:grid-cols-2' : 'max-w-xl mx-auto'} gap-6 lg:gap-8 items-stretch`}>
-              {productsToDisplay.map((product: Product, index: number) => {
-                const inclusions = PRODUCT_INCLUSIONS[product.id] || product.inclusions;
-                const exclusions = PRODUCT_EXCLUSIONS[product.id] || product.exclusions?.join('. ');
-
-                return (
-                  <AnimatedContent
-                    key={product.id}
-                    delay={index * 0.1}
-                    distance={20}
-                    direction="vertical"
-                    className="h-full"
-                  >
-                    <div className="bg-white rounded-3xl p-6 sm:p-7 border border-brand-ink/10 shadow-xs hover:shadow-card transition-shadow flex flex-col justify-between h-full">
-
-                      {/* Top Content Area */}
-                      <div>
-                        {/* 1. Large Product Photograph */}
-                        <div
-                          onClick={() => onSelectProduct(product)}
-                          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-brand-cream-50/70 border border-brand-ink/5 mb-5 cursor-pointer group flex items-center justify-center p-3"
-                        >
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-102 select-none"
-                            loading="eager"
-                          />
-                        </div>
-
-                        {/* 2. Product Name */}
-                        <h2
-                          onClick={() => onSelectProduct(product)}
-                          className="font-display font-extrabold text-xl sm:text-2xl text-brand-ink hover:text-brand-pink transition-colors cursor-pointer mb-1 leading-snug"
-                        >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {productsToDisplay.map((product, idx) => (
+                <AnimatedContent key={product.id} delay={idx * 0.1}>
+                  <div className="rounded-2xl bg-white border border-brand-ink/10 shadow-xs p-5 flex flex-col justify-between space-y-4">
+                    <div className="flex items-start gap-4">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-20 h-20 rounded-xl object-cover border border-brand-ink/10 shrink-0"
+                      />
+                      <div className="space-y-1 min-w-0">
+                        <h3 className="text-base font-extrabold text-brand-ink truncate">
                           {product.name}
-                        </h2>
-
-                        {/* Tagline */}
-                        <p className="text-xs sm:text-sm font-semibold text-brand-teal mb-3">
-                          {product.tagline}
+                        </h3>
+                        <p className="text-xs text-brand-ink-light line-clamp-2">
+                          {product.description}
                         </p>
-
-                        {/* 3. Clearly Visible Price */}
-                        <div className="flex items-baseline gap-1.5 mb-5">
-                          <span className="text-2xl sm:text-3xl font-extrabold text-brand-pink tracking-tight">
-                            ₹{product.price}
-                          </span>
-                          <span className="text-xs font-semibold text-brand-ink-muted">
-                            all inclusive
-                          </span>
-                        </div>
-
-                        {/* 4. Small Heading: "What's Inside the Box?" */}
-                        <div className="border-t border-brand-ink/10 pt-4 mb-3">
-                          <h3 className="text-xs font-bold uppercase tracking-wider text-brand-ink-muted flex items-center justify-between">
-                            <span>What's Inside the Box?</span>
-                            {product.totalPieces && (
-                              <span className="text-brand-pink font-extrabold normal-case text-xs">
-                                {product.totalPieces} pcs
-                              </span>
-                            )}
-                          </h3>
-                        </div>
-
-                        {/* 5. Complete actual list of included items with quantities */}
-                        <ul className="space-y-2 mb-5">
-                          {inclusions.map((item, i) => (
-                            <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-brand-ink-light leading-relaxed">
-                              <span className="w-4 h-4 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">
-                                <Check className="w-3 h-3 stroke-[3]" />
-                              </span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        <span className="text-base font-black text-brand-pink block">
+                          {formatPrice(product.price)}
+                        </span>
                       </div>
-
-                      {/* Bottom Action Area */}
-                      <div>
-                        {/* 6. Short honest exclusions note */}
-                        {exclusions && (
-                          <div className="bg-brand-cream-50/70 border border-brand-ink/5 rounded-xl px-3.5 py-2.5 mb-5 text-xs text-brand-ink-muted leading-relaxed">
-                            <span className="font-bold text-brand-ink">Note: </span>
-                            <span>{exclusions}</span>
-                          </div>
-                        )}
-
-                        {/* 7 & 8. Buy Now & Add to Cart Buttons */}
-                        <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
-                          {/* Buy Now Button */}
-                          <button
-                            type="button"
-                            onClick={() => onBuyNow(product)}
-                            className="w-full py-3.5 px-3 min-h-[46px] rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-xs active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                          >
-                            <span>Buy Now</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </button>
-
-                          {/* Add to Cart Button */}
-                          <button
-                            type="button"
-                            onClick={() => addToCart(product, 1)}
-                            className="w-full py-3.5 px-3 min-h-[46px] rounded-xl text-xs sm:text-sm font-bold text-brand-ink bg-brand-cream-50 hover:bg-brand-cream-100 border border-brand-ink/15 active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                          >
-                            <ShoppingBag className="w-4 h-4 text-brand-pink" />
-                            <span>Add to Cart</span>
-                          </button>
-                        </div>
-                      </div>
-
                     </div>
-                  </AnimatedContent>
-                );
-              })}
+
+                    <div className="flex items-center gap-2 pt-2 border-t border-brand-ink/5">
+                      <Link
+                        to="/celebration-boxes/pastel-rose"
+                        className="flex-1 py-2.5 px-4 rounded-xl text-center text-xs font-bold text-white bg-brand-pink hover:bg-brand-pink-hover shadow-card transition-all"
+                      >
+                        View Details
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => addToCart(product, 1)}
+                        className="py-2.5 px-4 rounded-xl text-xs font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/15 transition-all"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                </AnimatedContent>
+              ))}
             </div>
-          ) : (
-            /* Coming Soon Placeholder for upcoming categories */
-            <div className="max-w-xl mx-auto text-center surface-card p-8 sm:p-12 rounded-3xl border border-brand-ink/10 shadow-sm space-y-5">
-              <div
-                className="w-20 h-20 rounded-full mx-auto p-2 flex items-center justify-center shadow-xs"
-                style={{ backgroundColor: category.bgColor }}
+          </div>
+        ) : (
+          <div className="text-center py-12 px-6 rounded-3xl bg-white border border-brand-ink/10 shadow-xs max-w-lg mx-auto space-y-4">
+            <h3 className="text-xl font-bold text-brand-ink">
+              {category.name} Collection in Progress
+            </h3>
+            <p className="text-xs sm:text-sm text-brand-ink-light">
+              We are currently crafting dedicated decoration kits for {category.name}. Tap below to be notified upon launch!
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={handleWhatsAppNotify}
+                className="w-full sm:w-auto py-3 px-6 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm"
               >
-                <img
-                  src={category.image}
-                  alt={category.name}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-100 px-3 py-1 rounded-full">
-                  Launching Soon
-                </span>
-                <h2 className="text-2xl font-extrabold text-brand-ink pt-2">
-                  {category.name} Collection in Progress
-                </h2>
-                <p className="text-xs sm:text-sm text-brand-ink-light leading-relaxed">
-                  We are currently crafting and styling dedicated decoration kits for {category.name}.
-                </p>
-              </div>
-
-              <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-                <button
-                  type="button"
-                  onClick={handleWhatsAppNotify}
-                  className="py-3 px-6 rounded-xl text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>Notify Me on WhatsApp</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={onNavigateHome}
-                  className="py-3 px-6 rounded-xl text-xs sm:text-sm font-bold text-brand-ink bg-white hover:bg-brand-cream-50 border border-brand-ink/20 transition-all cursor-pointer"
-                >
-                  <span>Explore Birthday Kits</span>
-                </button>
-              </div>
+                Notify Me on WhatsApp
+              </button>
+              <Link
+                to="/celebration-boxes"
+                className="w-full sm:w-auto py-3 px-6 rounded-xl text-xs font-bold text-brand-ink bg-white border border-brand-ink/20"
+              >
+                Explore Celebration Boxes
+              </Link>
             </div>
-          )}
-        </section>
-      </main>
-
-      <Footer
-        onOpenOrder={onOpenOrderModal}
-        onOpenPolicy={onOpenPolicy}
-      />
+          </div>
+        )}
+      </section>
     </div>
   );
 };

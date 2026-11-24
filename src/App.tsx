@@ -1,63 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
+import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
+import { CelebrationBoxes } from './pages/CelebrationBoxes';
 import { ProductDetails } from './pages/ProductDetails';
+import { CakesCatalogue } from './pages/CakesCatalogue';
+import { CakeCustomizationPage } from './pages/CakeCustomizationPage';
+import { CartPage } from './pages/CartPage';
+import { CheckoutPage } from './pages/CheckoutPage';
+import { OrderConfirmationPage } from './pages/OrderConfirmationPage';
+import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
 import { CategoryProducts } from './pages/CategoryProducts';
-import { CartProvider, useCart } from './context/CartContext';
-import { AdminAuthProvider, useAdminAuth } from './context/AdminAuthContext';
-import { CartDrawer } from './components/CartDrawer';
-import { OrderCustomizerModal } from './components/OrderCustomizerModal';
-import { WhatsAppFallbackModal } from './components/WhatsAppFallbackModal';
-import { AdminTemplatesModal } from './components/AdminTemplatesModal';
-import { PolicyModal, PolicyType } from './components/PolicyModal';
-import { BrandSplashScreen, SPLASH_STORAGE_KEY } from './components/splash/BrandSplashScreen';
-import { SplashToHomeTransition } from './components/splash/SplashToHomeTransition';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminLogin } from './pages/admin/AdminLogin';
-import { Product } from './types';
-import { CheckCircle2, ShoppingBag } from 'lucide-react';
-import { BUSINESS_CONFIG } from './config/business';
-import { buildWhatsAppLink, triggerWhatsAppChat } from './services/whatsappService';
-
-type RouteState =
-  | { type: 'home' }
-  | { type: 'product'; id: string }
-  | { type: 'category'; slug: string }
-  | { type: 'admin'; subroute?: string };
-
-const parseRoute = (): RouteState => {
-  if (typeof window === 'undefined') return { type: 'home' };
-
-  const pathname = window.location.pathname.toLowerCase();
-  const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-
-  // 1. Direct path check for /admin or /admin/login or /admin/:tab
-  if (pathname.startsWith('/admin') || hash.startsWith('admin')) {
-    const adminSegment = pathname.startsWith('/admin')
-      ? pathname.replace(/^\/admin\/?/, '')
-      : hash.replace(/^admin\/?/, '');
-    return { type: 'admin', subroute: adminSegment || undefined };
-  }
-
-  // 2. Hash-based product/category check
-  if (hash.startsWith('product/')) {
-    const id = hash.replace('product/', '').split('?')[0].split('/')[0];
-    if (id) return { type: 'product', id };
-  }
-
-  if (hash.startsWith('category/')) {
-    const slug = hash.replace('category/', '').split('?')[0].split('/')[0];
-    if (slug) return { type: 'category', slug };
-  }
-
-  return { type: 'home' };
-};
+import { CartProvider } from './context/CartContext';
+import { AdminAuthProvider, useAdminAuth } from './context/AdminAuthContext';
+import { BrandSplashScreen, SPLASH_STORAGE_KEY } from './components/splash/BrandSplashScreen';
+import { SplashToHomeTransition } from './components/splash/SplashToHomeTransition';
 
 // Admin Container: handles auth check & redirects to /admin/login if unauthenticated
-const AdminRouteView: React.FC<{
-  subroute?: string;
-  onNavigateHome: () => void;
-}> = ({ subroute, onNavigateHome }) => {
+const AdminRouteView: React.FC = () => {
   const { user, isLoading } = useAdminAuth();
+  const location = useLocation();
+  const subroute = location.pathname.replace(/^\/admin\/?/, '');
 
   if (isLoading) {
     return (
@@ -68,46 +40,36 @@ const AdminRouteView: React.FC<{
     );
   }
 
-  // If not authenticated, always show AdminLogin (Redirect to /admin/login)
   if (!user || subroute === 'login') {
     return (
       <AdminLogin
         onSuccess={() => {
-          if (window.location.pathname.startsWith('/admin')) {
-            window.history.pushState(null, '', '/admin');
-          } else {
-            window.location.hash = '/admin';
-          }
-          window.location.reload();
+          window.location.href = '/admin';
         }}
-        onNavigateHome={onNavigateHome}
+        onNavigateHome={() => {
+          window.location.href = '/';
+        }}
       />
     );
   }
 
-  // Authenticated Admin Dashboard
   return (
     <AdminLayout
-      onNavigateHome={onNavigateHome}
+      onNavigateHome={() => {
+        window.location.href = '/';
+      }}
       initialTab={subroute && subroute !== 'login' ? subroute : 'overview'}
     />
   );
 };
 
-const AppRouter: React.FC = () => {
-  const { toastMessage, totalCount, setIsCartOpen } = useCart();
-  const [route, setRoute] = useState<RouteState>(parseRoute);
-
-  // Modals state (accessible across all pages)
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
-  const [orderModalMode, setOrderModalMode] = useState<'buy-now' | 'cart'>('buy-now');
-  const [orderModalProductId, setOrderModalProductId] = useState<string>('signature-celebration-box');
+export const AppContent: React.FC = () => {
+  const location = useLocation();
 
   // Smart branded splash screen state: show once per tab session on initial homepage visit
   const [showSplash, setShowSplash] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
-    const initialRoute = parseRoute();
-    if (initialRoute.type !== 'home') return false;
+    if (location.pathname !== '/') return false;
     try {
       return !sessionStorage.getItem(SPLASH_STORAGE_KEY);
     } catch {
@@ -115,28 +77,10 @@ const AppRouter: React.FC = () => {
     }
   });
 
-  const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
-  const [isFallbackConfigured, setIsFallbackConfigured] = useState<boolean>(false);
-  const [isAdminTemplatesOpen, setIsAdminTemplatesOpen] = useState<boolean>(false);
-  const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
-
-  // Handle hash changes & browser back/forward
-  useEffect(() => {
-    const handleNavigationChange = () => {
-      setRoute(parseRoute());
-    };
-    window.addEventListener('hashchange', handleNavigationChange);
-    window.addEventListener('popstate', handleNavigationChange);
-    return () => {
-      window.removeEventListener('hashchange', handleNavigationChange);
-      window.removeEventListener('popstate', handleNavigationChange);
-    };
-  }, []);
-
-  // Manage noindex meta tag dynamically for search engine privacy
+  // Admin route robots tag
   useEffect(() => {
     const existingMeta = document.querySelector('meta[data-admin-robots]');
-    if (route.type === 'admin') {
+    if (location.pathname.startsWith('/admin')) {
       if (!existingMeta) {
         const meta = document.createElement('meta');
         meta.name = 'robots';
@@ -147,206 +91,157 @@ const AppRouter: React.FC = () => {
     } else if (existingMeta) {
       existingMeta.remove();
     }
-  }, [route.type]);
-
-  // Founder admin modal shortcut (Alt + Shift + A or ?admin=templates)
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('admin') === 'templates') {
-        setIsAdminTemplatesOpen(true);
-      }
-
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.altKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-          e.preventDefault();
-          setIsAdminTemplatesOpen((prev) => !prev);
-        }
-      };
-
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, []);
-
-  // Navigation handlers
-  const navigateToHome = () => {
-    if (window.location.pathname.startsWith('/admin')) {
-      window.location.href = '/';
-    } else {
-      window.location.hash = '';
-      setRoute({ type: 'home' });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const navigateToProduct = (productId: string) => {
-    window.location.hash = `/product/${productId}`;
-  };
-
-  const navigateToCategory = (slug: string) => {
-    window.location.hash = `/category/${slug}`;
-  };
-
-  // Purchase Handlers
-  const handleBuyNow = (product: Product) => {
-    setOrderModalProductId(product.id);
-    setOrderModalMode('buy-now');
-    setIsOrderModalOpen(true);
-  };
-
-  const handleCartCheckout = () => {
-    setOrderModalMode('cart');
-    setIsOrderModalOpen(true);
-  };
-
-  const handleDirectWhatsAppOrder = (
-    productId?: string
-  ) => {
-    if (productId) {
-      setOrderModalProductId(productId);
-      setOrderModalMode('buy-now');
-      setIsOrderModalOpen(true);
-    } else {
-      const message =
-        'Hello Celebration Box! 🎉 I would like to order a Celebration Box for an upcoming celebration. Please share details and availability!';
-      const url = buildWhatsAppLink(BUSINESS_CONFIG.whatsappNumber, message);
-      triggerWhatsAppChat(url);
-    }
-  };
-
-  const handleOpenFallback = (message: string, isConfigured: boolean) => {
-    setFallbackMessage(message);
-    setIsFallbackConfigured(isConfigured);
-  };
-
-  const handleExploreShop = () => {
-    if (route.type !== 'home') {
-      window.location.hash = '';
-      setTimeout(() => {
-        const el = document.getElementById('shop');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
-    } else {
-      const el = document.getElementById('shop');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  }, [location.pathname]);
 
   return (
-    <div className="relative min-h-screen">
-      {/* Toast Notification for Add-to-Cart Confirmation */}
-      {toastMessage && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-brand-ink text-white px-4 py-2.5 rounded-xl shadow-card flex items-center gap-2 text-xs font-semibold animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{toastMessage}</span>
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="ml-2 text-brand-pink font-bold underline hover:text-white cursor-pointer"
-          >
-            View Cart
-          </button>
-        </div>
-      )}
+    <>
+      <Routes>
+        {/* 1. Home Page */}
+        <Route
+          path="/"
+          element={
+            <SplashToHomeTransition isSplashActive={showSplash}>
+              <Layout>
+                <Home />
+              </Layout>
+            </SplashToHomeTransition>
+          }
+        />
 
-      {/* Route Views */}
-      {route.type === 'admin' ? (
-        <AdminRouteView
-          subroute={route.subroute}
-          onNavigateHome={navigateToHome}
+        {/* 2. Celebration Boxes Catalogue */}
+        <Route
+          path="/celebration-boxes"
+          element={
+            <Layout>
+              <CelebrationBoxes />
+            </Layout>
+          }
         />
-      ) : route.type === 'product' ? (
-        <ProductDetails
-          productId={route.id}
-          onNavigateHome={navigateToHome}
-          onSelectProduct={(prod) => navigateToProduct(prod.id)}
-          onBuyNow={handleBuyNow}
-          onOpenOrderModal={handleDirectWhatsAppOrder}
-          onOpenPolicy={(policy) => setActivePolicy(policy)}
-        />
-      ) : route.type === 'category' ? (
-        <CategoryProducts
-          categorySlug={route.slug}
-          onNavigateHome={navigateToHome}
-          onSelectProduct={(prod) => navigateToProduct(prod.id)}
-          onBuyNow={handleBuyNow}
-          onOpenOrderModal={handleDirectWhatsAppOrder}
-          onOpenPolicy={(policy) => setActivePolicy(policy)}
-        />
-      ) : (
-        <SplashToHomeTransition isSplashActive={showSplash}>
-          <Home
-            onNavigateToProduct={navigateToProduct}
-            onNavigateToCategory={navigateToCategory}
-          />
-        </SplashToHomeTransition>
-      )}
 
-      {/* Branded Opening Splash Screen (Shown once per tab session on initial homepage visit) */}
+        {/* 3. Pastel Rose Product Page */}
+        <Route
+          path="/celebration-boxes/pastel-rose"
+          element={
+            <Layout>
+              <ProductDetails />
+            </Layout>
+          }
+        />
+
+        {/* Dynamic Product Page alias for compatibility */}
+        <Route
+          path="/celebration-boxes/:slug"
+          element={
+            <Layout>
+              <ProductDetails />
+            </Layout>
+          }
+        />
+
+        {/* 4. Cakes & Combos Catalogue */}
+        <Route
+          path="/cakes"
+          element={
+            <Layout>
+              <CakesCatalogue />
+            </Layout>
+          }
+        />
+
+        {/* 5. Cake Customization Page */}
+        <Route
+          path="/cakes/customize/:cakeId"
+          element={
+            <Layout>
+              <CakeCustomizationPage />
+            </Layout>
+          }
+        />
+
+        {/* 6. Shopping Cart Page */}
+        <Route
+          path="/cart"
+          element={
+            <Layout>
+              <CartPage />
+            </Layout>
+          }
+        />
+
+        {/* 7. Checkout Page */}
+        <Route
+          path="/checkout"
+          element={
+            <Layout>
+              <CheckoutPage />
+            </Layout>
+          }
+        />
+
+        {/* 8. Order Confirmation Page */}
+        <Route
+          path="/order-confirmation"
+          element={
+            <Layout>
+              <OrderConfirmationPage />
+            </Layout>
+          }
+        />
+
+        {/* 9. About Us Page */}
+        <Route
+          path="/about"
+          element={
+            <Layout>
+              <AboutPage />
+            </Layout>
+          }
+        />
+
+        {/* 10. Contact Us Page */}
+        <Route
+          path="/contact"
+          element={
+            <Layout>
+              <ContactPage />
+            </Layout>
+          }
+        />
+
+        {/* Category Products */}
+        <Route
+          path="/category/:categorySlug"
+          element={
+            <Layout>
+              <CategoryProducts />
+            </Layout>
+          }
+        />
+
+        {/* Admin Panel Routes */}
+        <Route path="/admin/*" element={<AdminRouteView />} />
+
+        {/* Fallback to Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+      {/* Branded Splash Screen */}
       {showSplash && (
         <BrandSplashScreen onComplete={() => setShowSplash(false)} />
       )}
-
-      {/* Global Modals & Drawers (Only for public store views) */}
-      {route.type !== 'admin' && (
-        <>
-          <CartDrawer
-            onCheckout={handleCartCheckout}
-            onExplore={handleExploreShop}
-          />
-
-          {isOrderModalOpen && (
-            <OrderCustomizerModal
-              initialProductId={orderModalProductId}
-              mode={orderModalMode}
-              onClose={() => setIsOrderModalOpen(false)}
-              onOpenFallback={handleOpenFallback}
-            />
-          )}
-
-          {fallbackMessage && (
-            <WhatsAppFallbackModal
-              message={fallbackMessage}
-              isConfigured={isFallbackConfigured}
-              onClose={() => setFallbackMessage(null)}
-            />
-          )}
-
-          {isAdminTemplatesOpen && (
-            <AdminTemplatesModal onClose={() => setIsAdminTemplatesOpen(false)} />
-          )}
-
-          <PolicyModal
-            policyType={activePolicy}
-            onClose={() => setActivePolicy(null)}
-          />
-
-          {/* Sticky Mobile Cart Floating Pill */}
-          {totalCount > 0 && (
-            <div className="fixed bottom-5 right-4 z-40 lg:hidden animate-fadeIn pb-[env(safe-area-inset-bottom)]">
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="flex items-center gap-2.5 px-5 py-3.5 min-h-[48px] rounded-full bg-brand-pink text-white font-extrabold text-xs shadow-modal active:scale-95 transition-all cursor-pointer border-2 border-white/40"
-                aria-label="View Cart"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                <span>View Cart ({totalCount})</span>
-              </button>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+    </>
   );
 };
 
 export const App: React.FC = () => {
   return (
-    <AdminAuthProvider>
-      <CartProvider>
-        <AppRouter />
-      </CartProvider>
-    </AdminAuthProvider>
+    <BrowserRouter>
+      <AdminAuthProvider>
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
+      </AdminAuthProvider>
+    </BrowserRouter>
   );
 };
 

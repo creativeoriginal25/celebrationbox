@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { OCCASION_CATEGORIES } from '../config/categories';
 import { OccasionCategory } from '../types';
 import { OccasionCategoryCard } from './OccasionCategoryCard';
@@ -7,17 +8,22 @@ import { BUSINESS_CONFIG } from '../config/business';
 import { buildWhatsAppLink, triggerWhatsAppChat } from '../services/whatsappService';
 
 interface OccasionCategoryGridProps {
-  onSelectCategory: (category: OccasionCategory) => void;
+  onSelectCategory?: (category: OccasionCategory) => void;
 }
 
 export const OccasionCategoryGrid: React.FC<OccasionCategoryGridProps> = ({
   onSelectCategory,
 }) => {
+  const navigate = useNavigate();
   const [comingSoonModalCategory, setComingSoonModalCategory] = useState<OccasionCategory | null>(null);
 
   const handleCategoryClick = (category: OccasionCategory) => {
     if (category.isAvailable) {
-      onSelectCategory(category);
+      if (onSelectCategory) {
+        onSelectCategory(category);
+      } else {
+        navigate('/celebration-boxes');
+      }
     } else {
       setComingSoonModalCategory(category);
     }

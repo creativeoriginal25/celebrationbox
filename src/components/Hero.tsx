@@ -1,10 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, PackageCheck, Sparkles, Truck, Layers, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Confetti, ConfettiRef } from './react-bits/Confetti';
 
 interface HeroProps {
-  onExplore: () => void;
+  onExplore?: () => void;
   onOpenOrder?: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
 }
 
@@ -118,13 +119,13 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
                     {activeSlide.price}
                   </span>
 
-                  <button
-                    onClick={onExplore}
+                  <Link
+                    to="/celebration-boxes/pastel-rose"
                     className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-[#8A1538] hover:bg-[#72112E] shadow-[0_4px_14px_0_rgba(138,21,56,0.35)] hover:shadow-[0_6px_20px_0_rgba(138,21,56,0.45)] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
                   >
                     <span>Shop Now</span>
                     <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Link>
                 </div>
 
                 {/* 5. Feature Highlights Row */}

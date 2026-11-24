@@ -1,12 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MessageCircle, Mail, MapPin } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/business';
 import { PolicyType } from './PolicyModal';
 import { CelebrationBoxLogo } from './CelebrationBoxLogo';
 
 interface FooterProps {
-  onOpenOrder: (productId?: 'mini-celebration-box' | 'signature-celebration-box') => void;
-  onOpenPolicy: (type: PolicyType) => void;
+  onOpenOrder?: () => void;
+  onOpenPolicy?: (type: PolicyType) => void;
 }
 
 const InstagramIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
@@ -83,7 +84,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
               </a>
 
               <button
-                onClick={() => onOpenOrder()}
+                onClick={() => onOpenOrder?.()}
                 className="w-9 h-9 rounded-xl bg-white/10 hover:bg-emerald-600 flex items-center justify-center transition-all duration-200 text-white shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
                 aria-label="Chat on WhatsApp"
               >
@@ -93,46 +94,54 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
           </div>
 
           {/* ========================================================
-              COLUMN 2 – CELEBRATION KITS
+              COLUMN 2 – CELEBRATION KITS & COMBOS
              ======================================================== */}
           <div className="space-y-3.5">
             <h4 className="text-xs font-bold uppercase tracking-wider text-brand-marigold">
-              Celebration Kits
+              Explore Our Store
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-gray-300">
               <li>
-                <button
-                  onClick={() => onOpenOrder('mini-celebration-box')}
-                  className="hover:text-brand-pink transition-colors text-left cursor-pointer flex items-center gap-1.5"
-                >
-                  <span>Mini Celebration Box</span>
-                  <span className="text-brand-pink font-semibold text-xs">— ₹249</span>
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onOpenOrder('signature-celebration-box')}
-                  className="hover:text-brand-pink transition-colors text-left cursor-pointer flex items-center gap-1.5"
-                >
-                  <span>Pastel Rose Celebration Box</span>
-                  <span className="text-brand-pink font-semibold text-xs">— ₹399</span>
-                </button>
-              </li>
-              <li>
-                <a
-                  href="#compare"
+                <Link
+                  to="/celebration-boxes"
                   className="hover:text-brand-pink transition-colors block"
                 >
-                  Compare Our Boxes
-                </a>
+                  All Celebration Boxes
+                </Link>
               </li>
               <li>
-                <a
-                  href="#how-it-works"
+                <Link
+                  to="/celebration-boxes/pastel-rose"
+                  className="hover:text-brand-pink transition-colors flex items-center justify-between gap-1.5"
+                >
+                  <span>Pastel Rose Box</span>
+                  <span className="text-brand-pink font-semibold text-xs">₹399</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/cakes"
+                  className="hover:text-brand-pink transition-colors flex items-center justify-between gap-1.5"
+                >
+                  <span>Cakes &amp; Combos</span>
+                  <span className="text-amber-400 font-semibold text-[10px] uppercase">Chocoloom</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
                   className="hover:text-brand-pink transition-colors block"
                 >
-                  How It Works
-                </a>
+                  About Celebration Box
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="hover:text-brand-pink transition-colors block"
+                >
+                  Contact &amp; Campus Delivery
+                </Link>
               </li>
             </ul>
           </div>
@@ -234,21 +243,21 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrder, onOpenPolicy }) => 
 
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <button
-              onClick={() => onOpenPolicy('terms')}
+              onClick={() => onOpenPolicy?.('terms')}
               className="hover:text-white transition-colors cursor-pointer"
             >
               Terms &amp; Conditions
             </button>
             <span className="text-white/20">•</span>
             <button
-              onClick={() => onOpenPolicy('privacy')}
+              onClick={() => onOpenPolicy?.('privacy')}
               className="hover:text-white transition-colors cursor-pointer"
             >
               Privacy Policy
             </button>
             <span className="text-white/20">•</span>
             <button
-              onClick={() => onOpenPolicy('cancellation')}
+              onClick={() => onOpenPolicy?.('cancellation')}
               className="hover:text-white transition-colors cursor-pointer"
             >
               Cancellation &amp; Returns
